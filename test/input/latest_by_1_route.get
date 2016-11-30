@@ -1,0 +1,1 @@
+GET	/avi?&wkt=LINESTRING(24.906+60.315,25.822+66.562,27.413+68.607)&maxdistance=10&time=201511210000&messagetype=METAR,TAF&param=stationid,icao,longitude,latitude,messagetype,route,messageid,message,messagetime,messagevalidfrom,messagevalidto,messagecreated,messirheading,messageversion&precision=3 HTTP/1.0

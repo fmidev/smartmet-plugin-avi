@@ -1,0 +1,1 @@
+GET	/avi?latlon=60.325830,24.916970&latlon=68.607900,27.403870&maxdistance=150&numberofstations=10&messagetype=METAR,TAF&starttime=201511210000&endtime=201511211200&param=stationid,icao,name,elevation,stationvalidfrom,longitude,latitude,lonlat,latlon,distance,bearing,route HTTP/1.0

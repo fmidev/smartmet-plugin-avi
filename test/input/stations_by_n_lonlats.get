@@ -1,0 +1,1 @@
+GET	/avi?lonlats=24.916970,60.325830,27.403870,68.607900&maxdistance=2&numberofstations=1&param=stationid,icao,name,elevation,stationvalidfrom,longitude,latitude,lonlat,latlon,distance,bearing HTTP/1.0

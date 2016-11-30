@@ -1,0 +1,1 @@
+GET	/avi?starttime=201511210000&endtime=201511210010&validity=rejected&param=messagetype,route,messagerejectedicao,message,messagetime,messagevalidfrom,messagevalidto,messagecreated,messagefilemodified,messirheading,messageversion,messagerejectedreason HTTP/1.0

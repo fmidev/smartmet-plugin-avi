@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<result>
+<row stationid="7" icao="EFHK" name="Vantaa Helsinki-Vantaa lentoasema AWOS" elevation="40" stationvalidfrom="19990101T000000" longitude="24.906970" latitude="60.315830" lonlat="24.906970, 60.315830" latlon="60.315830, 24.906970" distance="nan" bearing="nan"/>
+<row stationid="8" icao="EFIV" name="Inari Ivalo lentoasema" elevation="140" stationvalidfrom="19570601T000000" longitude="27.418970" latitude="68.613350" lonlat="27.418970, 68.613350" latlon="68.613350, 27.418970" distance="nan" bearing="nan"/>
+<row stationid="22" icao="EFRO" name="Rovaniemi lentoasema AWOS" elevation="193" stationvalidfrom="19510501T000000" longitude="25.822080" latitude="66.562490" lonlat="25.822080, 66.562490" latlon="66.562490, 25.822080" distance="nan" bearing="nan"/>
+</result>

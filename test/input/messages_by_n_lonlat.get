@@ -1,0 +1,1 @@
+GET	/avi?lonlat=24.916970,60.325830&lonlat=27.403870,68.607900&maxdistance=2&numberofstations=1&starttime=201511210000&endtime=201511211200&messagetype=METAR,TAF&param=stationid,icao,longitude,latitude,messagetype,route,messageid,message,messagetime,messagevalidfrom,messagevalidto,messagecreated,messirheading,messageversion&precision=3 HTTP/1.0

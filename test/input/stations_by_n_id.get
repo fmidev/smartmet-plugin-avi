@@ -1,0 +1,1 @@
+GET	/avi?stationid=7&stationid=8&stationid=22&param=stationid,icao,name,elevation,stationvalidfrom,longitude,latitude,lonlat,latlon,distance,bearing HTTP/1.0

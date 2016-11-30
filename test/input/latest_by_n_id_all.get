@@ -1,0 +1,1 @@
+GET	/avi?stationid=7&stationid=8&stationid=22&time=201511210000&messagetype=METAR,TAF&param=stationid,icao,longitude,latitude,messagetype,route,messageid,message,messagetime,messagevalidfrom,messagevalidto,messagecreated,messirheading,messageversion&precision=3&distinct=0 HTTP/1.0
