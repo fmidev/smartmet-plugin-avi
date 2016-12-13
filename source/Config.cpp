@@ -186,6 +186,10 @@ Config::Config(const string &theConfigFileName)
       }
     }
 
+    // Authentication engine needs not to be loaded if there's no apikey groups
+ 
+    itsUseAuthEngine &= (itsQueryLimits.size() > 0);
+ 
     // Store the default limits as the last map entry
 
     string defaultGroup(itsQueryLimits.size() > 0 ? itsQueryLimits.crbegin()->first + "Z"
