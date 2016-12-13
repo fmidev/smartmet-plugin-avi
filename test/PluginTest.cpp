@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void prelude(SmartMet::Spine::Reactor& reactor)
+void prelude(SmartMet::Spine::Reactor &reactor)
 {
   auto handlers = reactor.getURIMap();
   while (handlers.find("/avi") == handlers.end())

@@ -90,7 +90,7 @@ void Plugin::query(const SmartMet::Spine::HTTP::Request &theRequest,
   {
     // Parse query options
 
-    Query query(theRequest, itsConfig);
+    Query query(theRequest, itsAuthEngine, itsConfig);
 
     // Query
 
@@ -317,6 +317,18 @@ void Plugin::init()
     itsAviEngine = reinterpret_cast<SmartMet::Engine::Avi::Engine *>(engine);
 
     itsConfig.reset(new Config(itsConfigFileName));
+
+    /* AuthenticationEngine */
+
+    if (itsConfig->useAuthentication())
+    {
+      engine = itsReactor->getSingleton("Authentication", NULL);
+
+      if (!engine)
+        throw SmartMet::Spine::Exception(BCP, "Authentication engine unavailable");
+
+      itsAuthEngine = reinterpret_cast<SmartMet::Engine::Authentication::Engine *>(engine);
+    }
 
     if (!(itsReactor->addContentHandler(
             this, "/avi", boost::bind(&Plugin::callRequestHandler, this, _1, _2, _3))))
