@@ -14,10 +14,12 @@ BuildRequires: libconfig-devel
 BuildRequires: smartmet-library-spine-devel >= 16.11.29
 BuildRequires: libsmartmet-macgyver-devel >= 16.9.30
 BuildRequires: smartmet-engine-avi-devel >= 16.11.30
+BuildRequires: smartmet-engine-authentication-devel >= 1.0
 Requires: libconfig
 Requires: libsmartmet-macgyver >= 16.9.30
 Requires: smartmet-library-spine >= 16.11.29
 Requires: smartmet-engine-avi >= 16.11.30
+Requires: smartmet-engine-authentication >= 1.0
 Requires: boost-date-time
 Provides: %{SPECNAME}
 Obsoletes: smartmet-brainstorm-aviplugin < 16.11.1
@@ -46,6 +48,10 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Upcoming
+- Query limiting by apikey groups (SOL-4614)
+- Note: now requires (and changes to) authentication engine too
+
 * Wed Nov 30 2016 Mika Heiskanen <mika.heiskanen@fmi.fi> - 16.11.30-1.fmi
 - Using test database in test configuration
 - No installation for configuration
