@@ -2,7 +2,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet aviation message plugin
 Name: %{SPECNAME}
-Version: 16.11.30
+Version: 17.1.4
 Release: 1%{?dist}.fmi
 License: FMI
 Group: SmartMet/Plugins
@@ -11,13 +11,13 @@ Source0: %{name}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: boost-devel
 BuildRequires: libconfig-devel
-BuildRequires: smartmet-library-spine-devel >= 16.11.29
-BuildRequires: libsmartmet-macgyver-devel >= 16.9.30
-BuildRequires: smartmet-engine-avi-devel >= 16.11.30
+BuildRequires: smartmet-library-spine-devel >= 17.1.4
+BuildRequires: smartmet-library-macgyver-devel >= 16.12.20
+BuildRequires: smartmet-engine-avi-devel >= 17.1.4
 Requires: libconfig
-Requires: libsmartmet-macgyver >= 16.9.30
-Requires: smartmet-library-spine >= 16.11.29
-Requires: smartmet-engine-avi >= 16.11.30
+Requires: smartmet-library-macgyver >= 16.12.20
+Requires: smartmet-library-spine >= 17.1.4
+Requires: smartmet-engine-avi >= 17.1.4
 Requires: boost-date-time
 Provides: %{SPECNAME}
 Obsoletes: smartmet-brainstorm-aviplugin < 16.11.1
@@ -46,6 +46,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Wed Jan  4 2017 Mika Heiskanen <mika.heiskanen@fmi.fi> - 17.1.4-1.fmi
+- Changed to use renamed SmartMet base libraries
+
 * Wed Nov 30 2016 Mika Heiskanen <mika.heiskanen@fmi.fi> - 16.11.30-1.fmi
 - Using test database in test configuration
 - No installation for configuration
