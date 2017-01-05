@@ -128,10 +128,10 @@ release: all
 profile: all
 
 configtest:
-	@echo Validating test/cnf/aviengine.conf
-	@cfgvalidate -v test/cnf/aviengine.conf
-	@echo Validating test/cnf/aviplugin.conf
-	@cfgvalidate -v test/cnf/aviplugin.conf
+	@if [ -x "$$(command -v cfgvalidate)" ]; then \
+	  cfgvalidate -v test/cnf/aviengine.conf; \
+	  cfgvalidate -v test/cnf/aviplugin.conf; \
+	fi
 
 $(LIBFILE): $(OBJS)
 	$(CXX) $(CFLAGS) -shared -rdynamic -o $(LIBFILE) $(OBJS) $(LIBS)
