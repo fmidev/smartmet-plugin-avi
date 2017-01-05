@@ -14,10 +14,12 @@ BuildRequires: libconfig-devel
 BuildRequires: smartmet-library-spine-devel >= 17.1.4
 BuildRequires: smartmet-library-macgyver-devel >= 16.12.20
 BuildRequires: smartmet-engine-avi-devel >= 17.1.4
+BuildRequires: smartmet-engine-authentication-devel >= 1.0
 Requires: libconfig
 Requires: smartmet-library-macgyver >= 16.12.20
 Requires: smartmet-library-spine >= 17.1.4
 Requires: smartmet-engine-avi >= 17.1.4
+Requires: smartmet-engine-authentication >= 1.0
 Requires: boost-date-time
 Provides: %{SPECNAME}
 Obsoletes: smartmet-brainstorm-aviplugin < 16.11.1
@@ -46,6 +48,10 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Upcoming
+- Query limiting by apikey groups (SOL-4614)
+- Note: now requires (and changes to) authentication engine too
+
 * Wed Jan  4 2017 Mika Heiskanen <mika.heiskanen@fmi.fi> - 17.1.4-1.fmi
 - Changed to use renamed SmartMet base libraries
 

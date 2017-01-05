@@ -12,6 +12,7 @@
 #include <spine/Reactor.h>
 #include <spine/HTTP.h>
 #include <engines/avi/Engine.h>
+#include <engines/authentication/Engine.h>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp>
@@ -51,6 +52,7 @@ class Plugin : public SmartMetPlugin, private boost::noncopyable
 
   SmartMet::Spine::Reactor *itsReactor;
   SmartMet::Engine::Avi::Engine *itsAviEngine;
+  SmartMet::Engine::Authentication::Engine *itsAuthEngine;
 };
 
 }  // namespace Avi

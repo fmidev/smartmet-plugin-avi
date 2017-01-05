@@ -24,32 +24,32 @@ namespace Avi
 // ----------------------------------------------------------------------
 
 template <typename T>
-T toType(const string& s)
+T toType(const string &s)
 {
   throw SmartMet::Spine::Exception(BCP, "internal: unsupported conversion");
 }
 
 template <>
-SmartMet::Engine::Avi::StationIdType toType<SmartMet::Engine::Avi::StationIdType>(const string& s)
+SmartMet::Engine::Avi::StationIdType toType<SmartMet::Engine::Avi::StationIdType>(const string &s)
 {
   return Fmi::stol(s);
 }
 
 template <>
-double toType<double>(const string& s)
+double toType<double>(const string &s)
 {
   return Fmi::stod(s);
 }
 
 template <>
-string toType<string>(const string& s)
+string toType<string>(const string &s)
 {
   return s;
 }
 
 template <typename T>
-boost::optional<list<pair<T, T>>> listOfPairs(const string& commaSeparatedStr,
-                                              const char* optionName,
+boost::optional<list<pair<T, T>>> listOfPairs(const string &commaSeparatedStr,
+                                              const char *optionName,
                                               size_t nPairs,
                                               bool latlonPairs = true)
 {
@@ -141,20 +141,20 @@ boost::optional<list<pair<T, T>>> listOfPairs(const string& commaSeparatedStr,
 // ----------------------------------------------------------------------
 
 template <typename T>
-bool validValue(const T& value, double minValue, double maxValue)
+bool validValue(const T &value, double minValue, double maxValue)
 {
   return ((value >= minValue) && (value <= maxValue));
 }
 
 template <>
-bool validValue<string>(const string& value, double minValue, double maxValue)
+bool validValue<string>(const string &value, double minValue, double maxValue)
 {
   return true;
 }
 
 template <typename T>
-boost::optional<list<T>> listOfValues(const string& commaSeparatedStr,
-                                      const char* optionName,
+boost::optional<list<T>> listOfValues(const string &commaSeparatedStr,
+                                      const char *optionName,
                                       size_t nValues = 0,
                                       bool even = true,
                                       bool swap = false,
@@ -272,7 +272,7 @@ boost::optional<list<T>> listOfValues(const string& commaSeparatedStr,
  */
 // ----------------------------------------------------------------------
 
-string errMsgOptionIsEmpty(const char* optionName)
+string errMsgOptionIsEmpty(const char *optionName)
 {
   try
   {
@@ -284,16 +284,16 @@ string errMsgOptionIsEmpty(const char* optionName)
   }
 }
 
-void Query::parseMessageTypeOption(const SmartMet::Spine::HTTP::Request& theRequest)
+void Query::parseMessageTypeOption(const SmartMet::Spine::HTTP::Request &theRequest)
 {
   try
   {
-    const char* optionName;
+    const char *optionName;
 
     auto messagetypes = theRequest.getParameterList(optionName = "messagetype");
     if (!messagetypes.empty())
     {
-      for (const string& messagetype : messagetypes)
+      for (const string &messagetype : messagetypes)
       {
         auto listOfMessageTypes =
             listOfValues<string>(messagetype, optionName, 0, false, false, false);
@@ -301,7 +301,7 @@ void Query::parseMessageTypeOption(const SmartMet::Spine::HTTP::Request& theRequ
         if ((!listOfMessageTypes) || listOfMessageTypes->empty())
           throw SmartMet::Spine::Exception(BCP, errMsgOptionIsEmpty(optionName));
 
-        for (const string& m : *listOfMessageTypes)
+        for (const string &m : *listOfMessageTypes)
           itsQueryOptions.itsMessageTypes.push_back(Fmi::ascii_toupper_copy(m));
       }
     }
@@ -320,23 +320,23 @@ void Query::parseMessageTypeOption(const SmartMet::Spine::HTTP::Request& theRequ
  */
 // ----------------------------------------------------------------------
 
-void Query::parseParamOption(const SmartMet::Spine::HTTP::Request& theRequest)
+void Query::parseParamOption(const SmartMet::Spine::HTTP::Request &theRequest)
 {
   try
   {
-    const char* optionName;
+    const char *optionName;
 
     auto params = theRequest.getParameterList(optionName = "param");
     if (!params.empty())
     {
-      for (const string& param : params)
+      for (const string &param : params)
       {
         auto listOfParams = listOfValues<string>(param, optionName, 0, false, false, false);
 
         if ((!listOfParams) || listOfParams->empty())
           throw SmartMet::Spine::Exception(BCP, errMsgOptionIsEmpty(optionName));
 
-        for (const string& p : *listOfParams)
+        for (const string &p : *listOfParams)
           itsQueryOptions.itsParameters.push_back(Fmi::ascii_tolower_copy(p));
       }
 
@@ -355,19 +355,12 @@ void Query::parseParamOption(const SmartMet::Spine::HTTP::Request& theRequest)
 /*!
  * \brief Parse location/station related query options.
  *
-
- * 		  Note: Avi engine supports querying with multiple location options, but depending
- on
- *configuration, we may
- * 		  		allow only one location option to be given.
+ * 	  Note: Avi engine supports querying with multiple location options, but depending
+ * 	  on configuration, we may allow only one location option to be given.
  *
- *				The engine checks geometry type of given single wkt, and if the type
- is
- *linestring,
- *				the route order (station distance from route segment starting point)
- is
- *used; for other wkt types
- *				and for other types of location options, icao ordering is used.
+ *	  The engine checks geometry type of given single wkt, and if the type is linestring,
+ *	  the route order (station distance from route segment starting point) is used;
+ *	  for other wkt types and for other types of location options, icao ordering is used.
  */
 // ----------------------------------------------------------------------
 
@@ -395,7 +388,7 @@ void Query::checkIfMultipleLocationOptionsAllowed(bool allowMultipleLocationOpti
   }
 }
 
-void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request& theRequest,
+void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request &theRequest,
                                  bool allowMultipleLocationOptions)
 {
   try
@@ -405,12 +398,12 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request& theReques
     // place=place1&place=place2&place=...
     // places=place1,place2,...
 
-    const char* optionName;
+    const char *optionName;
 
     auto places = theRequest.getParameterList(optionName = "place");
     if (!places.empty())
     {
-      for (const string& place : places)
+      for (const string &place : places)
       {
         if (place.empty())
           throw SmartMet::Spine::Exception(BCP, errMsgOptionIsEmpty(optionName));
@@ -424,14 +417,14 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request& theReques
     {
       checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
 
-      for (const string& place : places)
+      for (const string &place : places)
       {
         auto listOfPlaces = listOfValues<string>(place, optionName, 0, false, false, false);
 
         if ((!listOfPlaces) || listOfPlaces->empty())
           throw SmartMet::Spine::Exception(BCP, errMsgOptionIsEmpty(optionName));
 
-        for (const string& p : *listOfPlaces)
+        for (const string &p : *listOfPlaces)
           itsQueryOptions.itsLocationOptions.itsPlaces.push_back(p);
       }
     }
@@ -445,7 +438,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request& theReques
     {
       checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
 
-      for (const string& bbox : bboxes)
+      for (const string &bbox : bboxes)
       {
         auto listOfTwoLonLatPairs = listOfPairs<double>(bbox, optionName, 2);
 
@@ -474,7 +467,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request& theReques
     {
       checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
 
-      for (const string& lonlat : lonlats)
+      for (const string &lonlat : lonlats)
       {
         auto listOfTwoValues = listOfValues<double>(lonlat, optionName, 2);
 
@@ -491,7 +484,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request& theReques
     {
       checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
 
-      for (const string& latlon : latlons)
+      for (const string &latlon : latlons)
       {
         auto listOfTwoValues = listOfValues<double>(latlon, optionName, 2, true, true);
 
@@ -508,7 +501,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request& theReques
     {
       checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
 
-      for (const string& lonlat : lonlats)
+      for (const string &lonlat : lonlats)
       {
         auto listOfEvenNValues = listOfValues<double>(lonlat, optionName);
 
@@ -533,7 +526,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request& theReques
     {
       checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
 
-      for (const string& latlon : latlons)
+      for (const string &latlon : latlons)
       {
         auto listOfEvenNValues = listOfValues<double>(latlon, optionName, 0, true, true);
 
@@ -560,7 +553,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request& theReques
     {
       checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
 
-      for (const string& wkt : wkts)
+      for (const string &wkt : wkts)
       {
         if (boost::trim_copy(wkt).empty())
           throw SmartMet::Spine::Exception(BCP, errMsgOptionIsEmpty(optionName));
@@ -576,7 +569,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request& theReques
     {
       checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
 
-      for (const string& icao : icaos)
+      for (const string &icao : icaos)
       {
         if (icao.empty())
           throw SmartMet::Spine::Exception(BCP, errMsgOptionIsEmpty(optionName));
@@ -590,14 +583,14 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request& theReques
     {
       checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
 
-      for (const string& icao : icaos)
+      for (const string &icao : icaos)
       {
         auto listOfIcaos = listOfValues<string>(icao, optionName, 0, false, false, false);
 
         if ((!listOfIcaos) || listOfIcaos->empty())
           throw SmartMet::Spine::Exception(BCP, errMsgOptionIsEmpty(optionName));
 
-        for (const string& p : *listOfIcaos)
+        for (const string &p : *listOfIcaos)
           itsQueryOptions.itsLocationOptions.itsIcaos.push_back(p);
       }
     }
@@ -609,7 +602,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request& theReques
     {
       checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
 
-      for (const string& country : countries)
+      for (const string &country : countries)
       {
         if (country.empty())
           throw SmartMet::Spine::Exception(BCP, errMsgOptionIsEmpty(optionName));
@@ -623,14 +616,14 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request& theReques
     {
       checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
 
-      for (const string& country : countries)
+      for (const string &country : countries)
       {
         auto listOfCountries = listOfValues<string>(country, optionName, 0, false, false, false);
 
         if ((!listOfCountries) || listOfCountries->empty())
           throw SmartMet::Spine::Exception(BCP, errMsgOptionIsEmpty(optionName));
 
-        for (const string& c : *listOfCountries)
+        for (const string &c : *listOfCountries)
           itsQueryOptions.itsLocationOptions.itsCountries.push_back(c);
       }
     }
@@ -642,7 +635,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request& theReques
     {
       checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
 
-      for (const string& stationid : stationids)
+      for (const string &stationid : stationids)
       {
         auto listOfNValues = listOfValues<SmartMet::Engine::Avi::StationIdType>(
             stationid, optionName, 0, false, false, false);
@@ -660,7 +653,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request& theReques
     {
       checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
 
-      for (const string& stationid : stationids)
+      for (const string &stationid : stationids)
       {
         auto listOfNValues = listOfValues<SmartMet::Engine::Avi::StationIdType>(
             stationid, optionName, 0, false, false, false);
@@ -679,7 +672,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request& theReques
           itsQueryOptions.itsLocationOptions.itsBBoxes.empty() &&
           itsQueryOptions.itsLocationOptions.itsWKTs.itsWKTs.empty()))
     {
-      const char* errMsg =
+      const char *errMsg =
           "Option maxdistance is required with latlon/lonlat, bbox and wkt options";
       itsQueryOptions.itsLocationOptions.itsMaxDistance =
           (SmartMet::Spine::required_double(theRequest.getParameter("maxdistance"), errMsg) * 1000);
@@ -707,20 +700,18 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request& theReques
  */
 // ----------------------------------------------------------------------
 
-void Query::parseTimeOptions(const SmartMet::Spine::HTTP::Request& theRequest,
+void Query::parseTimeOptions(const SmartMet::Spine::HTTP::Request &theRequest,
                              int maxMessageTimeRangeDays)
 {
   try
   {
-    // Either time range ('starttime' and 'endtime') or observation time ('time', defaults to
-    // current
-    // time) can be given.
+    // Either time range ('starttime' and 'endtime') or observation time
+    // ('time', defaults to current time) can be given.
     // Rejected messages can only be queried with time range.
     //
-    // Time range query for accepted messages returns either valid messages or messages created
-    // within
-    // the range,
-    // depending on option 'validrangemessages' (default 1 (nonzero); valid messages)
+    // Time range query for accepted messages returns either valid messages or
+    // messages created within the range, depending on option 'validrangemessages'
+    // (default 1 (nonzero); valid messages)
 
     string startTime = SmartMet::Spine::optional_string(theRequest.getParameter("startTime"), "");
     string endTime = SmartMet::Spine::optional_string(theRequest.getParameter("endTime"), "");
@@ -748,7 +739,7 @@ void Query::parseTimeOptions(const SmartMet::Spine::HTTP::Request& theRequest,
       if (st > et)
         throw SmartMet::Spine::Exception(BCP, "'starttime' must be earlier than 'endtime'");
 
-      if ((maxMessageTimeRangeDays > 0) && (((et - st).hours() / 24) > maxMessageTimeRangeDays))
+      if ((maxMessageTimeRangeDays > 0) && ((et - st).hours() > (maxMessageTimeRangeDays * 24)))
         throw SmartMet::Spine::Exception(
             BCP,
             "Time range too long, maximum is " + Fmi::to_string(maxMessageTimeRangeDays) + " days");
@@ -796,8 +787,9 @@ void Query::parseTimeOptions(const SmartMet::Spine::HTTP::Request& theRequest,
  */
 // ----------------------------------------------------------------------
 
-Query::Query(const SmartMet::Spine::HTTP::Request& theRequest,
-             const std::unique_ptr<Config>& config)
+Query::Query(const SmartMet::Spine::HTTP::Request &theRequest,
+             const SmartMet::Engine::Authentication::Engine *authEngine,
+             const std::unique_ptr<Config> &config)
 {
   try
   {
@@ -811,7 +803,10 @@ Query::Query(const SmartMet::Spine::HTTP::Request& theRequest,
 
     // Parse location related query options
 
-    parseLocationOptions(theRequest, config->allowMultipleLocationOptions());
+    auto queryLimits = config->getQueryLimits(
+        authEngine, SmartMet::Spine::optional_string(theRequest.getParameter("fmi-apikey"), ""));
+
+    parseLocationOptions(theRequest, queryLimits.getAllowMultipleLocationOptions());
 
     // 'validity' controls whether accepted or rejected messages are returned
 
@@ -827,7 +822,7 @@ Query::Query(const SmartMet::Spine::HTTP::Request& theRequest,
 
     // Parse time related query options
 
-    parseTimeOptions(theRequest, config->getMaxMessageTimeRangeDays());
+    parseTimeOptions(theRequest, queryLimits.getMaxMessageTimeRangeDays());
 
     // Format, output precision, debug on/off (whether engine writes generated sql to stderr)
 
@@ -847,16 +842,15 @@ Query::Query(const SmartMet::Spine::HTTP::Request& theRequest,
     itsQueryOptions.itsDistinctMessages =
         (SmartMet::Spine::optional_unsigned_long(theRequest.getParameter("distinct"), 1) > 0);
 
-    // Whether to filter (finnish) METARs (LIKE 'METAR%', if enabled by engine's configuration) or
-    // not
+    // Whether to filter (finnish) METARs (LIKE 'METAR%', if enabled by engine's configuration) or not
 
     itsQueryOptions.itsFilterMETARs =
         (SmartMet::Spine::optional_unsigned_long(theRequest.getParameter("filtermetars"), 1) > 0);
 
     // Query limits
 
-    itsQueryOptions.itsMaxMessageStations = config->getMaxMessageStations();
-    itsQueryOptions.itsMaxMessageRows = config->getMaxMessageRows();
+    itsQueryOptions.itsMaxMessageStations = queryLimits.getMaxMessageStations();
+    itsQueryOptions.itsMaxMessageRows = queryLimits.getMaxMessageRows();
   }
   catch (...)
   {

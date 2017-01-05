@@ -7,6 +7,7 @@
 #include <spine/HTTP.h>
 #include <spine/Parameter.h>
 #include <engines/avi/Engine.h>
+#include <engines/authentication/Engine.h>
 
 #include <list>
 #include <string>
@@ -26,7 +27,9 @@ namespace Avi
 class Query
 {
  public:
-  Query(const SmartMet::Spine::HTTP::Request& request, const std::unique_ptr<Config>& config);
+  Query(const SmartMet::Spine::HTTP::Request &request,
+        const SmartMet::Engine::Authentication::Engine *authEngine,
+        const std::unique_ptr<Config> &config);
   Query() = delete;
 
   SmartMet::Engine::Avi::QueryOptions itsQueryOptions;
@@ -36,11 +39,11 @@ class Query
  private:
   void checkIfMultipleLocationOptionsAllowed(bool allowMultipleLocationOptions);
 
-  void parseMessageTypeOption(const SmartMet::Spine::HTTP::Request& theRequest);
-  void parseParamOption(const SmartMet::Spine::HTTP::Request& theRequest);
-  void parseLocationOptions(const SmartMet::Spine::HTTP::Request& theRequest,
+  void parseMessageTypeOption(const SmartMet::Spine::HTTP::Request &theRequest);
+  void parseParamOption(const SmartMet::Spine::HTTP::Request &theRequest);
+  void parseLocationOptions(const SmartMet::Spine::HTTP::Request &theRequest,
                             bool allowMultipleLocationOptions);
-  void parseTimeOptions(const SmartMet::Spine::HTTP::Request& theRequest, int maxTimeRangeDays);
+  void parseTimeOptions(const SmartMet::Spine::HTTP::Request &theRequest, int maxTimeRangeDays);
 };
 
 }  // namespace Avi

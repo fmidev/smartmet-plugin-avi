@@ -4,6 +4,8 @@
 
 #include <spine/ConfigBase.h>
 #include <spine/TableFormatterOptions.h>
+#include <QueryLimits.h>
+#include <engines/authentication/Engine.h>
 #include <boost/noncopyable.hpp>
 
 namespace SmartMet
@@ -24,19 +26,13 @@ class Config : public ConfigBase, private boost::noncopyable
   Config &operator=(const Config &) = delete;
 
   const TableFormatterOptions &tableFormatterOptions() const { return itsTableFormatterOptions; }
-  int getMaxMessageStations() const { return itsMaxMessageStations; }
-  int getMaxMessageRows() const { return itsMaxMessages; }
-  int getMaxMessageTimeRangeDays() const { return itsMaxMessageTimeRangeDays; }
-  bool allowMultipleLocationOptions() const { return itsAllowMultipleLocationOptions; }
+  const QueryLimits &getQueryLimits(const SmartMet::Engine::Authentication::Engine *authEngine,
+                                    const std::string &apiKey) const;
+  bool useAuthentication() const { return itsUseAuthEngine; }
  private:
   TableFormatterOptions itsTableFormatterOptions;
-
-  int itsMaxMessageStations;  // if config value not given or < 0, engine rules; if 0, unlimited
-  int itsMaxMessages;         // if config value not given or < 0, engine rules; if 0, unlimited
-  int itsMaxMessageTimeRangeDays;  // if config value not given or < 0, defaults to
-                                   // maxMessageTimeRangeDaysDefault; if 0, unlimited
-
-  bool itsAllowMultipleLocationOptions;
+  bool itsUseAuthEngine;
+  std::map<std::string, QueryLimits> itsQueryLimits;
 };  // class Config
 
 }  // namespace Avi
