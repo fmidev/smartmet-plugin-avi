@@ -3,6 +3,7 @@
 #include "Query.h"
 #include <spine/Convenience.h>
 #include <spine/Exception.h>
+#include <spine/FmiApiKey.h>
 #include <macgyver/String.h>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/algorithm/string/trim.hpp>
@@ -804,7 +805,7 @@ Query::Query(const SmartMet::Spine::HTTP::Request &theRequest,
     // Parse location related query options
 
     auto queryLimits = config->getQueryLimits(
-        authEngine, SmartMet::Spine::optional_string(theRequest.getParameter("fmi-apikey"), ""));
+        authEngine, SmartMet::Spine::optional_string(SmartMet::Spine::FmiApiKey::getFmiApiKey(theRequest), ""));
 
     parseLocationOptions(theRequest, queryLimits.getAllowMultipleLocationOptions());
 
