@@ -17,7 +17,7 @@ BuildRequires: smartmet-engine-avi-devel >= 17.1.4
 BuildRequires: smartmet-engine-authentication-devel >= 17.1.5
 Requires: libconfig
 Requires: smartmet-library-macgyver >= 16.12.20
-Requires: smartmet-library-spine >= 17.1.4
+Requires: smartmet-library-spine >= 1.0
 Requires: smartmet-engine-avi >= 17.1.4
 Requires: smartmet-engine-authentication >= 17.1.5
 Requires: boost-date-time
@@ -48,6 +48,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Upcoming
+- Using FmiApiKey::getFmiApiKey() to extract request apikey
+
 * Thu Jan  5 2017 Mika Heiskanen <mika.heiskanen@fmi.fi> - 17.1.5-1.fmi
 - Query limiting by apikey groups (SOL-4614)
 - Note: now requires (and changes to) authentication engine too
