@@ -4,7 +4,7 @@
 #include <spine/Convenience.h>
 #include <spine/Exception.h>
 #include <spine/FmiApiKey.h>
-#include <macgyver/String.h>
+#include <macgyver/StringConversion.h>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/algorithm/string/trim.hpp>
 

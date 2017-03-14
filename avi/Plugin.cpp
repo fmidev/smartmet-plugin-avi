@@ -17,7 +17,7 @@
 #include <spine/Exception.h>
 
 #include <macgyver/TimeZoneFactory.h>
-#include <macgyver/String.h>
+#include <macgyver/StringConversion.h>
 
 #include <boost/date_time/local_time/local_time.hpp>
 

@@ -2,7 +2,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet aviation message plugin
 Name: %{SPECNAME}
-Version: 17.1.10
+Version: 17.3.14
 Release: 1%{?dist}.fmi
 License: FMI
 Group: SmartMet/Plugins
@@ -11,15 +11,15 @@ Source0: %{name}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: boost-devel
 BuildRequires: libconfig-devel
-BuildRequires: smartmet-library-spine-devel >= 17.1.10
-BuildRequires: smartmet-library-macgyver-devel >= 16.12.20
-BuildRequires: smartmet-engine-avi-devel >= 17.1.4
-BuildRequires: smartmet-engine-authentication-devel >= 17.1.5
+BuildRequires: smartmet-library-spine-devel >= 17.3.14
+BuildRequires: smartmet-library-macgyver-devel >= 17.3.14
+BuildRequires: smartmet-engine-avi-devel >= 17.3.14
+BuildRequires: smartmet-engine-authentication-devel >= 17.3.14
 Requires: libconfig
-Requires: smartmet-library-macgyver >= 16.12.20
-Requires: smartmet-library-spine >= 17.1.10
-Requires: smartmet-engine-avi >= 17.1.4
-Requires: smartmet-engine-authentication >= 17.1.5
+Requires: smartmet-library-macgyver >= 17.3.14
+Requires: smartmet-library-spine >= 17.3.14
+Requires: smartmet-engine-avi >= 17.3.14
+Requires: smartmet-engine-authentication >= 17.3.14
 Requires: boost-date-time
 Provides: %{SPECNAME}
 Obsoletes: smartmet-brainstorm-aviplugin < 16.11.1
@@ -48,6 +48,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Tue Mar 14 2017 Mika Heiskanen <mika.heiskanen@fmi.fi> - 17.3.14-1.fmi
+- Switched to use macgyver StringConversion tools
+
 * Tue Jan 10 2017 Mika Heiskanen <mika.heiskanen@fmi.fi> - 17.1.10-1.fmi
 - Using FmiApiKey::getFmiApiKey() to extract request apikey
 

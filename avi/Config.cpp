@@ -2,7 +2,7 @@
 
 #include "Config.h"
 #include <spine/Exception.h>
-#include <macgyver/String.h>
+#include <macgyver/StringConversion.h>
 #include <engines/authentication/Engine.h>
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/algorithm/string/split.hpp>
