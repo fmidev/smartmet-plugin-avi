@@ -7,17 +7,17 @@
 #include "Plugin.h"
 #include "Query.h"
 
-#include <spine/SmartMet.h>
-#include <spine/Reactor.h>
 #include <spine/Convenience.h>
-#include <spine/ValueFormatter.h>
-#include <spine/Table.h>
-#include <spine/TableFormatterFactory.h>
-#include <spine/TableFeeder.h>
 #include <spine/Exception.h>
+#include <spine/Reactor.h>
+#include <spine/SmartMet.h>
+#include <spine/Table.h>
+#include <spine/TableFeeder.h>
+#include <spine/TableFormatterFactory.h>
+#include <spine/ValueFormatter.h>
 
-#include <macgyver/TimeZoneFactory.h>
 #include <macgyver/StringConversion.h>
+#include <macgyver/TimeZoneFactory.h>
 
 #include <boost/date_time/local_time/local_time.hpp>
 
@@ -241,11 +241,7 @@ void Plugin::requestHandler(Reactor & /* theReactor */,
 
       SmartMet::Spine::Exception exception(BCP, "Request processing exception!", NULL);
       exception.addParameter("URI", theRequest.getURI());
-
-      if (!exception.stackTraceDisabled())
-        std::cerr << exception.getStackTrace();
-      else if (!exception.loggingDisabled())
-        std::cerr << exception.loggingDisabled() << std::endl;
+      exception.printError();
 
       if (isdebug)
       {
