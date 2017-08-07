@@ -9,6 +9,7 @@ Group: SmartMet/Plugins
 URL: https://github.com/fmidev/smartmet-plugin-avi
 Source0: %{name}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildRequires: make
 BuildRequires: boost-devel
 BuildRequires: libconfig-devel
 BuildRequires: smartmet-library-spine-devel >= 17.3.15
