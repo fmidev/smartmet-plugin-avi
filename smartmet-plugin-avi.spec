@@ -2,7 +2,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet aviation message plugin
 Name: %{SPECNAME}
-Version: 17.4.8
+Version: 17.8.28
 Release: 1%{?dist}.fmi
 License: FMI
 Group: SmartMet/Plugins
@@ -13,15 +13,15 @@ BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: boost-devel
 BuildRequires: libconfig-devel
-BuildRequires: smartmet-library-spine-devel >= 17.3.15
-BuildRequires: smartmet-library-macgyver-devel >= 17.3.14
-BuildRequires: smartmet-engine-avi-devel >= 17.3.15
-BuildRequires: smartmet-engine-authentication-devel >= 17.3.15
+BuildRequires: smartmet-library-spine-devel >= 17.8.28
+BuildRequires: smartmet-library-macgyver-devel >= 17.8.28
+BuildRequires: smartmet-engine-avi-devel >= 17.8.28
+BuildRequires: smartmet-engine-authentication-devel >= 1.0
 Requires: libconfig
-Requires: smartmet-library-macgyver >= 17.3.14
-Requires: smartmet-library-spine >= 17.3.15
-Requires: smartmet-engine-avi >= 17.3.15
-Requires: smartmet-engine-authentication >= 17.3.15
+Requires: smartmet-library-macgyver >= 17.8.28
+Requires: smartmet-library-spine >= 17.8.28
+Requires: smartmet-engine-avi >= 17.8.28
+Requires: smartmet-engine-authentication >= 1.0
 Requires: boost-date-time
 Provides: %{SPECNAME}
 Obsoletes: smartmet-brainstorm-aviplugin < 16.11.1
@@ -50,6 +50,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Mon Aug 28 2017 Mika Heiskanen <mika.heiskanen@fmi.fi> - 17.8.28-1.fmi
+- Upgrade to boost 1.65
+
 * Sat Apr  8 2017 Mika Heiskanen <mika.heiskanen@fmi.fi> - 17.4.8-1.fmi
 - Simplified error reporting
 
