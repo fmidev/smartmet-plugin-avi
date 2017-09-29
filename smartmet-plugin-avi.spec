@@ -17,6 +17,8 @@ BuildRequires: smartmet-library-spine-devel >= 17.8.28
 BuildRequires: smartmet-library-macgyver-devel >= 17.8.28
 BuildRequires: smartmet-engine-avi-devel >= 17.8.28
 BuildRequires: smartmet-engine-authentication-devel >= 1.0
+BuildRequires: bzip2-devel
+BuildRequires: zlib-devel
 Requires: libconfig
 Requires: smartmet-library-macgyver >= 17.8.28
 Requires: smartmet-library-spine >= 17.8.28
