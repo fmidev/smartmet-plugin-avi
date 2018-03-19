@@ -1,1 +1,0 @@
-GET	/avi?icaos=EFHK,EFRO,EFIV&format=debug&param=stationid,icao,name,elevation,stationvalidfrom,longitude,latitude,lonlat,latlon,distance,bearing HTTP/1.0
