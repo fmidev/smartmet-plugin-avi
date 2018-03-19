@@ -1,6 +1,0 @@
-<!DOCTYPE html><html><head><title>Debug mode output</title><style>table {border-collapse: collapse;}th, td {border-bottom: 1px solid black; padding: 3px 0.5em 3px 0.5em; text-align: center;}tr:nth-child(even) {background-color: #f2f2f2;}tr:hover {background-color: #e2e2e2;}</style>
-</head><body>
-<table><tr><th>stationid</th><th>icao</th><th>name</th><th>elevation</th><th>stationvalidfrom</th><th>longitude</th><th>latitude</th><th>lonlat</th><th>latlon</th><th>distance</th><th>bearing</th></tr><tr>
-<td>7</td><td>EFHK</td><td>Vantaa Helsinki-Vantaa lentoasema AWOS</td><td>40</td><td>19990101T000000</td><td>24.906970</td><td>60.315830</td><td>24.906970, 60.315830</td><td>60.315830, 24.906970</td><td>nan</td><td>nan</td></tr><tr>
-<td>8</td><td>EFIV</td><td>Inari Ivalo lentoasema</td><td>140</td><td>19570601T000000</td><td>27.418970</td><td>68.613350</td><td>27.418970, 68.613350</td><td>68.613350, 27.418970</td><td>nan</td><td>nan</td></tr><tr>
-<td>22</td><td>EFRO</td><td>Rovaniemi lentoasema AWOS</td><td>193</td><td>19510501T000000</td><td>25.822080</td><td>66.562490</td><td>25.822080, 66.562490</td><td>66.562490, 25.822080</td><td>nan</td><td>nan</td></tr></table></body></html>
