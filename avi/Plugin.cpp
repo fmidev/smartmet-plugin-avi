@@ -79,8 +79,8 @@ void setPrecisions(size_t nColumns, const Query &query, vector<int> &precisions)
 
 // ----------------------------------------------------------------------
 /*!
-* \brief Perform an avi query
-*/
+ * \brief Perform an avi query
+ */
 // ----------------------------------------------------------------------
 
 void Plugin::query(const SmartMet::Spine::HTTP::Request &theRequest,
@@ -198,8 +198,8 @@ void Plugin::query(const SmartMet::Spine::HTTP::Request &theRequest,
 
 // ----------------------------------------------------------------------
 /*!
-* \brief Main content handler
-*/
+ * \brief Main content handler
+ */
 // ----------------------------------------------------------------------
 
 void Plugin::requestHandler(Reactor & /* theReactor */,
@@ -272,8 +272,8 @@ void Plugin::requestHandler(Reactor & /* theReactor */,
 
 // ----------------------------------------------------------------------
 /*!
-* \brief Plugin constructor
-*/
+ * \brief Plugin constructor
+ */
 // ----------------------------------------------------------------------
 
 Plugin::Plugin(Reactor *theReactor, const char *theConfigFileName)
@@ -299,8 +299,8 @@ Plugin::Plugin(Reactor *theReactor, const char *theConfigFileName)
 
 // ----------------------------------------------------------------------
 /*!
-* \brief Plugin initialization
-*/
+ * \brief Plugin initialization
+ */
 // ----------------------------------------------------------------------
 
 void Plugin::init()
@@ -351,17 +351,15 @@ void Plugin::shutdown()
 }
 // ----------------------------------------------------------------------
 /*!
-* \brief Destructor
-*/
+ * \brief Destructor
+ */
 // ----------------------------------------------------------------------
 
-Plugin::~Plugin()
-{
-}
+Plugin::~Plugin() {}
 // ----------------------------------------------------------------------
 /*!
-* \brief Return the plugin name
-*/
+ * \brief Return the plugin name
+ */
 // ----------------------------------------------------------------------
 
 const std::string &Plugin::getPluginName() const
@@ -370,8 +368,8 @@ const std::string &Plugin::getPluginName() const
 }
 // ----------------------------------------------------------------------
 /*!
-* \brief Return the required version
-*/
+ * \brief Return the required version
+ */
 // ----------------------------------------------------------------------
 
 int Plugin::getRequiredAPIVersion() const

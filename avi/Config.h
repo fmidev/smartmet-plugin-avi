@@ -2,11 +2,11 @@
 
 #pragma once
 
+#include <boost/noncopyable.hpp>
+#include <engines/authentication/Engine.h>
 #include <spine/ConfigBase.h>
 #include <spine/TableFormatterOptions.h>
 #include <QueryLimits.h>
-#include <engines/authentication/Engine.h>
-#include <boost/noncopyable.hpp>
 
 namespace SmartMet
 {
@@ -29,6 +29,7 @@ class Config : public ConfigBase, private boost::noncopyable
   const QueryLimits &getQueryLimits(const SmartMet::Engine::Authentication::Engine *authEngine,
                                     const std::string &apiKey) const;
   bool useAuthentication() const { return itsUseAuthEngine; }
+
  private:
   TableFormatterOptions itsTableFormatterOptions;
   bool itsUseAuthEngine;

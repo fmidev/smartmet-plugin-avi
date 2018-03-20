@@ -1,12 +1,12 @@
 // ======================================================================
 
 #include "Query.h"
+#include <boost/algorithm/string/trim.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <macgyver/StringConversion.h>
 #include <spine/Convenience.h>
 #include <spine/Exception.h>
 #include <spine/FmiApiKey.h>
-#include <macgyver/StringConversion.h>
-#include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/algorithm/string/trim.hpp>
 
 using namespace std;
 using namespace boost::posix_time;
@@ -20,8 +20,8 @@ namespace Avi
 {
 // ----------------------------------------------------------------------
 /*!
-* \brief Return list of pairs of values from comma separated string
-*/
+ * \brief Return list of pairs of values from comma separated string
+ */
 // ----------------------------------------------------------------------
 
 template <typename T>
@@ -137,8 +137,8 @@ boost::optional<list<pair<T, T>>> listOfPairs(const string &commaSeparatedStr,
 
 // ----------------------------------------------------------------------
 /*!
-* \brief Return list of values from comma separated string
-*/
+ * \brief Return list of values from comma separated string
+ */
 // ----------------------------------------------------------------------
 
 template <typename T>
@@ -805,7 +805,8 @@ Query::Query(const SmartMet::Spine::HTTP::Request &theRequest,
     // Parse location related query options
 
     auto queryLimits = config->getQueryLimits(
-        authEngine, SmartMet::Spine::optional_string(SmartMet::Spine::FmiApiKey::getFmiApiKey(theRequest), ""));
+        authEngine,
+        SmartMet::Spine::optional_string(SmartMet::Spine::FmiApiKey::getFmiApiKey(theRequest), ""));
 
     parseLocationOptions(theRequest, queryLimits.getAllowMultipleLocationOptions());
 
@@ -843,7 +844,8 @@ Query::Query(const SmartMet::Spine::HTTP::Request &theRequest,
     itsQueryOptions.itsDistinctMessages =
         (SmartMet::Spine::optional_unsigned_long(theRequest.getParameter("distinct"), 1) > 0);
 
-    // Whether to filter (finnish) METARs (LIKE 'METAR%', if enabled by engine's configuration) or not
+    // Whether to filter (finnish) METARs (LIKE 'METAR%', if enabled by engine's configuration) or
+    // not
 
     itsQueryOptions.itsFilterMETARs =
         (SmartMet::Spine::optional_unsigned_long(theRequest.getParameter("filtermetars"), 1) > 0);

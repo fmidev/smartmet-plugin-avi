@@ -30,6 +30,7 @@ class QueryLimits
     itsAllowMultipleLocationOptions = allowMultipleLocationOptions;
   }
   bool getAllowMultipleLocationOptions() const { return itsAllowMultipleLocationOptions; }
+
  private:
   int itsMaxMessageStations;
   int itsMaxMessages;
