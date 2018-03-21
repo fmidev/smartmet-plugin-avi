@@ -8,11 +8,11 @@
 
 #include "Config.h"
 
-#include <spine/SmartMetPlugin.h>
-#include <spine/Reactor.h>
-#include <spine/HTTP.h>
-#include <engines/avi/Engine.h>
 #include <engines/authentication/Engine.h>
+#include <engines/avi/Engine.h>
+#include <spine/HTTP.h>
+#include <spine/Reactor.h>
+#include <spine/SmartMetPlugin.h>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp>

@@ -1,11 +1,11 @@
 // ======================================================================
 
 #include "Config.h"
-#include <spine/Exception.h>
-#include <macgyver/StringConversion.h>
-#include <engines/authentication/Engine.h>
-#include <boost/algorithm/string/trim.hpp>
 #include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/trim.hpp>
+#include <engines/authentication/Engine.h>
+#include <macgyver/StringConversion.h>
+#include <spine/Exception.h>
 #include <stdexcept>
 
 using namespace std;
@@ -187,9 +187,9 @@ Config::Config(const string &theConfigFileName)
     }
 
     // Authentication engine needs not to be loaded if there's no apikey groups
- 
+
     itsUseAuthEngine &= (itsQueryLimits.size() > 0);
- 
+
     // Store the default limits as the last map entry
 
     string defaultGroup(itsQueryLimits.size() > 0 ? itsQueryLimits.crbegin()->first + "Z"
