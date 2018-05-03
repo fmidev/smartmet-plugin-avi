@@ -154,21 +154,21 @@ Config::Config(const string &theConfigFileName)
             else
               throw SmartMet::Spine::Exception(BCP, string("Unknown variable '") + paramName);
           }
-          catch (libconfig::ParseException &e)
+          catch (const libconfig::ParseException &e)
           {
             throw SmartMet::Spine::Exception(BCP,
                                              string("Configuration error ' ") + e.getError() +
                                                  "' with variable '" + paramName + "' on line " +
                                                  Fmi::to_string(e.getLine()));
           }
-          catch (libconfig::ConfigException &)
+          catch (const libconfig::ConfigException &)
           {
             throw SmartMet::Spine::Exception(BCP,
                                              string("Configuration error with variable '") +
                                                  paramName + "' on line " +
                                                  Fmi::to_string(group[j].getSourceLine()));
           }
-          catch (std::exception &e)
+          catch (const std::exception &e)
           {
             throw SmartMet::Spine::Exception(BCP,
                                              e.what() + string(" (line number ") +
