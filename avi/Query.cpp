@@ -131,7 +131,7 @@ boost::optional<list<pair<T, T>>> listOfPairs(const string &commaSeparatedStr,
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception(BCP, "Operation failed!", NULL);
+    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
@@ -246,11 +246,10 @@ boost::optional<list<T>> listOfValues(const string &commaSeparatedStr,
       catch (...)
       {
         if (castOk)
-          throw SmartMet::Spine::Exception(BCP,
-                                           string("Invalid value for option '") + optionName +
-                                               "' at position " + Fmi::to_string(nn + 1) + "; '" +
-                                               commaSeparatedStr + "'",
-                                           NULL);
+          throw SmartMet::Spine::Exception::Trace(
+              BCP,
+              string("Invalid value for option '") + optionName + "' at position " +
+                  Fmi::to_string(nn + 1) + "; '" + commaSeparatedStr + "'");
       }
 
       np = n;
@@ -260,7 +259,7 @@ boost::optional<list<T>> listOfValues(const string &commaSeparatedStr,
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception(BCP, "Operation failed!", NULL);
+    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
@@ -281,7 +280,7 @@ string errMsgOptionIsEmpty(const char *optionName)
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception(BCP, "Operation failed!", NULL);
+    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
@@ -309,7 +308,7 @@ void Query::parseMessageTypeOption(const SmartMet::Spine::HTTP::Request &theRequ
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception(BCP, "Operation failed!", NULL);
+    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
@@ -348,7 +347,7 @@ void Query::parseParamOption(const SmartMet::Spine::HTTP::Request &theRequest)
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception(BCP, "Operation failed!", NULL);
+    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
@@ -385,7 +384,7 @@ void Query::checkIfMultipleLocationOptionsAllowed(bool allowMultipleLocationOpti
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception(BCP, "Operation failed!", NULL);
+    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
@@ -691,7 +690,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request &theReques
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception(BCP, "Operation failed!", NULL);
+    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
@@ -778,7 +777,7 @@ void Query::parseTimeOptions(const SmartMet::Spine::HTTP::Request &theRequest,
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception(BCP, "Operation failed!", NULL);
+    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
@@ -857,7 +856,7 @@ Query::Query(const SmartMet::Spine::HTTP::Request &theRequest,
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception(BCP, "Operation failed!", NULL);
+    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
   }
 }
 

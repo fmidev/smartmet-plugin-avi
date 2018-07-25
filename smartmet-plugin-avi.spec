@@ -2,7 +2,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet aviation message plugin
 Name: %{SPECNAME}
-Version: 18.7.23
+Version: 18.7.25
 Release: 1%{?dist}.fmi
 License: FMI
 Group: SmartMet/Plugins
@@ -15,13 +15,13 @@ BuildRequires: make
 BuildRequires: boost-devel
 BuildRequires: libconfig-devel
 BuildRequires: smartmet-library-spine-devel >= 18.7.23
-BuildRequires: smartmet-library-macgyver-devel >= 18.6.7
+BuildRequires: smartmet-library-macgyver-devel >= 18.7.25
 BuildRequires: smartmet-engine-avi-devel >= 18.4.7
 BuildRequires: smartmet-engine-authentication-devel >= 18.4.7
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 Requires: libconfig
-Requires: smartmet-library-macgyver >= 18.6.7
+Requires: smartmet-library-macgyver >= 18.7.25
 Requires: smartmet-library-spine >= 18.7.23
 Requires: smartmet-engine-avi >= 18.4.7
 Requires: smartmet-engine-authentication >= 18.4.7
@@ -53,6 +53,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Wed Jul 25 2018 Mika Heiskanen <mika.heiskanen@fmi.fi> - 18.7.25-1.fmi
+- Prefer nullptr over NULL
+
 * Mon Jul 23 2018 Mika Heiskanen <mika.heiskanen@fmi.fi> - 18.7.23-1.fmi
 - Repackaged since spine ValueFormatter ABI changed
 

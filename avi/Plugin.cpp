@@ -52,7 +52,7 @@ void setColumnHeaders(TableFormatter::Names &headers, const SmartMet::Engine::Av
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception(BCP, "Operation failed!", NULL);
+    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
@@ -71,7 +71,7 @@ void setPrecisions(size_t nColumns, const Query &query, vector<int> &precisions)
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception(BCP, "Operation failed!", NULL);
+    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
@@ -192,7 +192,7 @@ void Plugin::query(const SmartMet::Spine::HTTP::Request &theRequest,
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception(BCP, "Operation failed!", NULL);
+    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
@@ -239,7 +239,7 @@ void Plugin::requestHandler(Reactor & /* theReactor */,
     {
       // Catching all exceptions
 
-      SmartMet::Spine::Exception exception(BCP, "Request processing exception!", NULL);
+      SmartMet::Spine::Exception exception(BCP, "Request processing exception!", nullptr);
       exception.addParameter("URI", theRequest.getURI());
       exception.printError();
 
@@ -266,7 +266,7 @@ void Plugin::requestHandler(Reactor & /* theReactor */,
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception(BCP, "Operation failed!", NULL);
+    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
@@ -293,7 +293,7 @@ Plugin::Plugin(Reactor *theReactor, const char *theConfigFileName)
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception(BCP, "Operation failed!", NULL);
+    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
@@ -309,7 +309,7 @@ void Plugin::init()
   {
     /* AviEngine */
 
-    auto engine = itsReactor->getSingleton("Avi", NULL);
+    auto engine = itsReactor->getSingleton("Avi", nullptr);
     if (!engine)
       throw SmartMet::Spine::Exception(BCP, "Avi engine unavailable");
 
@@ -321,7 +321,7 @@ void Plugin::init()
 
     if (itsConfig->useAuthentication())
     {
-      engine = itsReactor->getSingleton("Authentication", NULL);
+      engine = itsReactor->getSingleton("Authentication", nullptr);
 
       if (!engine)
         throw SmartMet::Spine::Exception(BCP, "Authentication engine unavailable");
@@ -335,7 +335,7 @@ void Plugin::init()
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception(BCP, "Operation failed!", NULL);
+    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
@@ -405,7 +405,7 @@ extern "C" SmartMetPlugin *create(SmartMet::Spine::Reactor *theReactor,
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception(BCP, "Operation failed!", NULL);
+    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
