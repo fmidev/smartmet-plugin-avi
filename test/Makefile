@@ -32,7 +32,7 @@ all: $(PROG)
 clean:
 	rm -f $(PROG) *~
 
-test: $(PROG)
+test: unit_test $(PROG)
 	@echo Running tests:
 	@mkdir -p tmp failures
 	@rm -f tmp/* failures/*
@@ -42,3 +42,7 @@ test: $(PROG)
 
 $(PROG) : % : %.cpp Makefile ../avi.so
 	$(CC) $(CFLAGS) -o $@ $@.cpp $(INCLUDES) $(LIBS)
+
+unit_test:
+	echo "Runing Unit Tests"
+	make -C unit_test test
