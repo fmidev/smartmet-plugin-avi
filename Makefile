@@ -142,6 +142,7 @@ install:
 	$(INSTALL_PROG) $(LIBFILE) $(plugindir)/$(LIBFILE)
 
 test:
+	mkdir -p build && cd build && cmake ../ && make && make test && cd ..
 	cd test && make test
 
 objdir:
