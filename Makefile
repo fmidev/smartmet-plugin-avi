@@ -135,7 +135,7 @@ clean:
 	rm -rf obj
 
 format:
-	clang-format -i -style=file $(SUBNAME)/*.h $(SUBNAME)/*.cpp test/*.cpp
+	clang-format -i -style=file $(SUBNAME)/*.h $(SUBNAME)/*.cpp test/*.cpp test/unit_test/*.cpp
 
 install:
 	@mkdir -p $(plugindir)
