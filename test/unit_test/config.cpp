@@ -35,7 +35,7 @@ BOOST_AUTO_TEST_CASE(config_accessor_tableFormatterOptions,
 {
   const std::string filename = "cnf/aviplugin.conf";
   Config config(filename);
-  const TableFormatterOptions & tfo = config.tableFormatterOptions();
+  const TableFormatterOptions& tfo = config.tableFormatterOptions();
   BOOST_CHECK_EQUAL(tfo.formatType(), "");
 }
 BOOST_AUTO_TEST_CASE(config_accessor_getQueryLimits,
@@ -43,7 +43,7 @@ BOOST_AUTO_TEST_CASE(config_accessor_getQueryLimits,
 {
   const std::string filename = "cnf/aviplugin.conf";
   Config config(filename);
-  const QueryLimits & gql = config.getQueryLimits(nullptr, "");
+  const QueryLimits& gql = config.getQueryLimits(nullptr, "");
   BOOST_CHECK_EQUAL(gql.getMaxMessageStations(), 0);
 }
 }  // namespace Avi
