@@ -45,6 +45,9 @@ BOOST_AUTO_TEST_CASE(config_accessor_getQueryLimits,
   Config config(filename);
   const QueryLimits& gql = config.getQueryLimits(nullptr, "");
   BOOST_CHECK_EQUAL(gql.getMaxMessageStations(), 0);
+  BOOST_CHECK_EQUAL(gql.getMaxMessageRows(), 0);
+  BOOST_CHECK_EQUAL(gql.getMaxMessageTimeRangeDays(), 31);
+  BOOST_CHECK_EQUAL(gql.getAllowMultipleLocationOptions(), true);
 }
 }  // namespace Avi
 }  // namespace Plugin
