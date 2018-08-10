@@ -29,6 +29,10 @@ BOOST_AUTO_TEST_CASE(config_accessor_useAuthentication,
   Config config(filename);
   const bool boolVariable = true;
   BOOST_CHECK_EQUAL(config.useAuthentication(), not boolVariable);
+
+  const std::string filename2 = "cnf/aviplugin-with-authentication.conf";
+  Config config2(filename2);
+  BOOST_CHECK_EQUAL(config2.useAuthentication(), boolVariable);
 }
 BOOST_AUTO_TEST_CASE(config_accessor_tableFormatterOptions,
                      *boost::unit_test::depends_on("config_constructor_with_valid_file_exist"))
