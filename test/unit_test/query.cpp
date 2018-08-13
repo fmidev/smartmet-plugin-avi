@@ -93,6 +93,36 @@ BOOST_AUTO_TEST_CASE(query_constructor_allowMultipleLocationOptions_disabled,
   request.addParameter("icao", "EFHK");
   BOOST_CHECK_THROW({ Query query2(request, authEngine, config); }, Spine::Exception);
 }
+
+BOOST_AUTO_TEST_CASE(
+    query_constructor_parseLocationOptions_places,
+    *boost::unit_test::depends_on("query_constructor_allowMultipleLocationOptions_enabled"))
+{
+  BOOST_CHECK(authEngine != nullptr);
+
+  const std::string filename = "cnf/aviplugin.conf";
+  std::unique_ptr<Config> config(new Config(filename));
+  Spine::HTTP::Request request;
+  request.addParameter("param", "value");
+  request.addParameter("place", " Göteborg");
+  request.addParameter("place", "Helsinki ");
+  request.addParameter("place", ",Turku");
+  request.addParameter("places", " Tampere , Oulu ");
+
+  Query query1(request, authEngine, config);
+  request.removeParameter("place");
+  request.removeParameter("places");
+
+  // Exception: Empty value for option 'places' at position 1; ',Kuopio,Rovaniemi'
+  request.addParameter("places", ",Kuopio,Rovaniemi");
+  BOOST_CHECK_THROW({ Query query2(request, authEngine, config); }, Spine::Exception);
+  request.removeParameter("places");
+
+  // Exception: Empty value for option 'places' at position 3; 'Jyväskylä,Joensuu,'
+  request.addParameter("places", "Jyväskylä,Joensuu,");
+  BOOST_CHECK_THROW({ Query query3(request, authEngine, config); }, Spine::Exception);
+  request.removeParameter("places");
+}
 }  // namespace Avi
 }  // namespace Plugin
 }  // namespace SmartMet
