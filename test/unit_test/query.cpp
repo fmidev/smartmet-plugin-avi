@@ -516,6 +516,47 @@ BOOST_AUTO_TEST_CASE(
                     stringVariable1);
   BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsLocationOptions.itsCountries.back(), stringVariable2);
 }
+
+BOOST_AUTO_TEST_CASE(
+    query_constructor_parseLocationOptions_countries,
+    *boost::unit_test::depends_on("query_constructor_parseLocationOptions_country"))
+{
+  BOOST_CHECK(authEngine != nullptr);
+
+  const std::string stringVariable1 = "12abcDE#)\{}+";
+  const std::string stringVariable2 = "SE";
+  const std::string stringVariable3 = stringVariable1 + "," + stringVariable2;
+  const std::string filename = "cnf/aviplugin.conf";
+  std::unique_ptr<Config> config(new Config(filename));
+  Spine::HTTP::Request request;
+  request.addParameter("param", "value");
+
+  // One country with invalid value
+  request.addParameter("countries", stringVariable1);
+  Query query1(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query1.itsQueryOptions.itsLocationOptions.itsCountries.size(), 1);
+  BOOST_CHECK_EQUAL(query1.itsQueryOptions.itsLocationOptions.itsCountries.front(),
+                    stringVariable1);
+  request.removeParameter("countries");
+
+  // Two comma separated country codes in a countries variable
+  request.addParameter("countries", stringVariable3);
+  Query query2(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsLocationOptions.itsCountries.size(), 2);
+  BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsLocationOptions.itsCountries.front(),
+                    stringVariable1);
+  BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsLocationOptions.itsCountries.back(), stringVariable2);
+  request.removeParameter("countries");
+
+  // Two country codes in separated countries variables
+  request.addParameter("countries", stringVariable1);
+  request.addParameter("countries", stringVariable2);
+  Query query3(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsLocationOptions.itsCountries.size(), 2);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsLocationOptions.itsCountries.front(),
+                    stringVariable1);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsLocationOptions.itsCountries.back(), stringVariable2);
+}
 }  // namespace Avi
 }  // namespace Plugin
 }  // namespace SmartMet
