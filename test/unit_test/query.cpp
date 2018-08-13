@@ -168,6 +168,63 @@ BOOST_AUTO_TEST_CASE(
   BOOST_CHECK_EQUAL(query6.itsQueryOptions.itsLocationOptions.itsBBoxes.size(), 2);
   request.removeParameter("bbox");
 }
+
+BOOST_AUTO_TEST_CASE(
+    query_constructor_parseLocationOptions_lonlat,
+    *boost::unit_test::depends_on("query_constructor_allowMultipleLocationOptions_enabled"))
+{
+  BOOST_CHECK(authEngine != nullptr);
+
+  const std::string filename = "cnf/aviplugin.conf";
+  std::unique_ptr<Config> config(new Config(filename));
+  Spine::HTTP::Request request;
+  request.addParameter("param", "value");
+
+  // Exception: Option maxdistance is required with latlon/lonlat, bbox and wkt options
+  request.addParameter("lonlat", "25,60");
+  BOOST_CHECK_THROW({ Query query1(request, authEngine, config); }, Spine::Exception);
+
+  // One lonlat by using integers
+  request.addParameter("maxdistance", "1000.0");
+  Query query2(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsLocationOptions.itsLonLats.size(), 1);
+  BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsLocationOptions.itsLonLats.front().itsLon, 25);
+  BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsLocationOptions.itsLonLats.front().itsLat, 60);
+  request.removeParameter("lonlat");
+
+  // One lonlat by using floating point numbers
+  request.addParameter("lonlat", "25.12,60.1");
+  Query query3(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsLocationOptions.itsLonLats.size(), 1);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsLocationOptions.itsLonLats.front().itsLon, 25.12);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsLocationOptions.itsLonLats.front().itsLat, 60.1);
+  request.removeParameter("lonlat");
+
+  // Exception: 2 values required for option 'lonlat'; ',25,60'
+  request.addParameter("lonlat", ",25,60");
+  BOOST_CHECK_THROW({ Query query4(request, authEngine, config); }, Spine::Exception);
+  request.removeParameter("lonlat");
+
+  // Exception: 2 values required for option 'lonlat'; '25,60,'
+  request.addParameter("lonlat", "25,60,");
+  BOOST_CHECK_THROW({ Query query5(request, authEngine, config); }, Spine::Exception);
+  request.removeParameter("lonlat");
+
+  // Exception: 2 values required for option 'lonlat'; '25,60,'
+  request.addParameter("lonlat", "25,60,");
+  BOOST_CHECK_THROW({ Query query6(request, authEngine, config); }, Spine::Exception);
+  request.removeParameter("lonlat");
+
+  // Two separate lonlat query parameters
+  request.addParameter("lonlat", "25,60");
+  request.addParameter("lonlat", "20.12,60.1");
+  Query query7(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query7.itsQueryOptions.itsLocationOptions.itsLonLats.size(), 2);
+  BOOST_CHECK_EQUAL(query7.itsQueryOptions.itsLocationOptions.itsLonLats.front().itsLon, 25);
+  BOOST_CHECK_EQUAL(query7.itsQueryOptions.itsLocationOptions.itsLonLats.front().itsLat, 60);
+  BOOST_CHECK_EQUAL(query7.itsQueryOptions.itsLocationOptions.itsLonLats.back().itsLon, 20.12);
+  BOOST_CHECK_EQUAL(query7.itsQueryOptions.itsLocationOptions.itsLonLats.back().itsLat, 60.1);
+}
 }  // namespace Avi
 }  // namespace Plugin
 }  // namespace SmartMet
