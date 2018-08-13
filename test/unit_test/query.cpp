@@ -557,6 +557,56 @@ BOOST_AUTO_TEST_CASE(
                     stringVariable1);
   BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsLocationOptions.itsCountries.back(), stringVariable2);
 }
+
+BOOST_AUTO_TEST_CASE(
+    query_constructor_parseLocationOptions_statioid,
+    *boost::unit_test::depends_on("query_constructor_allowMultipleLocationOptions_enabled"))
+{
+  BOOST_CHECK(authEngine != nullptr);
+
+  const std::string stringVariable1 = "ab";
+  const std::string stringVariable2 = "91";
+  const std::string stringVariable3 = "92";
+  const int intVariable2 = 91;
+  const int intVariable3 = 92;
+  const int intVariable4 = std::numeric_limits<int>::lowest();
+  const int intVariable5 = std::numeric_limits<int>::max();
+  const std::string stringVariable4 = std::to_string(intVariable4);
+  const std::string stringVariable5 = std::to_string(intVariable5);
+  const std::string filename = "cnf/aviplugin.conf";
+  std::unique_ptr<Config> config(new Config(filename));
+  Spine::HTTP::Request request;
+  request.addParameter("param", "value");
+
+  // Exception: Option 'stationid' is empty
+  request.addParameter("stationid", stringVariable1);
+  BOOST_CHECK_THROW({ Query query1(request, authEngine, config); }, Spine::Exception);
+  request.removeParameter("stationid");
+
+  // One valid stationid
+  request.addParameter("stationid", stringVariable2);
+  Query query2(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsLocationOptions.itsStationIds.size(), 1);
+  BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsLocationOptions.itsStationIds.front(), intVariable2);
+  request.removeParameter("stationid");
+
+  // Two valid stationid values
+  request.addParameter("stationid", stringVariable2);
+  request.addParameter("stationid", stringVariable3);
+  Query query3(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsLocationOptions.itsStationIds.size(), 2);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsLocationOptions.itsStationIds.front(), intVariable2);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsLocationOptions.itsStationIds.back(), intVariable3);
+  request.removeParameter("stationid");
+
+  // Lowest and maximum value of integer.
+  request.addParameter("stationid", stringVariable4);
+  request.addParameter("stationid", stringVariable5);
+  Query query4(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsLocationOptions.itsStationIds.size(), 2);
+  BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsLocationOptions.itsStationIds.front(), intVariable4);
+  BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsLocationOptions.itsStationIds.back(), intVariable5);
+}
 }  // namespace Avi
 }  // namespace Plugin
 }  // namespace SmartMet
