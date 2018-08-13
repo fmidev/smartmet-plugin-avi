@@ -653,6 +653,31 @@ BOOST_AUTO_TEST_CASE(
   BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsLocationOptions.itsStationIds.front(), intVariable2);
   BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsLocationOptions.itsStationIds.back(), intVariable3);
 }
+
+BOOST_AUTO_TEST_CASE(
+    query_constructor_parseLocationOptions_numberofstations,
+    *boost::unit_test::depends_on("query_constructor_allowMultipleLocationOptions_enabled"))
+{
+  BOOST_CHECK(authEngine != nullptr);
+
+  const std::string stringVariable1 = "ab";
+  const std::string stringVariable2 = "91";
+  const unsigned int unsignedIntVariable2 = 91;
+  const std::string filename = "cnf/aviplugin.conf";
+  std::unique_ptr<Config> config(new Config(filename));
+  Spine::HTTP::Request request;
+  request.addParameter("param", "value");
+
+  // Exception: [Invalid argument] Fmi::stoul failed to convert 'ab' to unsigned long
+  request.addParameter("numberofstations", stringVariable1);
+  BOOST_CHECK_THROW({ Query query1(request, authEngine, config); }, Spine::Exception);
+  request.removeParameter("numberofstations");
+
+  request.addParameter("numberofstations", stringVariable2);
+  Query query2(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsLocationOptions.itsNumberOfNearestStations,
+                    unsignedIntVariable2);
+}
 }  // namespace Avi
 }  // namespace Plugin
 }  // namespace SmartMet
