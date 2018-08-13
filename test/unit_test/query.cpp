@@ -447,6 +447,44 @@ BOOST_AUTO_TEST_CASE(
   BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsLocationOptions.itsIcaos.front(), stringVariable1);
   BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsLocationOptions.itsIcaos.back(), stringVariable2);
 }
+
+BOOST_AUTO_TEST_CASE(
+    query_constructor_parseLocationOptions_icaos,
+    *boost::unit_test::depends_on("query_constructor_allowMultipleLocationOptions_enabled"))
+{
+  BOOST_CHECK(authEngine != nullptr);
+
+  const std::string stringVariable1 = "12abcDE#)\{}+";
+  const std::string stringVariable2 = "EFRO";
+  const std::string stringVariable3 = stringVariable1 + "," + stringVariable2;
+  const std::string filename = "cnf/aviplugin.conf";
+  std::unique_ptr<Config> config(new Config(filename));
+  Spine::HTTP::Request request;
+  request.addParameter("param", "value");
+
+  // One icao code with invalid value
+  request.addParameter("icaos", stringVariable1);
+  Query query1(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query1.itsQueryOptions.itsLocationOptions.itsIcaos.size(), 1);
+  BOOST_CHECK_EQUAL(query1.itsQueryOptions.itsLocationOptions.itsIcaos.front(), stringVariable1);
+  request.removeParameter("icaos");
+
+  // Two comma separated icao codes in a string.
+  request.addParameter("icaos", stringVariable3);
+  Query query2(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsLocationOptions.itsIcaos.size(), 2);
+  BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsLocationOptions.itsIcaos.front(), stringVariable1);
+  BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsLocationOptions.itsIcaos.back(), stringVariable2);
+  request.removeParameter("icaos");
+
+  // Two icao codes in separated strings.
+  request.addParameter("icaos", stringVariable1);
+  request.addParameter("icaos", stringVariable2);
+  Query query3(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsLocationOptions.itsIcaos.size(), 2);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsLocationOptions.itsIcaos.front(), stringVariable1);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsLocationOptions.itsIcaos.back(), stringVariable2);
+}
 }  // namespace Avi
 }  // namespace Plugin
 }  // namespace SmartMet
