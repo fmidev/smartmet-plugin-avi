@@ -56,8 +56,10 @@ BOOST_AUTO_TEST_CASE(query_constructor, *boost::unit_test::depends_on("query_aut
   BOOST_CHECK(typeid(query.itsFormat) == typeid(stringVariable));
   BOOST_CHECK_EQUAL(query.itsPrecision, 6);
   BOOST_CHECK_EQUAL(query.itsFormat, "ascii");
-}
 
+  request.removeParameter("param");
+  BOOST_CHECK_THROW({ Query query2(request, authEngine, config); }, Spine::Exception);
+}
 }  // namespace Avi
 }  // namespace Plugin
 }  // namespace SmartMet
