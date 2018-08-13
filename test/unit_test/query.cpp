@@ -383,6 +383,42 @@ BOOST_AUTO_TEST_CASE(query_constructor_parseLocationOptions_latlons,
   BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsLocationOptions.itsLonLats.back().itsLon, 21);
   BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsLocationOptions.itsLonLats.back().itsLat, 61);
 }
+
+BOOST_AUTO_TEST_CASE(
+    query_constructor_parseLocationOptions_wkt,
+    *boost::unit_test::depends_on("query_constructor_allowMultipleLocationOptions_enabled"))
+{
+  BOOST_CHECK(authEngine != nullptr);
+
+  const std::string stringVariable1 = "12abcDE#)\{}+";
+  const std::string stringVariable2 = "POINT(25 60)";
+  const std::string filename = "cnf/aviplugin.conf";
+  std::unique_ptr<Config> config(new Config(filename));
+  Spine::HTTP::Request request;
+  request.addParameter("param", "value");
+
+  // Exception: Option maxdistance is required with latlon/lonlat, bbox and wkt options
+  request.addParameter("wkt", stringVariable1);
+  BOOST_CHECK_THROW({ Query query1(request, authEngine, config); }, Spine::Exception);
+
+  // One wkt
+  request.addParameter("maxdistance", "1000.0");
+  Query query2(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsLocationOptions.itsWKTs.itsWKTs.size(), 1);
+  BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsLocationOptions.itsWKTs.itsWKTs.front(),
+                    stringVariable1);
+  request.removeParameter("wkt");
+
+  request.addParameter("wkt", stringVariable1);
+  request.addParameter("wkt", stringVariable2);
+  Query query3(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsLocationOptions.itsWKTs.itsWKTs.size(), 2);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsLocationOptions.itsWKTs.itsWKTs.front(),
+                    stringVariable1);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsLocationOptions.itsWKTs.itsWKTs.back(),
+                    stringVariable2);
+}
+
 }  // namespace Avi
 }  // namespace Plugin
 }  // namespace SmartMet
