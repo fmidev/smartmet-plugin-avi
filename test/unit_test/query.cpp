@@ -225,6 +225,68 @@ BOOST_AUTO_TEST_CASE(
   BOOST_CHECK_EQUAL(query7.itsQueryOptions.itsLocationOptions.itsLonLats.back().itsLon, 20.12);
   BOOST_CHECK_EQUAL(query7.itsQueryOptions.itsLocationOptions.itsLonLats.back().itsLat, 60.1);
 }
+
+BOOST_AUTO_TEST_CASE(
+    query_constructor_parseLocationOptions_latlon,
+    *boost::unit_test::depends_on("query_constructor_allowMultipleLocationOptions_enabled"))
+{
+  BOOST_CHECK(authEngine != nullptr);
+
+  const std::string filename = "cnf/aviplugin.conf";
+  std::unique_ptr<Config> config(new Config(filename));
+  Spine::HTTP::Request request;
+  request.addParameter("param", "value");
+
+  // Exception: Option maxdistance is required with latlon/lonlat, bbox and wkt options
+  request.addParameter("latlon", "60,25");
+  BOOST_CHECK_THROW({ Query query1(request, authEngine, config); }, Spine::Exception);
+
+  // One latlon by using integers
+  request.addParameter("maxdistance", "1000.0");
+  Query query2(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsLocationOptions.itsLonLats.size(), 1);
+  BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsLocationOptions.itsLonLats.front().itsLon, 25);
+  BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsLocationOptions.itsLonLats.front().itsLat, 60);
+  request.removeParameter("latlon");
+
+  // One latlon by using floating point numbers
+  request.addParameter("latlon", "60.1,25.12345");
+  Query query3(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsLocationOptions.itsLonLats.size(), 1);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsLocationOptions.itsLonLats.front().itsLon, 25.12345);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsLocationOptions.itsLonLats.front().itsLat, 60.1);
+  request.removeParameter("latlon");
+
+  // Exception: Value in range [-90,90] expected for option 'latlon' at position 1; '91.0,25'
+  request.addParameter("latlon", "91.0,25");
+  BOOST_CHECK_THROW({ Query query4(request, authEngine, config); }, Spine::Exception);
+  request.removeParameter("latlon");
+
+  // Exception: Value in range [-90,90] expected for option 'latlon' at position 1; '-91.0,25'
+  request.addParameter("latlon", "-91.0,25");
+  BOOST_CHECK_THROW({ Query query5(request, authEngine, config); }, Spine::Exception);
+  request.removeParameter("latlon");
+
+  // Exception: Value in range [-180,180] expected for option 'latlon' at position 2; '60,181'
+  request.addParameter("latlon", "60,181");
+  BOOST_CHECK_THROW({ Query query6(request, authEngine, config); }, Spine::Exception);
+  request.removeParameter("latlon");
+
+  // Exception: Value in range [-180,180] expected for option 'latlon' at position 2; '60,-181'
+  request.addParameter("latlon", "60,-181");
+  BOOST_CHECK_THROW({ Query query7(request, authEngine, config); }, Spine::Exception);
+  request.removeParameter("latlon");
+
+  request.addParameter("latlon", "60,25");
+  request.addParameter("latlon", "60.1,20.12");
+  Query query8(request, authEngine, config);
+  request.removeParameter("latlon");
+  BOOST_CHECK_EQUAL(query8.itsQueryOptions.itsLocationOptions.itsLonLats.size(), 2);
+  BOOST_CHECK_EQUAL(query8.itsQueryOptions.itsLocationOptions.itsLonLats.front().itsLon, 25);
+  BOOST_CHECK_EQUAL(query8.itsQueryOptions.itsLocationOptions.itsLonLats.front().itsLat, 60);
+  BOOST_CHECK_EQUAL(query8.itsQueryOptions.itsLocationOptions.itsLonLats.back().itsLon, 20.12);
+  BOOST_CHECK_EQUAL(query8.itsQueryOptions.itsLocationOptions.itsLonLats.back().itsLat, 60.1);
+}
 }  // namespace Avi
 }  // namespace Plugin
 }  // namespace SmartMet
