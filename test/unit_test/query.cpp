@@ -607,6 +607,52 @@ BOOST_AUTO_TEST_CASE(
   BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsLocationOptions.itsStationIds.front(), intVariable4);
   BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsLocationOptions.itsStationIds.back(), intVariable5);
 }
+
+BOOST_AUTO_TEST_CASE(
+    query_constructor_parseLocationOptions_statioids,
+    *boost::unit_test::depends_on("query_constructor_parseLocationOptions_statioid"))
+{
+  BOOST_CHECK(authEngine != nullptr);
+
+  const std::string stringVariable1 = "ab";
+  const std::string stringVariable2 = "91";
+  const std::string stringVariable3 = "92";
+  const std::string stringVariable4 = stringVariable2 + "," + stringVariable3;
+  const int intVariable2 = 91;
+  const int intVariable3 = 92;
+  const std::string filename = "cnf/aviplugin.conf";
+  std::unique_ptr<Config> config(new Config(filename));
+  Spine::HTTP::Request request;
+  request.addParameter("param", "value");
+
+  // Exception: Option 'stationids' is empty
+  request.addParameter("stationids", stringVariable1);
+  BOOST_CHECK_THROW({ Query query1(request, authEngine, config); }, Spine::Exception);
+  request.removeParameter("stationids");
+
+  // One stationid in stationids variable
+  request.addParameter("stationids", stringVariable2);
+  Query query2(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsLocationOptions.itsStationIds.size(), 1);
+  BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsLocationOptions.itsStationIds.front(), intVariable2);
+  request.removeParameter("stationids");
+
+  // Two comma separated statioid values in a stationids parameter
+  request.addParameter("stationids", stringVariable4);
+  Query query3(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsLocationOptions.itsStationIds.size(), 2);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsLocationOptions.itsStationIds.front(), intVariable2);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsLocationOptions.itsStationIds.back(), intVariable3);
+  request.removeParameter("stationids");
+
+  // Two stationid values in separate stationids parameters
+  request.addParameter("stationids", stringVariable2);
+  request.addParameter("stationids", stringVariable3);
+  Query query4(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsLocationOptions.itsStationIds.size(), 2);
+  BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsLocationOptions.itsStationIds.front(), intVariable2);
+  BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsLocationOptions.itsStationIds.back(), intVariable3);
+}
 }  // namespace Avi
 }  // namespace Plugin
 }  // namespace SmartMet
