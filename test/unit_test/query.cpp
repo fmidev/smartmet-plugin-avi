@@ -336,6 +336,53 @@ BOOST_AUTO_TEST_CASE(query_constructor_parseLocationOptions_lonlats,
   BOOST_CHECK_EQUAL(query5.itsQueryOptions.itsLocationOptions.itsLonLats.back().itsLat, 61);
   request.removeParameter("lonlats");
 }
+
+BOOST_AUTO_TEST_CASE(query_constructor_parseLocationOptions_latlons,
+                     *boost::unit_test::depends_on("query_constructor_parseLocationOptions_latlon"))
+{
+  BOOST_CHECK(authEngine != nullptr);
+
+  const std::string filename = "cnf/aviplugin.conf";
+  std::unique_ptr<Config> config(new Config(filename));
+  Spine::HTTP::Request request;
+  request.addParameter("param", "value");
+
+  // Exception: Option maxdistance is required with latlon/lonlat, bbox and wkt options
+  request.addParameter("latlons", "60,25");
+  BOOST_CHECK_THROW({ Query query1(request, authEngine, config); }, Spine::Exception);
+
+  request.addParameter("maxdistance", "1000.0");
+  Query query2(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsLocationOptions.itsLonLats.size(), 1);
+  BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsLocationOptions.itsLonLats.front().itsLon, 25);
+  BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsLocationOptions.itsLonLats.front().itsLat, 60);
+  request.removeParameter("latlons");
+
+  // Exception: Even number of values required for option 'latlons'; '60,25,61'
+  request.addParameter("latlons", "60,25,61");
+  BOOST_CHECK_THROW({ Query query3(request, authEngine, config); }, Spine::Exception);
+  request.removeParameter("latlons");
+
+  // Two LatLon pairs in a latlons query parameter
+  request.addParameter("latlons", "60,25,61,21");
+  Query query4(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsLocationOptions.itsLonLats.size(), 2);
+  BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsLocationOptions.itsLonLats.front().itsLon, 25);
+  BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsLocationOptions.itsLonLats.front().itsLat, 60);
+  BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsLocationOptions.itsLonLats.back().itsLon, 21);
+  BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsLocationOptions.itsLonLats.back().itsLat, 61);
+  request.removeParameter("latlons");
+
+  // Two LatLon pairs in separate latlons query parameters
+  request.addParameter("latlons", "60,25");
+  request.addParameter("latlons", "21,61");
+  Query query5(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsLocationOptions.itsLonLats.size(), 2);
+  BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsLocationOptions.itsLonLats.front().itsLon, 25);
+  BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsLocationOptions.itsLonLats.front().itsLat, 60);
+  BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsLocationOptions.itsLonLats.back().itsLon, 21);
+  BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsLocationOptions.itsLonLats.back().itsLat, 61);
+}
 }  // namespace Avi
 }  // namespace Plugin
 }  // namespace SmartMet
