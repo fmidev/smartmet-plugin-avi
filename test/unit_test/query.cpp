@@ -678,6 +678,50 @@ BOOST_AUTO_TEST_CASE(
   BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsLocationOptions.itsNumberOfNearestStations,
                     unsignedIntVariable2);
 }
+
+BOOST_AUTO_TEST_CASE(query_constructor_parseMessageTypeOption_messagetype,
+                     *boost::unit_test::depends_on("query_constructor"))
+{
+  BOOST_CHECK(authEngine != nullptr);
+
+  const std::string stringVariable1 = "";
+  const std::string stringVariable2 = "a";
+  const std::string stringVariable3 = "METAR";
+  const std::string stringVariable4 = stringVariable2 + "," + stringVariable3;
+  ;
+  const std::string stringVariable5 = "A";
+  const std::string filename = "cnf/aviplugin.conf";
+  std::unique_ptr<Config> config(new Config(filename));
+  Spine::HTTP::Request request;
+  request.addParameter("param", "value");
+
+  // Exception: Option 'messagetype' is empty
+  request.addParameter("messagetype", stringVariable1);
+  BOOST_CHECK_THROW({ Query query1(request, authEngine, config); }, Spine::Exception);
+  request.removeParameter("messagetype");
+
+  // One messagetype
+  request.addParameter("messagetype", stringVariable2);
+  Query query2(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsMessageTypes.size(), 1);
+  request.removeParameter("messagetype");
+
+  // Two messagetype values in separate parameters
+  request.addParameter("messagetype", stringVariable2);
+  request.addParameter("messagetype", stringVariable3);
+  Query query3(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsMessageTypes.size(), 2);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsMessageTypes.front(), stringVariable5);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsMessageTypes.back(), stringVariable3);
+  request.removeParameter("messagetype");
+
+  // Two comma separated messagetype values in a messagetype parameter
+  request.addParameter("messagetype", stringVariable4);
+  Query query4(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsMessageTypes.size(), 2);
+  BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsMessageTypes.front(), stringVariable5);
+  BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsMessageTypes.back(), stringVariable3);
+}
 }  // namespace Avi
 }  // namespace Plugin
 }  // namespace SmartMet
