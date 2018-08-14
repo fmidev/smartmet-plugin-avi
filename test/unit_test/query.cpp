@@ -1009,6 +1009,49 @@ BOOST_AUTO_TEST_CASE(query_constructor_option_distinct,
   request.addParameter("distinct", stringVariable5);
   BOOST_CHECK_THROW({ Query query5(request, authEngine, config); }, Spine::Exception);
 }
+
+BOOST_AUTO_TEST_CASE(query_constructor_option_filtermetars,
+                     *boost::unit_test::depends_on("query_constructor"))
+{
+  BOOST_CHECK(authEngine != nullptr);
+
+  const std::string stringVariable2 = "1";
+  const std::string stringVariable3 = "0";
+  const std::string stringVariable4 = "666";
+  const std::string stringVariable5 = "-666";
+
+  const bool boolVariable = true;
+  const std::string filename = "cnf/aviplugin.conf";
+  std::unique_ptr<Config> config(new Config(filename));
+  Spine::HTTP::Request request;
+  request.addParameter("param", "value");
+
+  // Default value of filtermetars request parameter
+  Query query1(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query1.itsQueryOptions.itsFilterMETARs, boolVariable);
+
+  // METAR filter enabled
+  request.addParameter("filtermetars", stringVariable2);
+  Query query2(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsFilterMETARs, boolVariable);
+  request.removeParameter("filtermetars");
+
+  // METAR filter disabled
+  request.addParameter("filtermetars", stringVariable3);
+  Query query3(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsFilterMETARs, not boolVariable);
+  request.removeParameter("filtermetars");
+
+  // Pathological way of enabling the METAR filter
+  request.addParameter("filtermetars", stringVariable4);
+  Query query4(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsFilterMETARs, boolVariable);
+  request.removeParameter("filtermetars");
+
+  // Exception: [Invalid argument] Fmi::stoul failed to convert '-666' to unsigned long
+  request.addParameter("filtermetars", stringVariable5);
+  BOOST_CHECK_THROW({ Query query5(request, authEngine, config); }, Spine::Exception);
+}
 }  // namespace Avi
 }  // namespace Plugin
 }  // namespace SmartMet
