@@ -722,6 +722,90 @@ BOOST_AUTO_TEST_CASE(query_constructor_parseMessageTypeOption_messagetype,
   BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsMessageTypes.front(), stringVariable5);
   BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsMessageTypes.back(), stringVariable3);
 }
+
+BOOST_AUTO_TEST_CASE(query_constructor_parseTimeOptions_starttime_endtime,
+                     *boost::unit_test::depends_on("query_constructor"))
+{
+  BOOST_CHECK(authEngine != nullptr);
+
+  const std::string stringVariable1 = "a";
+  const std::string stringVariable2 = "2010-10-10T10:10:20Z";
+  const std::string stringVariable3 = "2010-12-10T10:10:20Z";
+  const std::string stringVariable4 = "timestamptz '20101010T101020Z'";
+  const std::string stringVariable5 = "timestamptz '20121010T101020Z'";
+  const std::string stringVariable6 = "20101010T101020Z";
+  const std::string stringVariable7 = "20101010T101020";
+  const std::string stringVariable8 = "20101010101020";
+
+  const std::string filename = "cnf/aviplugin.conf";
+  std::unique_ptr<Config> config(new Config(filename));
+  Spine::HTTP::Request request;
+  request.addParameter("param", "value");
+
+  // Exception: 'starttime' and 'endtime' options must be given simultaneously
+  request.addParameter("starttime", stringVariable1);
+  BOOST_CHECK_THROW({ Query query1(request, authEngine, config); }, Spine::Exception);
+  request.removeParameter("starttime");
+
+  // Exception: 'starttime' and 'endtime' options must be given simultaneously
+  request.addParameter("endtime", stringVariable1);
+  BOOST_CHECK_THROW({ Query query2(request, authEngine, config); }, Spine::Exception);
+  request.removeParameter("endtime");
+
+  // Exception  [Runtime error] Unknown time string 'a'
+  request.addParameter("starttime", stringVariable1);
+  request.addParameter("endtime", stringVariable1);
+  BOOST_CHECK_THROW({ Query query3(request, authEngine, config); }, Spine::Exception);
+  request.removeParameter("starttime");
+  request.removeParameter("endtime");
+
+  // Same starttime and endtime
+  request.addParameter("starttime", stringVariable2);
+  request.addParameter("endtime", stringVariable2);
+  Query query4(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsTimeOptions.itsStartTime, stringVariable4);
+  BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsTimeOptions.itsEndTime, stringVariable4);
+  request.removeParameter("starttime");
+  request.removeParameter("endtime");
+
+  request.addParameter("starttime", stringVariable6);
+  request.addParameter("endtime", stringVariable6);
+  Query query5(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query5.itsQueryOptions.itsTimeOptions.itsStartTime, stringVariable4);
+  BOOST_CHECK_EQUAL(query5.itsQueryOptions.itsTimeOptions.itsEndTime, stringVariable4);
+  request.removeParameter("starttime");
+  request.removeParameter("endtime");
+
+  request.addParameter("starttime", stringVariable7);
+  request.addParameter("endtime", stringVariable7);
+  Query query6(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query6.itsQueryOptions.itsTimeOptions.itsStartTime, stringVariable4);
+  BOOST_CHECK_EQUAL(query6.itsQueryOptions.itsTimeOptions.itsEndTime, stringVariable4);
+  request.removeParameter("starttime");
+  request.removeParameter("endtime");
+
+  request.addParameter("starttime", stringVariable8);
+  request.addParameter("endtime", stringVariable8);
+  Query query7(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query7.itsQueryOptions.itsTimeOptions.itsStartTime, stringVariable4);
+  BOOST_CHECK_EQUAL(query7.itsQueryOptions.itsTimeOptions.itsEndTime, stringVariable4);
+  request.removeParameter("starttime");
+  request.removeParameter("endtime");
+
+  // Exception: 'starttime' must be earlier than 'endtime'
+  request.addParameter("starttime", stringVariable3);
+  request.addParameter("endtime", stringVariable2);
+  BOOST_CHECK_THROW({ Query query8(request, authEngine, config); }, Spine::Exception);
+  request.removeParameter("starttime");
+  request.removeParameter("endtime");
+
+  // Exception: Time range too long, maximum is 31 days
+  request.addParameter("starttime", stringVariable2);
+  request.addParameter("endtime", stringVariable3);
+  BOOST_CHECK_THROW({ Query query9(request, authEngine, config); }, Spine::Exception);
+  request.removeParameter("starttime");
+  request.removeParameter("endtime");
+}
 }  // namespace Avi
 }  // namespace Plugin
 }  // namespace SmartMet
