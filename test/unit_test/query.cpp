@@ -937,6 +937,36 @@ BOOST_AUTO_TEST_CASE(
   Query query5(request, authEngine, config);
   BOOST_CHECK_EQUAL(query5.itsQueryOptions.itsValidity, Engine::Avi::Rejected);
 }
+
+BOOST_AUTO_TEST_CASE(query_constructor_option_format,
+                     *boost::unit_test::depends_on("query_constructor"))
+{
+  BOOST_CHECK(authEngine != nullptr);
+
+  const std::string stringVariable1 = "a";
+  const std::string stringVariable2 = "ascii";
+  const std::string stringVariable3 = "debug";
+  const bool boolVariable = true;
+
+  const std::string filename = "cnf/aviplugin.conf";
+  std::unique_ptr<Config> config(new Config(filename));
+  Spine::HTTP::Request request;
+  request.addParameter("param", "value");
+
+  request.addParameter("format", stringVariable1);
+  Query query1(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query1.itsQueryOptions.itsDebug, not boolVariable);
+  request.removeParameter("format");
+
+  request.addParameter("format", stringVariable2);
+  Query query2(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsDebug, not boolVariable);
+  request.removeParameter("format");
+
+  request.addParameter("format", stringVariable3);
+  Query query3(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsDebug, boolVariable);
+}
 }  // namespace Avi
 }  // namespace Plugin
 }  // namespace SmartMet
