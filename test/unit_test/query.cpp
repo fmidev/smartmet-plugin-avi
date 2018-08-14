@@ -1052,6 +1052,25 @@ BOOST_AUTO_TEST_CASE(query_constructor_option_filtermetars,
   request.addParameter("filtermetars", stringVariable5);
   BOOST_CHECK_THROW({ Query query5(request, authEngine, config); }, Spine::Exception);
 }
+
+BOOST_AUTO_TEST_CASE(query_constructor_option_configured,
+                     *boost::unit_test::depends_on("query_constructor"))
+{
+  BOOST_CHECK(authEngine != nullptr);
+
+  const std::string filename = "cnf/aviplugin.conf";
+  std::unique_ptr<Config> config(new Config(filename));
+  Spine::HTTP::Request request;
+  request.addParameter("param", "value");
+
+  // Values from configuration file
+  // - maxstations
+  // - maxrows
+  // - maxrangedays (not available from itsQueryOptions )
+  Query query1(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query1.itsQueryOptions.itsMaxMessageStations, 0);
+  BOOST_CHECK_EQUAL(query1.itsQueryOptions.itsMaxMessageRows, 0);
+}
 }  // namespace Avi
 }  // namespace Plugin
 }  // namespace SmartMet
