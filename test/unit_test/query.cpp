@@ -967,6 +967,48 @@ BOOST_AUTO_TEST_CASE(query_constructor_option_format,
   Query query3(request, authEngine, config);
   BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsDebug, boolVariable);
 }
+
+BOOST_AUTO_TEST_CASE(query_constructor_option_distinct,
+                     *boost::unit_test::depends_on("query_constructor"))
+{
+  BOOST_CHECK(authEngine != nullptr);
+
+  const std::string stringVariable2 = "1";
+  const std::string stringVariable3 = "0";
+  const std::string stringVariable4 = "666";
+  const std::string stringVariable5 = "-666";
+
+  const bool boolVariable = true;
+  const std::string filename = "cnf/aviplugin.conf";
+  std::unique_ptr<Config> config(new Config(filename));
+  Spine::HTTP::Request request;
+  request.addParameter("param", "value");
+
+  // Default value of distict parameter
+  Query query1(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query1.itsQueryOptions.itsDistinctMessages, boolVariable);
+
+  // distinct enabled through request parameter
+  request.addParameter("distinct", stringVariable2);
+  Query query2(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsDistinctMessages, boolVariable);
+  request.removeParameter("distinct");
+
+  // distinct disabled through request parameter
+  request.addParameter("distinct", stringVariable3);
+  Query query3(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsDistinctMessages, not boolVariable);
+  request.removeParameter("distinct");
+
+  request.addParameter("distinct", stringVariable4);
+  Query query4(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsDistinctMessages, boolVariable);
+  request.removeParameter("distinct");
+
+  // Exception: [Invalid argument] Fmi::stoul failed to convert '-666' to unsigned long
+  request.addParameter("distinct", stringVariable5);
+  BOOST_CHECK_THROW({ Query query5(request, authEngine, config); }, Spine::Exception);
+}
 }  // namespace Avi
 }  // namespace Plugin
 }  // namespace SmartMet
