@@ -872,6 +872,31 @@ BOOST_AUTO_TEST_CASE(query_constructor_parseTimeOptions_time,
   BOOST_CHECK_EQUAL(query8.itsQueryOptions.itsTimeOptions.itsObservationTime, stringVariable9);
 }
 
+BOOST_AUTO_TEST_CASE(query_constructor_parseTimeOptions_timeformat,
+                     *boost::unit_test::depends_on("query_constructor_parseTimeOptions_time"))
+{
+  BOOST_CHECK(authEngine != nullptr);
+
+  const std::string stringVariable1 = "a";
+  const std::string filename = "cnf/aviplugin.conf";
+  std::unique_ptr<Config> config(new Config(filename));
+  Spine::HTTP::Request request;
+  request.addParameter("param", "value");
+
+  // Exception: Unknown 'timeformat', use 'iso', 'timestamp', 'sql', 'xml' or 'epoch'
+  request.addParameter("timeformat", stringVariable1);
+  BOOST_CHECK_THROW({ Query query1(request, authEngine, config); }, Spine::Exception);
+  request.removeParameter("timeformat");
+
+  // Supported timeformat values.
+  for (auto value : {"iso", "timestamp", "sql", "xml", "epoch"})
+  {
+    request.addParameter("timeformat", value);
+    Query query2(request, authEngine, config);
+    request.removeParameter("timeformat");
+  }
+}
+
 BOOST_AUTO_TEST_CASE(
     query_constructor_option_validity,
     *boost::unit_test::depends_on("query_constructor_parseTimeOptions_starttime_endtime"))
