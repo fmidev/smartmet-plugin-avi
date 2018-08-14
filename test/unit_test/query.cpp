@@ -807,6 +807,71 @@ BOOST_AUTO_TEST_CASE(query_constructor_parseTimeOptions_starttime_endtime,
   request.removeParameter("endtime");
 }
 
+BOOST_AUTO_TEST_CASE(query_constructor_parseTimeOptions_time,
+                     *boost::unit_test::depends_on("query_constructor"))
+{
+  BOOST_CHECK(authEngine != nullptr);
+
+  const std::string stringVariable1 = "a";
+  const std::string stringVariable2 = "2010-10-10T10:10:20Z";
+  const std::string stringVariable3 = "20101010T101020Z";
+  const std::string stringVariable4 = "20101010T101020";
+  const std::string stringVariable5 = "20101010101020";
+  const std::string stringVariable6 = "1286705420";
+  const std::string stringVariable7 = "2010-10-10 10:10:20";
+  const std::string stringVariable8 = "timestamptz '20101010T101020Z'";
+  const std::string stringVariable9 = "current_timestamp";
+
+  const std::string filename = "cnf/aviplugin.conf";
+  std::unique_ptr<Config> config(new Config(filename));
+  Spine::HTTP::Request request;
+  request.addParameter("param", "value");
+
+  // Exception: [Runtime error] Unknown time string 'a'
+  request.addParameter("time", stringVariable1);
+  BOOST_CHECK_THROW({ Query query1(request, authEngine, config); }, Spine::Exception);
+  request.removeParameter("time");
+
+  // ISO extended format
+  request.addParameter("time", stringVariable2);
+  Query query2(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsTimeOptions.itsObservationTime, stringVariable8);
+  request.removeParameter("time");
+
+  // ISO format with Z
+  request.addParameter("time", stringVariable3);
+  Query query3(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsTimeOptions.itsObservationTime, stringVariable8);
+  request.removeParameter("time");
+
+  // ISO format without Z
+  request.addParameter("time", stringVariable4);
+  Query query4(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsTimeOptions.itsObservationTime, stringVariable8);
+  request.removeParameter("time");
+
+  // Timestamp
+  request.addParameter("time", stringVariable5);
+  Query query5(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query5.itsQueryOptions.itsTimeOptions.itsObservationTime, stringVariable8);
+  request.removeParameter("time");
+
+  // Unixtime
+  request.addParameter("time", stringVariable6);
+  Query query6(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query6.itsQueryOptions.itsTimeOptions.itsObservationTime, stringVariable8);
+  request.removeParameter("time");
+
+  request.addParameter("time", stringVariable7);
+  Query query7(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query7.itsQueryOptions.itsTimeOptions.itsObservationTime, stringVariable8);
+  request.removeParameter("time");
+
+  // Default time value
+  Query query8(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query8.itsQueryOptions.itsTimeOptions.itsObservationTime, stringVariable9);
+}
+
 BOOST_AUTO_TEST_CASE(
     query_constructor_option_validity,
     *boost::unit_test::depends_on("query_constructor_parseTimeOptions_starttime_endtime"))
