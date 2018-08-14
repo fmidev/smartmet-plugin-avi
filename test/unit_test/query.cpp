@@ -806,6 +806,47 @@ BOOST_AUTO_TEST_CASE(query_constructor_parseTimeOptions_starttime_endtime,
   request.removeParameter("starttime");
   request.removeParameter("endtime");
 }
+
+BOOST_AUTO_TEST_CASE(
+    query_constructor_option_validity,
+    *boost::unit_test::depends_on("query_constructor_parseTimeOptions_starttime_endtime"))
+{
+  BOOST_CHECK(authEngine != nullptr);
+
+  const std::string stringVariable1 = "a";
+  const std::string stringVariable2 = "accepted";
+  const std::string stringVariable3 = "rejected";
+  const std::string stringVariable4 = "2010-10-10T10:10:20Z";
+  const std::string filename = "cnf/aviplugin.conf";
+  std::unique_ptr<Config> config(new Config(filename));
+  Spine::HTTP::Request request;
+  request.addParameter("param", "value");
+
+  // Exception: Unknown 'validity', use 'accepted' or 'rejected'
+  request.addParameter("validity", stringVariable1);
+  BOOST_CHECK_THROW({ Query query1(request, authEngine, config); }, Spine::Exception);
+  request.removeParameter("validity");
+
+  // Accepted case as default
+  Query query2(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsValidity, SmartMet::Engine::Avi::Accepted);
+
+  // Set accepted validity
+  request.addParameter("validity", stringVariable2);
+  Query query3(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsValidity, SmartMet::Engine::Avi::Accepted);
+  request.removeParameter("validity");
+
+  // Exception: Time range must be used to query rejected messages
+  request.addParameter("validity", stringVariable3);
+  BOOST_CHECK_THROW({ Query query4(request, authEngine, config); }, Spine::Exception);
+
+  // Rejected case
+  request.addParameter("starttime", stringVariable4);
+  request.addParameter("endtime", stringVariable4);
+  Query query5(request, authEngine, config);
+  BOOST_CHECK_EQUAL(query5.itsQueryOptions.itsValidity, Engine::Avi::Rejected);
+}
 }  // namespace Avi
 }  // namespace Plugin
 }  // namespace SmartMet
