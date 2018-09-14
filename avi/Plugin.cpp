@@ -42,11 +42,13 @@ namespace
  */
 // ----------------------------------------------------------------------
 
-void setColumnHeaders(TableFormatter::Names &headers, const SmartMet::Engine::Avi::Columns &columns)
+void setColumnHeaders(TableFormatter::Names &headers,
+                      const SmartMet::Engine::Avi::ColumnList &columns)
 {
   try
   {
-    for (SmartMet::Engine::Avi::Columns::const_iterator it = columns.begin(); (it != columns.end());
+    for (SmartMet::Engine::Avi::ColumnList::const_iterator it = columns.begin();
+         (it != columns.end());
          it++)
       headers.push_back(it->itsName);
   }
