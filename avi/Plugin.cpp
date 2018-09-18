@@ -50,7 +50,7 @@ void setColumnHeaders(TableFormatter::Names &headers,
     for (SmartMet::Engine::Avi::ColumnList::const_iterator it = columns.begin();
          (it != columns.end());
          it++)
-      headers.push_back(it->itsName);
+      headers.push_back(it->getName());
   }
   catch (...)
   {
@@ -152,13 +152,13 @@ void Plugin::query(const SmartMet::Spine::HTTP::Request &theRequest,
         tf.setCurrentRow(0);
         tf.setCurrentColumn(columnNumber);
 
-        if (column.itsType == SmartMet::Engine::Avi::ColumnType::TS_LatLon)
+        if (column.getType() == SmartMet::Engine::Avi::ColumnType::TS_LatLon)
           tf << TimeSeries::LonLatFormat::LATLON;
-        else if (column.itsType == SmartMet::Engine::Avi::ColumnType::TS_LonLat)
+        else if (column.getType() == SmartMet::Engine::Avi::ColumnType::TS_LonLat)
           tf << TimeSeries::LonLatFormat::LONLAT;
 
         for (auto stationId : stationData.itsStationIds)
-          tf << stationData.itsValues[stationId][column.itsName];
+          tf << stationData.itsValues[stationId][column.getName()];
 
         columnNumber++;
       }
@@ -170,12 +170,12 @@ void Plugin::query(const SmartMet::Spine::HTTP::Request &theRequest,
         tf.setCurrentRow(0);
         tf.setCurrentColumn(columnNumber);
 
-        if (column.itsType == SmartMet::Engine::Avi::ColumnType::TS_LatLon)
+        if (column.getType() == SmartMet::Engine::Avi::ColumnType::TS_LatLon)
           tf << TimeSeries::LonLatFormat::LATLON;
-        else if (column.itsType == SmartMet::Engine::Avi::ColumnType::TS_LonLat)
+        else if (column.getType() == SmartMet::Engine::Avi::ColumnType::TS_LonLat)
           tf << TimeSeries::LonLatFormat::LONLAT;
 
-        tf << rejectedMessageData.itsValues[column.itsName];
+        tf << rejectedMessageData.itsValues[column.getName()];
 
         columnNumber++;
       }
