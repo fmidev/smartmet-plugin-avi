@@ -25,7 +25,7 @@ LIBS =	-lsmartmet-spine \
 	-lboost_system \
 	-lconfig++ \
 	-lbz2 -lz \
-	-lpthread
+	-lpthread /usr/share/smartmet/engines/avi.so
 
 all: $(PROG)
 
