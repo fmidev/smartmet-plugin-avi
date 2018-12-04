@@ -2,7 +2,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet aviation message plugin
 Name: %{SPECNAME}
-Version: 18.8.13
+Version: 18.12.4
 Release: 1%{?dist}.fmi
 License: FMI
 Group: SmartMet/Plugins
@@ -14,17 +14,17 @@ BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: boost-devel
 BuildRequires: libconfig-devel
-BuildRequires: smartmet-library-spine-devel >= 18.8.13
-BuildRequires: smartmet-library-macgyver-devel >= 18.8.4
-BuildRequires: smartmet-engine-avi-devel >= 18.7.25
-BuildRequires: smartmet-engine-authentication-devel >= 18.7.25
+BuildRequires: smartmet-library-spine-devel >= 18.12.4
+BuildRequires: smartmet-library-macgyver-devel >= 18.11.24
+BuildRequires: smartmet-engine-avi-devel >= package smartmet-engine-avi-devel is not installed
+BuildRequires: smartmet-engine-authentication-devel >= package smartmet-engine-authentication-devel is not installed
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 Requires: libconfig
-Requires: smartmet-library-macgyver >= 18.8.4
-Requires: smartmet-library-spine >= 18.8.13
-Requires: smartmet-engine-avi >= 18.7.25
-Requires: smartmet-engine-authentication >= 18.7.25
+Requires: smartmet-library-macgyver >= 18.11.24
+Requires: smartmet-library-spine >= 18.12.4
+Requires: smartmet-engine-avi >= package smartmet-engine-avi is not installed
+Requires: smartmet-engine-authentication >= 18.9.10
 Requires: boost-date-time
 Provides: %{SPECNAME}
 Obsoletes: smartmet-brainstorm-aviplugin < 16.11.1
@@ -53,6 +53,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Tue Dec  4 2018 Pertti Kinnia <pertti.kinnia@fmi.fi> - 18.12.4-1.fmi
+- Repackaged since Spine::Table size changed
+
 * Mon Aug 13 2018 Mika Heiskanen <mika.heiskanen@fmi.fi> - 18.8.13-1.fmi
 - Repackaged since Spine::Location size changed
 
