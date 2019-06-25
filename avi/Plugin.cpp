@@ -189,6 +189,7 @@ void Plugin::query(const SmartMet::Spine::HTTP::Request &theRequest,
 
     string mime = formatter->mimetype() + "; charset=UTF-8";
     theResponse.setHeader("Content-type", mime.c_str());
+    theResponse.setHeader("Access-Control-Allow-Origin", "*");
   }
   catch (...)
   {

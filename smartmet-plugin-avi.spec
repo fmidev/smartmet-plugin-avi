@@ -2,7 +2,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet aviation message plugin
 Name: %{SPECNAME}
-Version: 19.2.14
+Version: 19.6.25
 Release: 1%{?dist}.fmi
 License: FMI
 Group: SmartMet/Plugins
@@ -53,6 +53,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Tue Jun 25 2019 Mika Heiskanen <mika.heiskanen@fmi.fi> - 19.6.25-1.fmi
+- Added Access-Control-Allow-Origin header
+
 * Thu Feb 14 2019 Mika Heiskanen <mika.heiskanen@fmi.fi> - 19.2.14-1.fmi
 - Added client IP to exception reports
 
