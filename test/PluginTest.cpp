@@ -22,7 +22,7 @@ int main()
   options.defaultlogging = false;
   options.configfile = "cnf/reactor.conf";
 
-  SmartMet::Spine::PluginTest::test(options, prelude);
+  SmartMet::Spine::PluginTest::test(options, prelude, false, 10);
 
   return 0;
 }
