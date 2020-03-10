@@ -849,6 +849,13 @@ Query::Query(const SmartMet::Spine::HTTP::Request &theRequest,
     itsQueryOptions.itsFilterMETARs =
         (SmartMet::Spine::optional_unsigned_long(theRequest.getParameter("filtermetars"), 1) > 0);
 
+    // https://jira.fmi.fi/browse/BRAINSTORM-1779
+    //
+    // Whether to exclude (finnish) SPECIs
+
+    itsQueryOptions.itsExcludeSPECIs =
+        (SmartMet::Spine::optional_unsigned_long(theRequest.getParameter("excludespecis"), 0) > 0);
+
     // Query limits
 
     itsQueryOptions.itsMaxMessageStations = queryLimits.getMaxMessageStations();
