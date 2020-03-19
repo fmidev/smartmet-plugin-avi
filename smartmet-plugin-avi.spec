@@ -2,7 +2,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet aviation message plugin
 Name: %{SPECNAME}
-Version: 19.9.26
+Version: 20.3.19
 Release: 1%{?dist}.fmi
 License: FMI
 Group: SmartMet/Plugins
@@ -14,16 +14,16 @@ BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: boost-devel
 BuildRequires: libconfig-devel
-BuildRequires: smartmet-library-spine-devel >= 19.9.26
-BuildRequires: smartmet-library-macgyver-devel >= 19.9.26
-BuildRequires: smartmet-engine-avi-devel >= 19.9.26
+BuildRequires: smartmet-library-spine-devel >= 20.3.9
+BuildRequires: smartmet-library-macgyver-devel >= 20.3.5
+BuildRequires: smartmet-engine-avi-devel >= 20.3.19
 BuildRequires: smartmet-engine-authentication-devel >= 19.9.26
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 Requires: libconfig
-Requires: smartmet-library-macgyver >= 19.9.26
-Requires: smartmet-library-spine >= 19.9.26
-Requires: smartmet-engine-avi >= 19.9.26
+Requires: smartmet-library-macgyver >= 20.3.5
+Requires: smartmet-library-spine >= 20.3.9
+Requires: smartmet-engine-avi >= 20.3.19
 Requires: smartmet-engine-authentication >= 19.9.26
 Requires: boost-date-time
 Provides: %{SPECNAME}
@@ -53,6 +53,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Thu Mar 19 2020 Pertti Kinnia <pertti.kinnia@fmi.fi> - 20.3.19-1.fmi
+- Added support for excluding finnish SPECIs (BS-1779)
+
 * Thu Sep 26 2019 Mika Heiskanen <mika.heiskanen@fmi.fi> - 19.9.26-1.fmi
 - Support for ASAN & TSAN builds
 
