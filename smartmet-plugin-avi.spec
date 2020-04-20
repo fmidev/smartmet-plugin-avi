@@ -14,17 +14,17 @@ BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: boost169-devel
 BuildRequires: libconfig-devel
-BuildRequires: smartmet-library-spine-devel >= 20.4.18
-BuildRequires: smartmet-library-macgyver-devel >= 20.4.18
-BuildRequires: smartmet-engine-avi-devel >= 20.4.18
-BuildRequires: smartmet-engine-authentication-devel >= 20.4.18
+BuildRequires: smartmet-library-spine-devel >= 20.3.9
+BuildRequires: smartmet-library-macgyver-devel >= 20.3.5
+BuildRequires: smartmet-engine-avi-devel >= 20.3.19
+BuildRequires: smartmet-engine-authentication-devel >= 19.9.26
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 Requires: libconfig
-Requires: smartmet-library-macgyver >= 20.4.18
-Requires: smartmet-library-spine >= 20.4.18
-Requires: smartmet-engine-avi >= 20.4.18
-Requires: smartmet-engine-authentication >= 20.4.18
+Requires: smartmet-library-macgyver >= 20.3.5
+Requires: smartmet-library-spine >= 20.3.9
+Requires: smartmet-engine-avi >= 20.3.19
+Requires: smartmet-engine-authentication >= 19.9.26
 Requires: boost169-date-time
 Provides: %{SPECNAME}
 Obsoletes: smartmet-brainstorm-aviplugin < 16.11.1
@@ -55,6 +55,9 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 * Sat Apr 18 2020 Mika Heiskanen <mika.heiskanen@fmi.fi> - 20.4.18-1.fmi
 - Upgraded to Boost 1.69
+
+* Thu Mar 19 2020 Pertti Kinnia <pertti.kinnia@fmi.fi> - 20.3.19-1.fmi
+- Added support for excluding finnish SPECIs (BS-1779)
 
 * Thu Sep 26 2019 Mika Heiskanen <mika.heiskanen@fmi.fi> - 19.9.26-1.fmi
 - Support for ASAN & TSAN builds
