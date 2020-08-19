@@ -1,0 +1,1 @@
+GET	/avi?bbox=25,60,30,70&maxdistance=50&starttime=20200101000000&endtime=20200101010000&messagetype=METAR,SPECI&param=stationid,icao,longitude,latitude,messagetype,route,messageid,message,messagetime,messagevalidfrom,messagevalidto,messagecreated,messirheading,messageversion&precision=3&excludespecis=1 HTTP/1.0
