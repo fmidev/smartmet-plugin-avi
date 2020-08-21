@@ -1,0 +1,1 @@
+GET	/avi?&wkt=LINESTRING(25+60,25.8+66)&maxdistance=75&time=202001010030&messagetype=SIGMET,AIRMET,SWX,TCA,ARS,WXREP,VAA&param=stationid,icao,longitude,latitude,messagetype,route,messageid,message,messagetime,messagevalidfrom,messagevalidto,messagecreated,messirheading,messageversion&precision=3 HTTP/1.0
