@@ -8,7 +8,7 @@
 #include "Query.h"
 
 #include <spine/Convenience.h>
-#include <spine/Exception.h>
+#include <macgyver/Exception.h>
 #include <spine/Reactor.h>
 #include <spine/SmartMet.h>
 #include <spine/Table.h>
@@ -52,7 +52,7 @@ void setColumnHeaders(TableFormatter::Names &headers, const SmartMet::Engine::Av
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
@@ -71,7 +71,7 @@ void setPrecisions(size_t nColumns, const Query &query, vector<int> &precisions)
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
@@ -102,7 +102,7 @@ void Plugin::query(const SmartMet::Spine::HTTP::Request &theRequest,
     else
     {
       if (!query.itsQueryOptions.itsTimeOptions.itsObservationTime.empty())
-        throw SmartMet::Spine::Exception(BCP, "Time range must be used to query rejected messages");
+        throw Fmi::Exception(BCP, "Time range must be used to query rejected messages");
 
       rejectedMessageData = itsAviEngine->queryRejectedMessages(query.itsQueryOptions);
     }
@@ -193,7 +193,7 @@ void Plugin::query(const SmartMet::Spine::HTTP::Request &theRequest,
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
@@ -240,7 +240,7 @@ void Plugin::requestHandler(Reactor & /* theReactor */,
     {
       // Catching all exceptions
 
-      SmartMet::Spine::Exception exception(BCP, "Request processing exception!", nullptr);
+      Fmi::Exception exception(BCP, "Request processing exception!", nullptr);
       exception.addParameter("URI", theRequest.getURI());
       exception.addParameter("ClientIP", theRequest.getClientIP());
       exception.printError();
@@ -268,7 +268,7 @@ void Plugin::requestHandler(Reactor & /* theReactor */,
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
@@ -295,7 +295,7 @@ Plugin::Plugin(Reactor *theReactor, const char *theConfigFileName)
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
@@ -313,7 +313,7 @@ void Plugin::init()
 
     auto engine = itsReactor->getSingleton("Avi", nullptr);
     if (!engine)
-      throw SmartMet::Spine::Exception(BCP, "Avi engine unavailable");
+      throw Fmi::Exception(BCP, "Avi engine unavailable");
 
     itsAviEngine = reinterpret_cast<SmartMet::Engine::Avi::Engine *>(engine);
 
@@ -326,18 +326,18 @@ void Plugin::init()
       engine = itsReactor->getSingleton("Authentication", nullptr);
 
       if (!engine)
-        throw SmartMet::Spine::Exception(BCP, "Authentication engine unavailable");
+        throw Fmi::Exception(BCP, "Authentication engine unavailable");
 
       itsAuthEngine = reinterpret_cast<SmartMet::Engine::Authentication::Engine *>(engine);
     }
 
     if (!(itsReactor->addContentHandler(
             this, "/avi", boost::bind(&Plugin::callRequestHandler, this, _1, _2, _3))))
-      throw SmartMet::Spine::Exception(BCP, "Failed to register avidb content handler");
+      throw Fmi::Exception(BCP, "Failed to register avidb content handler");
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
@@ -407,7 +407,7 @@ extern "C" SmartMetPlugin *create(SmartMet::Spine::Reactor *theReactor,
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
 

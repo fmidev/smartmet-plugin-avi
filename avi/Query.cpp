@@ -5,7 +5,7 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <macgyver/StringConversion.h>
 #include <spine/Convenience.h>
-#include <spine/Exception.h>
+#include <macgyver/Exception.h>
 #include <spine/FmiApiKey.h>
 
 using namespace std;
@@ -27,7 +27,7 @@ namespace Avi
 template <typename T>
 T toType(const string &s)
 {
-  throw SmartMet::Spine::Exception(BCP, "internal: unsupported conversion");
+  throw Fmi::Exception(BCP, "internal: unsupported conversion");
 }
 
 template <>
@@ -68,12 +68,12 @@ boost::optional<list<pair<T, T>>> listOfPairs(const string &commaSeparatedStr,
     // Given number of value pairs (e.g. 2 for bbox) required ?
 
     if ((nValues > 0) && (flds.size() != nValues))
-      throw SmartMet::Spine::Exception(BCP,
+      throw Fmi::Exception(BCP,
                                        Fmi::to_string(nValues) +
                                            string(" values required for option '") + optionName +
                                            "'; '" + commaSeparatedStr + "'");
     else if ((nValues == 0) && ((flds.size() % 2) != 0))
-      throw SmartMet::Spine::Exception(BCP,
+      throw Fmi::Exception(BCP,
                                        string("Even number of values required for option '") +
                                            optionName + "'; '" + commaSeparatedStr + "'");
 
@@ -84,7 +84,7 @@ boost::optional<list<pair<T, T>>> listOfPairs(const string &commaSeparatedStr,
       boost::trim(flds[n]);
 
       if (flds[n].empty())
-        throw SmartMet::Spine::Exception(BCP,
+        throw Fmi::Exception(BCP,
                                          string("Empty value for option '") + optionName +
                                              "' at position " + Fmi::to_string(n + 1) + "; '" +
                                              commaSeparatedStr + "'");
@@ -106,12 +106,12 @@ boost::optional<list<pair<T, T>>> listOfPairs(const string &commaSeparatedStr,
           // Order lon,lat expected
           //
           if ((value1 < -180) || (value1 > 180))
-            throw SmartMet::Spine::Exception(
+            throw Fmi::Exception(
                 BCP,
                 string("Value in range [-180,180] expected for option '") + optionName +
                     "' at position " + Fmi::to_string(n - 1) + "; '" + commaSeparatedStr + "'");
           if ((value2 < -90) || (value2 > 90))
-            throw SmartMet::Spine::Exception(
+            throw Fmi::Exception(
                 BCP,
                 string("Value in range [-90,90] expected for option '") + optionName +
                     "' at position " + Fmi::to_string(n) + "; '" + commaSeparatedStr + "'");
@@ -121,7 +121,7 @@ boost::optional<list<pair<T, T>>> listOfPairs(const string &commaSeparatedStr,
       }
       catch (...)
       {
-        throw SmartMet::Spine::Exception(BCP,
+        throw Fmi::Exception(BCP,
                                          string("Invalid value for option '") + optionName +
                                              "' at position " + Fmi::to_string(n + 1) + "; '" +
                                              commaSeparatedStr + "'");
@@ -131,7 +131,7 @@ boost::optional<list<pair<T, T>>> listOfPairs(const string &commaSeparatedStr,
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
@@ -176,7 +176,7 @@ boost::optional<list<T>> listOfValues(const string &commaSeparatedStr,
     if (nValues > 0)
     {
       if (nValues != flds.size())
-        throw SmartMet::Spine::Exception(BCP,
+        throw Fmi::Exception(BCP,
                                          Fmi::to_string(nValues) +
                                              string(" values required for option '") + optionName +
                                              "'; '" + commaSeparatedStr + "'");
@@ -186,7 +186,7 @@ boost::optional<list<T>> listOfValues(const string &commaSeparatedStr,
       nValues = flds.size();
 
       if (even && ((nValues % 2) != 0))
-        throw SmartMet::Spine::Exception(BCP,
+        throw Fmi::Exception(BCP,
                                          string("Even number of values required for option '") +
                                              optionName + "'; '" + commaSeparatedStr + "'");
     }
@@ -198,7 +198,7 @@ boost::optional<list<T>> listOfValues(const string &commaSeparatedStr,
       boost::trim(flds[n]);
 
       if (flds[n].empty())
-        throw SmartMet::Spine::Exception(BCP,
+        throw Fmi::Exception(BCP,
                                          string("Empty value for option '") + optionName +
                                              "' at position " + Fmi::to_string(n + 1) + "; '" +
                                              commaSeparatedStr + "'");
@@ -226,7 +226,7 @@ boost::optional<list<T>> listOfValues(const string &commaSeparatedStr,
           if ((n % 2) == 0)
           {
             if (!validValue<T>(value, -180, 180))
-              throw SmartMet::Spine::Exception(
+              throw Fmi::Exception(
                   BCP,
                   string("Value in range [-180,180] expected for option '") + optionName +
                       "' at position " + Fmi::to_string(nn + 1) + "; '" + commaSeparatedStr + "'");
@@ -234,7 +234,7 @@ boost::optional<list<T>> listOfValues(const string &commaSeparatedStr,
           else
           {
             if (!validValue<T>(value, -90, 90))
-              throw SmartMet::Spine::Exception(
+              throw Fmi::Exception(
                   BCP,
                   string("Value in range [-90,90] expected for option '") + optionName +
                       "' at position " + Fmi::to_string(nn + 1) + "; '" + commaSeparatedStr + "'");
@@ -246,7 +246,7 @@ boost::optional<list<T>> listOfValues(const string &commaSeparatedStr,
       catch (...)
       {
         if (castOk)
-          throw SmartMet::Spine::Exception::Trace(
+          throw Fmi::Exception::Trace(
               BCP,
               string("Invalid value for option '") + optionName + "' at position " +
                   Fmi::to_string(nn + 1) + "; '" + commaSeparatedStr + "'");
@@ -259,7 +259,7 @@ boost::optional<list<T>> listOfValues(const string &commaSeparatedStr,
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
@@ -280,7 +280,7 @@ string errMsgOptionIsEmpty(const char *optionName)
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
@@ -299,7 +299,7 @@ void Query::parseMessageTypeOption(const SmartMet::Spine::HTTP::Request &theRequ
             listOfValues<string>(messagetype, optionName, 0, false, false, false);
 
         if ((!listOfMessageTypes) || listOfMessageTypes->empty())
-          throw SmartMet::Spine::Exception(BCP, errMsgOptionIsEmpty(optionName));
+          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
 
         for (const string &m : *listOfMessageTypes)
           itsQueryOptions.itsMessageTypes.push_back(Fmi::ascii_toupper_copy(m));
@@ -308,7 +308,7 @@ void Query::parseMessageTypeOption(const SmartMet::Spine::HTTP::Request &theRequ
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
@@ -334,7 +334,7 @@ void Query::parseParamOption(const SmartMet::Spine::HTTP::Request &theRequest)
         auto listOfParams = listOfValues<string>(param, optionName, 0, false, false, false);
 
         if ((!listOfParams) || listOfParams->empty())
-          throw SmartMet::Spine::Exception(BCP, errMsgOptionIsEmpty(optionName));
+          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
 
         for (const string &p : *listOfParams)
           itsQueryOptions.itsParameters.push_back(Fmi::ascii_tolower_copy(p));
@@ -343,11 +343,11 @@ void Query::parseParamOption(const SmartMet::Spine::HTTP::Request &theRequest)
       return;
     }
 
-    throw SmartMet::Spine::Exception(BCP, "Option 'param' must be provided");
+    throw Fmi::Exception(BCP, "Option 'param' must be provided");
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
@@ -376,7 +376,7 @@ void Query::checkIfMultipleLocationOptionsAllowed(bool allowMultipleLocationOpti
           !itsQueryOptions.itsLocationOptions.itsPlaces.empty() ||
           !itsQueryOptions.itsLocationOptions.itsWKTs.itsWKTs.empty() ||
           !itsQueryOptions.itsLocationOptions.itsBBoxes.empty())
-        throw SmartMet::Spine::Exception(
+        throw Fmi::Exception(
             BCP,
             "Only one location option ('place', 'places', 'bbox', 'lonlat', 'latlon', 'lonlats', "
             "'latlons', 'wkt', 'icao', 'icaos', 'stationid') allowed");
@@ -384,7 +384,7 @@ void Query::checkIfMultipleLocationOptionsAllowed(bool allowMultipleLocationOpti
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
@@ -406,7 +406,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request &theReques
       for (const string &place : places)
       {
         if (place.empty())
-          throw SmartMet::Spine::Exception(BCP, errMsgOptionIsEmpty(optionName));
+          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
 
         itsQueryOptions.itsLocationOptions.itsPlaces.push_back(place);
       }
@@ -422,7 +422,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request &theReques
         auto listOfPlaces = listOfValues<string>(place, optionName, 0, false, false, false);
 
         if ((!listOfPlaces) || listOfPlaces->empty())
-          throw SmartMet::Spine::Exception(BCP, errMsgOptionIsEmpty(optionName));
+          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
 
         for (const string &p : *listOfPlaces)
           itsQueryOptions.itsLocationOptions.itsPlaces.push_back(p);
@@ -443,7 +443,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request &theReques
         auto listOfTwoLonLatPairs = listOfPairs<double>(bbox, optionName, 2);
 
         if ((!listOfTwoLonLatPairs) || listOfTwoLonLatPairs->empty())
-          throw SmartMet::Spine::Exception(BCP, errMsgOptionIsEmpty(optionName));
+          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
 
         auto west = listOfTwoLonLatPairs->front().first;
         auto south = listOfTwoLonLatPairs->front().second;
@@ -472,7 +472,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request &theReques
         auto listOfTwoValues = listOfValues<double>(lonlat, optionName, 2);
 
         if ((!listOfTwoValues) || listOfTwoValues->empty())
-          throw SmartMet::Spine::Exception(BCP, errMsgOptionIsEmpty(optionName));
+          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
 
         itsQueryOptions.itsLocationOptions.itsLonLats.push_back(
             SmartMet::Engine::Avi::LonLat(listOfTwoValues->front(), listOfTwoValues->back()));
@@ -489,7 +489,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request &theReques
         auto listOfTwoValues = listOfValues<double>(latlon, optionName, 2, true, true);
 
         if ((!listOfTwoValues) || listOfTwoValues->empty())
-          throw SmartMet::Spine::Exception(BCP, errMsgOptionIsEmpty(optionName));
+          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
 
         itsQueryOptions.itsLocationOptions.itsLonLats.push_back(
             SmartMet::Engine::Avi::LonLat(listOfTwoValues->front(), listOfTwoValues->back()));
@@ -506,7 +506,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request &theReques
         auto listOfEvenNValues = listOfValues<double>(lonlat, optionName);
 
         if ((!listOfEvenNValues) || listOfEvenNValues->empty())
-          throw SmartMet::Spine::Exception(BCP, errMsgOptionIsEmpty(optionName));
+          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
 
         for (auto it = listOfEvenNValues->begin(); (it != listOfEvenNValues->end());)
         {
@@ -531,7 +531,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request &theReques
         auto listOfEvenNValues = listOfValues<double>(latlon, optionName, 0, true, true);
 
         if ((!listOfEvenNValues) || listOfEvenNValues->empty())
-          throw SmartMet::Spine::Exception(BCP, errMsgOptionIsEmpty(optionName));
+          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
 
         for (auto it = listOfEvenNValues->begin(); (it != listOfEvenNValues->end());)
         {
@@ -556,7 +556,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request &theReques
       for (const string &wkt : wkts)
       {
         if (boost::trim_copy(wkt).empty())
-          throw SmartMet::Spine::Exception(BCP, errMsgOptionIsEmpty(optionName));
+          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
 
         itsQueryOptions.itsLocationOptions.itsWKTs.itsWKTs.push_back(wkt);
       }
@@ -572,7 +572,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request &theReques
       for (const string &icao : icaos)
       {
         if (icao.empty())
-          throw SmartMet::Spine::Exception(BCP, errMsgOptionIsEmpty(optionName));
+          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
 
         itsQueryOptions.itsLocationOptions.itsIcaos.push_back(icao);
       }
@@ -588,7 +588,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request &theReques
         auto listOfIcaos = listOfValues<string>(icao, optionName, 0, false, false, false);
 
         if ((!listOfIcaos) || listOfIcaos->empty())
-          throw SmartMet::Spine::Exception(BCP, errMsgOptionIsEmpty(optionName));
+          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
 
         for (const string &p : *listOfIcaos)
           itsQueryOptions.itsLocationOptions.itsIcaos.push_back(p);
@@ -605,7 +605,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request &theReques
       for (const string &country : countries)
       {
         if (country.empty())
-          throw SmartMet::Spine::Exception(BCP, errMsgOptionIsEmpty(optionName));
+          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
 
         itsQueryOptions.itsLocationOptions.itsCountries.push_back(country);
       }
@@ -621,7 +621,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request &theReques
         auto listOfCountries = listOfValues<string>(country, optionName, 0, false, false, false);
 
         if ((!listOfCountries) || listOfCountries->empty())
-          throw SmartMet::Spine::Exception(BCP, errMsgOptionIsEmpty(optionName));
+          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
 
         for (const string &c : *listOfCountries)
           itsQueryOptions.itsLocationOptions.itsCountries.push_back(c);
@@ -641,7 +641,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request &theReques
             stationid, optionName, 0, false, false, false);
 
         if ((!listOfNValues) || listOfNValues->empty())
-          throw SmartMet::Spine::Exception(BCP, errMsgOptionIsEmpty(optionName));
+          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
 
         for (auto id : *listOfNValues)
           itsQueryOptions.itsLocationOptions.itsStationIds.push_back(id);
@@ -659,7 +659,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request &theReques
             stationid, optionName, 0, false, false, false);
 
         if ((!listOfNValues) || listOfNValues->empty())
-          throw SmartMet::Spine::Exception(BCP, errMsgOptionIsEmpty(optionName));
+          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
 
         for (auto id : *listOfNValues)
           itsQueryOptions.itsLocationOptions.itsStationIds.push_back(id);
@@ -678,7 +678,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request &theReques
           (SmartMet::Spine::required_double(theRequest.getParameter("maxdistance"), errMsg) * 1000);
 
       if (itsQueryOptions.itsLocationOptions.itsMaxDistance < 0)
-        throw SmartMet::Spine::Exception(BCP, "maxdistance can't be negative");
+        throw Fmi::Exception(BCP, "maxdistance can't be negative");
     }
     else
       itsQueryOptions.itsLocationOptions.itsMaxDistance = 0;
@@ -690,7 +690,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request &theReques
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
@@ -722,13 +722,13 @@ void Query::parseTimeOptions(const SmartMet::Spine::HTTP::Request &theRequest,
          0);
 
     if (startTime.empty() != endTime.empty())
-      throw SmartMet::Spine::Exception(
+      throw Fmi::Exception(
           BCP, "'starttime' and 'endtime' options must be given simultaneously");
 
     if (!startTime.empty())
     {
       if (!obsTime.empty())
-        throw SmartMet::Spine::Exception(
+        throw Fmi::Exception(
             BCP,
             "Can't specify both time range ('starttime' and 'endtime') and observation time "
             "('time')");
@@ -737,10 +737,10 @@ void Query::parseTimeOptions(const SmartMet::Spine::HTTP::Request &theRequest,
       ptime et = Fmi::TimeParser::parse(endTime);
 
       if (st > et)
-        throw SmartMet::Spine::Exception(BCP, "'starttime' must be earlier than 'endtime'");
+        throw Fmi::Exception(BCP, "'starttime' must be earlier than 'endtime'");
 
       if ((maxMessageTimeRangeDays > 0) && ((et - st).hours() > (maxMessageTimeRangeDays * 24)))
-        throw SmartMet::Spine::Exception(
+        throw Fmi::Exception(
             BCP,
             "Time range too long, maximum is " + Fmi::to_string(maxMessageTimeRangeDays) + " days");
 
@@ -750,7 +750,7 @@ void Query::parseTimeOptions(const SmartMet::Spine::HTTP::Request &theRequest,
           string("timestamptz '") + Fmi::to_iso_string(et) + "Z'";
     }
     else if (itsQueryOptions.itsValidity == SmartMet::Engine::Avi::Rejected)
-      throw SmartMet::Spine::Exception(BCP, "Time range must be used to query rejected messages");
+      throw Fmi::Exception(BCP, "Time range must be used to query rejected messages");
     else if (!obsTime.empty())
       itsQueryOptions.itsTimeOptions.itsObservationTime =
           string("timestamptz '") + Fmi::to_iso_string(Fmi::TimeParser::parse(obsTime)) + "Z'";
@@ -767,7 +767,7 @@ void Query::parseTimeOptions(const SmartMet::Spine::HTTP::Request &theRequest,
         (itsQueryOptions.itsTimeOptions.itsTimeFormat != "sql") &&
         (itsQueryOptions.itsTimeOptions.itsTimeFormat != "xml") &&
         (itsQueryOptions.itsTimeOptions.itsTimeFormat != "epoch"))
-      throw SmartMet::Spine::Exception(
+      throw Fmi::Exception(
           BCP, "Unknown 'timeformat', use 'iso', 'timestamp', 'sql', 'xml' or 'epoch'");
 
     // Times always in utc
@@ -777,7 +777,7 @@ void Query::parseTimeOptions(const SmartMet::Spine::HTTP::Request &theRequest,
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
@@ -819,7 +819,7 @@ Query::Query(const SmartMet::Spine::HTTP::Request &theRequest,
     else if (validity == "rejected")
       itsQueryOptions.itsValidity = SmartMet::Engine::Avi::Rejected;
     else
-      throw SmartMet::Spine::Exception(BCP, "Unknown 'validity', use 'accepted' or 'rejected'");
+      throw Fmi::Exception(BCP, "Unknown 'validity', use 'accepted' or 'rejected'");
 
     // Parse time related query options
 
@@ -863,7 +863,7 @@ Query::Query(const SmartMet::Spine::HTTP::Request &theRequest,
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
 

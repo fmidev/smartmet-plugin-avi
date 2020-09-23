@@ -5,7 +5,7 @@
 #include <boost/algorithm/string/trim.hpp>
 #include <engines/authentication/Engine.h>
 #include <macgyver/StringConversion.h>
-#include <spine/Exception.h>
+#include <macgyver/Exception.h>
 #include <stdexcept>
 
 using namespace std;
@@ -97,7 +97,7 @@ Config::Config(const string &theConfigFileName)
       libconfig::Setting &groups = theConfig.lookup(optGroups);
 
       if (!groups.isList())
-        throw SmartMet::Spine::Exception(
+        throw Fmi::Exception(
             BCP,
             "Groups must be stored in list of groups delimited by {}: line " +
                 Fmi::to_string(groups.getSourceLine()));
@@ -107,7 +107,7 @@ Config::Config(const string &theConfigFileName)
         libconfig::Setting &group = groups[i];
 
         if (!group.isGroup())
-          throw SmartMet::Spine::Exception(
+          throw Fmi::Exception(
               BCP,
               "Groups must be stored in list of groups delimited by {}: line " +
                   Fmi::to_string(group.getSourceLine()));
@@ -129,7 +129,7 @@ Config::Config(const string &theConfigFileName)
               groupName = value;
 
               if (itsQueryLimits.find(groupName) != itsQueryLimits.end())
-                throw SmartMet::Spine::Exception(BCP, string("Duplicate group name"));
+                throw Fmi::Exception(BCP, string("Duplicate group name"));
             }
             else if ((paramName == "maxstations") || (paramName == "maxrows") ||
                      (paramName == "maxrangedays"))
@@ -152,32 +152,32 @@ Config::Config(const string &theConfigFileName)
               groupLimits.setAllowMultipleLocationOptions(allowMultipleLocationOptions);
             }
             else
-              throw SmartMet::Spine::Exception(BCP, string("Unknown variable '") + paramName);
+              throw Fmi::Exception(BCP, string("Unknown variable '") + paramName);
           }
           catch (const libconfig::ParseException &e)
           {
-            throw SmartMet::Spine::Exception(BCP,
+            throw Fmi::Exception(BCP,
                                              string("Configuration error ' ") + e.getError() +
                                                  "' with variable '" + paramName + "' on line " +
                                                  Fmi::to_string(e.getLine()));
           }
           catch (const libconfig::ConfigException &)
           {
-            throw SmartMet::Spine::Exception(BCP,
+            throw Fmi::Exception(BCP,
                                              string("Configuration error with variable '") +
                                                  paramName + "' on line " +
                                                  Fmi::to_string(group[j].getSourceLine()));
           }
           catch (const std::exception &e)
           {
-            throw SmartMet::Spine::Exception(BCP,
+            throw Fmi::Exception(BCP,
                                              e.what() + string(" (line number ") +
                                                  Fmi::to_string(group[j].getSourceLine()) + ")");
           }
         }
 
         if (groupName.empty())
-          throw SmartMet::Spine::Exception(
+          throw Fmi::Exception(
               BCP,
               string("Group name missing for group definition starting at line ") +
                   Fmi::to_string(group[i].getSourceLine()));
@@ -198,7 +198,7 @@ Config::Config(const string &theConfigFileName)
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception::Trace(BCP, "Operation failed!");
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
 
