@@ -181,11 +181,10 @@ void Plugin::query(const SmartMet::Spine::HTTP::Request &theRequest,
 
     // Formatted output
 
-    ostringstream output;
     boost::shared_ptr<TableFormatter> formatter(TableFormatterFactory::create(query.itsFormat));
-    formatter->format(output, table, headers, theRequest, itsConfig->tableFormatterOptions());
+    auto out = formatter->format(table, headers, theRequest, itsConfig->tableFormatterOptions());
 
-    theResponse.setContent(output.str());
+    theResponse.setContent(out);
 
     string mime = formatter->mimetype() + "; charset=UTF-8";
     theResponse.setHeader("Content-type", mime.c_str());
