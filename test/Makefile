@@ -1,61 +1,71 @@
-PROG = $(patsubst %.cpp,%,$(wildcard *Test.cpp))
 
-FLAGS = -std=c++11 -Wall -W -Wno-unused-parameter
+TEST_PREPARE_TARGETS := cnf/authengine.conf cnf/aviengine.conf
+TEST_FINISH_TARGETS := dummy
+TEST_TARGETS := test-noauth test-auth
 
-EXTRAFLAGS = -Werror -pedantic -Wpointer-arith -Wcast-qual \
-	-Wcast-align -Wwrite-strings -Wconversion -Winline \
-	-Wctor-dtor-privacy -Wnon-virtual-dtor -Wno-pmf-conversions \
-	-Wsign-promo -Wchar-subscripts -Wold-style-cast \
-	-Wshadow -Woverloaded-virtual
-
-DIFFICULTFLAGS = -Weffc++ -Wunreachable-code -Wredundant-decls
-
-ifeq ($(TSAN), yes)
-  FLAGS += -fsanitize=thread
-endif
-ifeq ($(ASAN), yes)
-  FLAGS += -fsanitize=address -fsanitize=pointer-compare -fsanitize=pointer-subtract -fsanitize=undefined -fsanitize-address-use-after-scope
+ifdef CI
+GEONAMES_HOST_EDIT := sed -e 's/"smartmet-test"/"localhost"/g'
+TEST_PREPARE_TARGETS += geonames-database start-geonames-db
+TEST_FINISH_TARGETS += stop-test-db
+EXTRA_IGNORE := input/.testignore_circle-ci
+else
+GEONAMES_HOST_EDIT := cat
+EXTRA_IGNORE :=
 endif
 
-CFLAGS = -DUNIX -O0 -g $(FLAGS)
+TEST_DB_DIR := $(shell pwd)/tmp-geonames-db
+TEST_RUNNER :=
 
-# Boost 1.69
-
-ifneq "$(wildcard /usr/include/boost169)" ""
-  INCLUDES += -isystem /usr/include/boost169
-  LIBS += -L/usr/lib64/boost169
-endif
-
-INCLUDES += -I ../avi -I /usr/include/smartmet -I /usr/include/mysql
-
-LIBS +=	-lsmartmet-spine \
-	-lsmartmet-newbase \
-	-lsmartmet-macgyver \
-	-lboost_date_time \
-	-lboost_thread \
-	-lboost_filesystem \
-	-lboost_iostreams \
-	-lboost_system \
-	-lconfig++ \
-	-lbz2 -lz \
-	-lpthread
-
-all: $(PROG)
+all:
 
 clean:
-	rm -f $(PROG) *~
+	-$(MAKE) $(TEST_FINISH_TARGETS)
+	rm -rf failed-sqlite failed-oracle failed-postgresql
+	rm -rf tmp-geonames-db
 
-test: unit_test $(PROG)
-	@echo Running tests:
-	@mkdir -p tmp failures
-	@rm -f tmp/* failures/*
-	@for prog in $(PROG); do \
-	  ./$$prog; \
-	done
+test:	$(TEST_PREPARE_TARGETS)
+	@ok=true; failed=; \
+	for test in $(TEST_TARGETS); do \
+	  if ! $(MAKE) $$test; then ok=false; failed="$$failed $$test"; fi; \
+        done; \
+	if ! $$ok ; then \
+	  echo "======================================================================="; \
+	  echo "Failed: $$failed"; \
+	  echo "======================================================================="; \
+        fi; \
+        $$ok
 
-$(PROG) : % : %.cpp Makefile ../avi.so
-	$(CXX) $(CFLAGS) -o $@ $@.cpp $(INCLUDES) $(LIBS)
+PRE_TEST :=
+POST_TEST :=
 
-unit_test:
-	echo "Runing Unit Tests"
-	make -C unit_test test
+test-noauth:		CONFIG := cnf/reactor.conf
+test-auth:		CONFIG := cnf/reactor-with-authetication.conf
+
+test-noauth test-auth: $(TEST_PREPARE_TARGETS)
+	rm -rf failures-$@
+	mkdir -p failures-$@
+	$(TEST_RUNNER) smartmet-plugin-test --handler /avi \
+		--reactor-config $(CONFIG) \
+		--failures-dir failures-$@ \
+		$(foreach fn, input/.testignore $(EXTRA_IGNORE), --ignore $(fn)) \
+		--timeout 300
+	$(MAKE) $(TEST_FINISH_TARGETS)
+
+geonames-database:
+	@-$(MAKE) stop-test-db
+	rm -rf tmp-geonames-db
+	if ! /usr/share/smartmet/test/db/create-local-db.sh $(TEST_DB_DIR) >tmp-geonames-db.log 2>&1 ; then \
+	    cat tmp-geonames-db.log; \
+	    false; \
+	fi
+
+start-geonames-db: geonames-database
+	/usr/share/smartmet/test/db/test-db-ctl.sh $(TEST_DB_DIR) start -w
+
+stop-test-db:
+	-/usr/share/smartmet/test/db/test-db-ctl.sh $(TEST_DB_DIR) stop
+
+cnf/authengine.conf cnf/aviengine.conf:	dummy
+	$(GEONAMES_HOST_EDIT) $@.in >$@
+
+dummy:

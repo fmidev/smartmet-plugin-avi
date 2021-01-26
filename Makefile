@@ -62,6 +62,9 @@ install:
 	@mkdir -p $(plugindir)
 	$(INSTALL_PROG) $(LIBFILE) $(plugindir)/$(LIBFILE)
 
+test:
+	$(MAKE) -C test $@
+
 objdir:
 	@mkdir -p $(objdir)
 
