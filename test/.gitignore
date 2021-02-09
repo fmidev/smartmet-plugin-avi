@@ -2,3 +2,5 @@
 /cnf/aviengine.conf
 /failures-test-noauth
 /failures-test-auth
+/tmp-geonames-db
+/tmp-geonames-db.log

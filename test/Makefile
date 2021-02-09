@@ -5,7 +5,7 @@ TEST_TARGETS := test-noauth test-auth
 
 ifdef CI
 GEONAMES_HOST_EDIT := sed -e 's/"smartmet-test"/"localhost"/g'
-TEST_PREPARE_TARGETS += geonames-database start-geonames-db
+TEST_PREPARE_TARGETS += start-geonames-db
 TEST_FINISH_TARGETS += stop-test-db
 EXTRA_IGNORE := input/.testignore_circle-ci
 else
@@ -44,12 +44,13 @@ test-auth:		CONFIG := cnf/reactor-with-authetication.conf
 test-noauth test-auth: $(TEST_PREPARE_TARGETS)
 	rm -rf failures-$@
 	mkdir -p failures-$@
-	$(TEST_RUNNER) smartmet-plugin-test --handler /avi \
+	ok=false; $(TEST_RUNNER) smartmet-plugin-test --handler /avi \
 		--reactor-config $(CONFIG) \
 		--failures-dir failures-$@ \
 		$(foreach fn, input/.testignore $(EXTRA_IGNORE), --ignore $(fn)) \
-		--timeout 300
-	$(MAKE) $(TEST_FINISH_TARGETS)
+		--timeout 300 && ok=true; \
+	$(MAKE) $(TEST_FINISH_TARGETS); \
+	$$ok
 
 geonames-database:
 	@-$(MAKE) stop-test-db
