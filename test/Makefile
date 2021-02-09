@@ -23,7 +23,7 @@ clean:
 	rm -rf failed-sqlite failed-oracle failed-postgresql
 	rm -rf tmp-geonames-db
 
-test:	$(TEST_PREPARE_TARGETS)
+test:
 	@ok=true; failed=; \
 	for test in $(TEST_TARGETS); do \
 	  if ! $(MAKE) $$test; then ok=false; failed="$$failed $$test"; fi; \
@@ -35,13 +35,11 @@ test:	$(TEST_PREPARE_TARGETS)
         fi; \
         $$ok
 
-PRE_TEST :=
-POST_TEST :=
-
 test-noauth:		CONFIG := cnf/reactor.conf
-test-auth:		CONFIG := cnf/reactor-with-authetication.conf
+test-auth:		CONFIG := cnf/reactor-with-authentication.conf
 
-test-noauth test-auth: $(TEST_PREPARE_TARGETS)
+test-noauth test-auth:
+	$(MAKE) $(TEST_PREPARE_TARGETS)
 	rm -rf failures-$@
 	mkdir -p failures-$@
 	ok=false; $(TEST_RUNNER) smartmet-plugin-test --handler /avi \
@@ -70,3 +68,5 @@ cnf/authengine.conf cnf/aviengine.conf:	dummy
 	$(GEONAMES_HOST_EDIT) $@.in >$@
 
 dummy:
+
+.PHONY: cnf/authengine.conf cnf/aviengine.conf
