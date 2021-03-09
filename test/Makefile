@@ -3,8 +3,10 @@ TEST_PREPARE_TARGETS := cnf/authengine.conf cnf/aviengine.conf
 TEST_FINISH_TARGETS := dummy
 TEST_TARGETS := test-noauth test-auth
 
+TEST_DB_DIR := $(shell pwd)/tmp-geonames-db
+
 ifdef CI
-GEONAMES_HOST_EDIT := sed -e 's/"smartmet-test"/"localhost"/g'
+GEONAMES_HOST_EDIT := sed -e 's|"smartmet-test"|"$(TEST_DB_DIR)"|g'
 TEST_PREPARE_TARGETS += start-geonames-db
 TEST_FINISH_TARGETS += stop-test-db
 EXTRA_IGNORE := input/.testignore_circle-ci
@@ -13,7 +15,6 @@ GEONAMES_HOST_EDIT := cat
 EXTRA_IGNORE :=
 endif
 
-TEST_DB_DIR := $(shell pwd)/tmp-geonames-db
 TEST_RUNNER :=
 
 all:
