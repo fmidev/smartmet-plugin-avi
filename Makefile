@@ -45,9 +45,6 @@ debug: all
 release: all
 profile: all
 
-test:
-	cd test && make test
-
 $(LIBFILE): $(OBJS)
 	$(CXX) $(LDFLAGS) -shared -rdynamic -o $(LIBFILE) $(OBJS) $(LIBS)
 
@@ -78,5 +75,7 @@ rpm: clean $(SPEC).spec
 
 obj/%.o: %.cpp
 	$(CXX) $(CFLAGS) $(INCLUDES) -c -o $@ $<
+
+.PHONY: test
 
 -include $(wildcard obj/*.d)
