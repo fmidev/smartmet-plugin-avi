@@ -2,7 +2,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet aviation message plugin
 Name: %{SPECNAME}
-Version: 21.8.17
+Version: 21.8.31
 Release: 1%{?dist}.fmi
 License: FMI
 Group: SmartMet/Plugins
@@ -14,17 +14,17 @@ BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: boost169-devel
 BuildRequires: libconfig-devel
-BuildRequires: smartmet-library-spine-devel >= 21.8.17
-BuildRequires: smartmet-library-macgyver-devel >= 21.8.5
-BuildRequires: smartmet-engine-avi-devel >= 21.8.17
-BuildRequires: smartmet-engine-authentication-devel >= 21.8.17
+BuildRequires: smartmet-library-spine-devel >= 21.8.30
+BuildRequires: smartmet-library-macgyver-devel >= 21.8.30
+BuildRequires: smartmet-engine-avi-devel >= 21.8.31
+BuildRequires: smartmet-engine-authentication-devel >= 21.8.31
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 Requires: libconfig
-Requires: smartmet-library-macgyver >= 21.8.5
-Requires: smartmet-library-spine >= 21.8.17
-Requires: smartmet-engine-avi >= 21.8.17
-Requires: smartmet-engine-authentication >= 21.8.17
+Requires: smartmet-library-macgyver >= 21.8.30
+Requires: smartmet-library-spine >= 21.8.30
+Requires: smartmet-engine-avi >= 21.8.31
+Requires: smartmet-engine-authentication >= 21.8.31
 Requires: boost169-date-time
 Provides: %{SPECNAME}
 Obsoletes: smartmet-brainstorm-aviplugin < 16.11.1
@@ -53,6 +53,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Tue Aug 31 2021 Mika Heiskanen <mika.heiskanen@fmi.fi> - 21.8.31-1.fmi
+- Repackaged due to Spine ABI changes
+
 * Tue Aug 17 2021 Mika Heiskanen <mika.heiskanen@fmi.fi> - 21.8.17-1.fmi
 - Repackaged due to a modified shutdown API
 
