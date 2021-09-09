@@ -19,7 +19,7 @@ BuildRequires: smartmet-engine-avi-devel >= 21.9.7
 BuildRequires: smartmet-engine-authentication-devel >= 21.8.31
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
-Requires: libconfig
+Requires: libconfig17
 Requires: smartmet-library-macgyver >= 21.8.30
 Requires: smartmet-library-spine >= 21.9.7
 Requires: smartmet-engine-avi >= 21.9.7
