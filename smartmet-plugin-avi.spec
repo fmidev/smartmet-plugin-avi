@@ -2,7 +2,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet aviation message plugin
 Name: %{SPECNAME}
-Version: 21.9.7
+Version: 21.9.9
 Release: 1%{?dist}.fmi
 License: FMI
 Group: SmartMet/Plugins
@@ -52,6 +52,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Thu Sep  9 2021 Andris Pavenis <andris.pavenis@fmi.fi> 21.9.9-1.fmi
+- Fix require in spec file (libconfig->libconfig17)
+
 * Tue Sep  7 2021 Andris Pavēnis <andris.pavenis@fmi.fi> - 21.9.7-1.fmi
 - Repackaged due to dependency changes (libconfig -> libconfig17)
 
