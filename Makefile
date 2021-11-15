@@ -2,7 +2,7 @@ SUBNAME = avi
 SPEC = smartmet-plugin-$(SUBNAME)
 INCDIR = smartmet/plugins/$(SUBNAME)
 
-REQUIRES = 
+REQUIRES = configpp
 
 include $(shell echo $${PREFIX-/usr})/share/smartmet/devel/makefile.inc
 
