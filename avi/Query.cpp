@@ -4,6 +4,7 @@
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <macgyver/StringConversion.h>
+#include <macgyver/DistanceParser.h>
 #include <spine/Convenience.h>
 #include <macgyver/Exception.h>
 #include <spine/FmiApiKey.h>
@@ -674,8 +675,12 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request &theReques
     {
       const char *errMsg =
           "Option maxdistance is required with latlon/lonlat, bbox and wkt options";
-      itsQueryOptions.itsLocationOptions.itsMaxDistance =
-          (SmartMet::Spine::required_double(theRequest.getParameter("maxdistance"), errMsg) * 1000);
+	  std::string maxdistance = SmartMet::Spine::required_string(theRequest.getParameter("maxdistance"), errMsg);
+	  // If plain number is given it is kilometers
+	  if(std::isdigit(maxdistance.back()))
+		maxdistance.append("km");
+
+      itsQueryOptions.itsLocationOptions.itsMaxDistance = Fmi::DistanceParser::parse_meter(maxdistance);
 
       if (itsQueryOptions.itsLocationOptions.itsMaxDistance < 0)
         throw Fmi::Exception(BCP, "maxdistance can't be negative");
