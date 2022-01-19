@@ -13,17 +13,17 @@ BuildRequires: rpm-build
 BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: boost169-devel
-BuildRequires: smartmet-library-spine-devel >= 21.11.10
+BuildRequires: smartmet-library-spine-devel >= 22.1.5
 BuildRequires: smartmet-library-macgyver-devel >= 22.1.18
-BuildRequires: smartmet-engine-avi-devel >= 21.9.7
-BuildRequires: smartmet-engine-authentication-devel >= 21.9.9
+BuildRequires: smartmet-engine-avi-devel >= 21.12.7
+BuildRequires: smartmet-engine-authentication-devel >= 21.12.7
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 Requires: libconfig17
 Requires: smartmet-library-macgyver >= 22.1.18
-Requires: smartmet-library-spine >= 21.11.10
-Requires: smartmet-engine-avi >= 21.9.7
-Requires: smartmet-engine-authentication >= 21.9.9
+Requires: smartmet-library-spine >= 22.1.5
+Requires: smartmet-engine-avi >= 21.12.7
+Requires: smartmet-engine-authentication >= 21.12.7
 Requires: boost169-date-time
 Provides: %{SPECNAME}
 Obsoletes: smartmet-brainstorm-aviplugin < 16.11.1
