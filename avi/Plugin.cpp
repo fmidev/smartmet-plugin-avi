@@ -7,14 +7,14 @@
 #include "Plugin.h"
 #include "Query.h"
 
-#include <spine/Convenience.h>
 #include <macgyver/Exception.h>
+#include <macgyver/ValueFormatter.h>
+#include <spine/Convenience.h>
 #include <spine/Reactor.h>
 #include <spine/SmartMet.h>
 #include <spine/Table.h>
 #include <spine/TableFeeder.h>
 #include <spine/TableFormatterFactory.h>
-#include <spine/ValueFormatter.h>
 
 #include <macgyver/StringConversion.h>
 #include <macgyver/TimeZoneFactory.h>
@@ -137,9 +137,9 @@ void Plugin::query(const SmartMet::Spine::HTTP::Request &theRequest,
     // Fill table
 
     Table table;
-    ValueFormatter valueFormatter(theRequest);
-    SmartMet::Spine::TimeSeries::TableFeeder tf(
-        table, valueFormatter, precisions, timeFormatter, timeZonePtr);
+    Fmi::ValueFormatterParam opt;
+    Fmi::ValueFormatter valueFormatter(opt);
+    Spine::TableFeeder tf(table, valueFormatter, precisions, timeFormatter, timeZonePtr);
 
     int columnNumber = 0;
 

@@ -2,7 +2,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet aviation message plugin
 Name: %{SPECNAME}
-Version: 22.1.18
+Version: 22.3.8
 Release: 1%{?dist}.fmi
 License: FMI
 Group: SmartMet/Plugins
@@ -13,17 +13,19 @@ BuildRequires: rpm-build
 BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: boost169-devel
-BuildRequires: smartmet-library-spine-devel >= 22.1.5
-BuildRequires: smartmet-library-macgyver-devel >= 22.1.18
-BuildRequires: smartmet-engine-avi-devel >= 21.12.7
-BuildRequires: smartmet-engine-authentication-devel >= 21.12.7
+BuildRequires: smartmet-library-spine-devel >= 22.3.8
+BuildRequires: smartmet-library-macgyver-devel >= 22.3.8
+BuildRequires: smartmet-library-timeseries-devel >= 22.3.8
+BuildRequires: smartmet-engine-avi-devel >= 22.3.8
+BuildRequires: smartmet-engine-authentication-devel >= 22.1.21
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 Requires: libconfig17
-Requires: smartmet-library-macgyver >= 22.1.18
-Requires: smartmet-library-spine >= 22.1.5
-Requires: smartmet-engine-avi >= 21.12.7
-Requires: smartmet-engine-authentication >= 21.12.7
+Requires: smartmet-library-macgyver >= 22.3.8
+Requires: smartmet-library-timeseries >= 22.3.8
+Requires: smartmet-library-spine >= 22.3.8
+Requires: smartmet-engine-avi >= 22.3.8
+Requires: smartmet-engine-authentication >= 22.1.21
 Requires: boost169-date-time
 Provides: %{SPECNAME}
 Obsoletes: smartmet-brainstorm-aviplugin < 16.11.1
@@ -52,6 +54,8 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Tue Mar  8 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.3.8-1.fmi
+- Use the new TimeSeries library
 
 * Tue Jan 18 2022 Anssi Reponen <anssi.reponen@fmi.fi> - 22.1.18-1.fmi
 - Use DistanceParser for maxdistance URL-parameter (BRAINSTORM-605)
