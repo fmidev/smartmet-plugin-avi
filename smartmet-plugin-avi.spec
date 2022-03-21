@@ -13,17 +13,18 @@ BuildRequires: rpm-build
 BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: boost169-devel
-BuildRequires: smartmet-library-spine-devel >= 22.3.8
+BuildRequires: smartmet-library-spine-devel >= 22.3.18
+BuildRequires: smartmet-library-timeseries-devel >= 22.3.18
 BuildRequires: smartmet-library-macgyver-devel >= 22.3.8
-BuildRequires: smartmet-library-timeseries-devel >= 22.3.8
+BuildRequires: smartmet-library-timeseries-devel >= 22.3.18
 BuildRequires: smartmet-engine-avi-devel >= 22.3.8
 BuildRequires: smartmet-engine-authentication-devel >= 22.1.21
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 Requires: libconfig17
 Requires: smartmet-library-macgyver >= 22.3.8
-Requires: smartmet-library-timeseries >= 22.3.8
-Requires: smartmet-library-spine >= 22.3.8
+Requires: smartmet-library-timeseries >= 22.3.18
+Requires: smartmet-library-spine >= 22.3.18
 Requires: smartmet-engine-avi >= 22.3.8
 Requires: smartmet-engine-authentication >= 22.1.21
 Requires: boost169-date-time
