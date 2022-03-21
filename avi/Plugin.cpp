@@ -13,9 +13,8 @@
 #include <spine/Reactor.h>
 #include <spine/SmartMet.h>
 #include <spine/Table.h>
-#include <spine/TableFeeder.h>
 #include <spine/TableFormatterFactory.h>
-
+#include <timeseries/TableFeeder.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TimeZoneFactory.h>
 
@@ -139,7 +138,7 @@ void Plugin::query(const SmartMet::Spine::HTTP::Request &theRequest,
     Table table;
     Fmi::ValueFormatterParam opt;
     Fmi::ValueFormatter valueFormatter(opt);
-    Spine::TableFeeder tf(table, valueFormatter, precisions, timeFormatter, timeZonePtr);
+    TimeSeries::TableFeeder tf(table, valueFormatter, precisions, timeFormatter, timeZonePtr);
 
     int columnNumber = 0;
 
