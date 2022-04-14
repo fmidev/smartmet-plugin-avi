@@ -1,0 +1,1 @@
+GET	/avi?icao=EFHK&icao=EFRO&icao=EFIV&time=201511170239&messagetype=METAR,TAF&param=stationid,icao,longitude,latitude,messagetype,route,messageid,message,messagetime,messagevalidfrom,messagevalidto,messagecreated,messirheading,messageversion&precision=3 HTTP/1.0

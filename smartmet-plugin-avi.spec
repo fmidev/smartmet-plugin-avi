@@ -2,7 +2,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet aviation message plugin
 Name: %{SPECNAME}
-Version: 22.3.21
+Version: 22.4.22
 Release: 1%{?dist}.fmi
 License: FMI
 Group: SmartMet/Plugins
@@ -55,6 +55,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Thu Apr 14 2022 Pertti Kinnia <pertti.kinnia@fmi.fi> - 22.4.14-1.fmi
+- Added TAF query time restriction tests (BRAINSTORM-2247, BRAINSTORM-2239). Test can now be run against updated smartmet-test-db (when repackaged) instead of dockerized database (fmidev/smartmet-server-test-db), but test database must first manually be created using '/usr/share/smartmet/test/db/create-local-db.sh db_dir pg_restore collation_C avi.dump' and started using '/usr/share/smartmet/test/db/test-db-ctl.sh path_to_db_dir start -w'. Database host (smartmet-test) must also be changed to path_to_db_dir (using unix socket) in aviengine.conf.in. Shall later modify Makefile and aviengine.conf.in to automatically create/start/use/stop rpm based test database when running tests
+
 * Mon Mar 21 2022 Andris Pavēnis <andris.pavenis@fmi.fi> 22.3.21-1.fmi
 - Update due to changes in smartmet-library-spine and smartnet-library-timeseries
 
