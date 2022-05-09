@@ -305,6 +305,8 @@ Plugin::Plugin(Reactor *theReactor, const char *theConfigFileName)
 
 void Plugin::init()
 {
+  using namespace boost::placeholders;
+
   try
   {
     /* AviEngine */
