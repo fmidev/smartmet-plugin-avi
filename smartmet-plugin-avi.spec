@@ -2,7 +2,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet aviation message plugin
 Name: %{SPECNAME}
-Version: 22.4.28
+Version: 22.5.24
 Release: 1%{?dist}.fmi
 License: FMI
 Group: SmartMet/Plugins
@@ -13,20 +13,20 @@ BuildRequires: rpm-build
 BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: boost169-devel
-BuildRequires: smartmet-library-spine-devel >= 22.4.26
-BuildRequires: smartmet-library-timeseries-devel >= 22.3.18
-BuildRequires: smartmet-library-macgyver-devel >= 22.3.8
-BuildRequires: smartmet-library-timeseries-devel >= 22.3.18
-BuildRequires: smartmet-engine-avi-devel >= 22.3.8
-BuildRequires: smartmet-engine-authentication-devel >= 22.1.21
+BuildRequires: smartmet-library-spine-devel >= 22.5.24
+BuildRequires: smartmet-library-timeseries-devel >= 22.5.24
+BuildRequires: smartmet-library-macgyver-devel >= 22.5.24
+BuildRequires: smartmet-library-timeseries-devel >= 22.5.24
+BuildRequires: smartmet-engine-avi-devel >= 22.5.24
+BuildRequires: smartmet-engine-authentication-devel >= 22.5.24
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 Requires: libconfig17
-Requires: smartmet-library-macgyver >= 22.3.8
-Requires: smartmet-library-timeseries >= 22.3.18
-Requires: smartmet-library-spine >= 22.4.26
-Requires: smartmet-engine-avi >= 22.3.8
-Requires: smartmet-engine-authentication >= 22.1.21
+Requires: smartmet-library-macgyver >= 22.5.24
+Requires: smartmet-library-timeseries >= 22.5.24
+Requires: smartmet-library-spine >= 22.5.24
+Requires: smartmet-engine-avi >= 22.5.24
+Requires: smartmet-engine-authentication >= 22.5.24
 Requires: boost169-date-time
 Provides: %{SPECNAME}
 Obsoletes: smartmet-brainstorm-aviplugin < 16.11.1
@@ -55,6 +55,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Tue May 24 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.5.24-1.fmi
+- Repackaged due to NFmiArea ABI changes
+
 * Thu Apr 28 2022 Andris Pavenis <andris.pavenis@fmi.fi> 22.4.28-1.fmi
 - Repackage due to SmartMet::Spine::Reactor ABI changes
 
