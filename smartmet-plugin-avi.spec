@@ -9,25 +9,32 @@ Group: SmartMet/Plugins
 URL: https://github.com/fmidev/smartmet-plugin-avi
 Source0: %{name}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+
+%if 0%{?rhel} && 0%{rhel} < 9
+%define smartmet_boost boost169
+%else
+%define smartmet_boost boost
+%endif
+
 BuildRequires: rpm-build
 BuildRequires: gcc-c++
 BuildRequires: make
-BuildRequires: boost169-devel
-BuildRequires: smartmet-library-spine-devel >= 22.5.24
-BuildRequires: smartmet-library-timeseries-devel >= 22.5.24
-BuildRequires: smartmet-library-macgyver-devel >= 22.5.24
-BuildRequires: smartmet-library-timeseries-devel >= 22.5.24
-BuildRequires: smartmet-engine-avi-devel >= 22.5.24
-BuildRequires: smartmet-engine-authentication-devel >= 22.5.24
+BuildRequires: %{smartmet_boost}-devel
+BuildRequires: smartmet-library-spine-devel >= 22.6.16
+BuildRequires: smartmet-library-timeseries-devel >= 22.6.16
+BuildRequires: smartmet-library-macgyver-devel >= 22.6.16
+BuildRequires: smartmet-library-timeseries-devel >= 22.6.16
+BuildRequires: smartmet-engine-avi-devel >= 22.6.17
+BuildRequires: smartmet-engine-authentication-devel >= 22.6.17
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 Requires: libconfig17
-Requires: smartmet-library-macgyver >= 22.5.24
-Requires: smartmet-library-timeseries >= 22.5.24
-Requires: smartmet-library-spine >= 22.5.24
-Requires: smartmet-engine-avi >= 22.5.24
-Requires: smartmet-engine-authentication >= 22.5.24
-Requires: boost169-date-time
+Requires: smartmet-library-macgyver >= 22.6.16
+Requires: smartmet-library-timeseries >= 22.6.16
+Requires: smartmet-library-spine >= 22.6.16
+Requires: smartmet-engine-avi >= 22.6.17
+Requires: smartmet-engine-authentication >= 22.6.17
+Requires: %{smartmet_boost}-date-time
 Provides: %{SPECNAME}
 Obsoletes: smartmet-brainstorm-aviplugin < 16.11.1
 Obsoletes: smartmet-brainstorm-aviplugin-debuginfo < 16.11.1
