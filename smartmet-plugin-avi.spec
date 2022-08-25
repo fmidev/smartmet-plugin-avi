@@ -2,7 +2,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet aviation message plugin
 Name: %{SPECNAME}
-Version: 22.6.21
+Version: 22.8.25
 Release: 1%{?dist}.fmi
 License: FMI
 Group: SmartMet/Plugins
@@ -20,18 +20,18 @@ BuildRequires: rpm-build
 BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: %{smartmet_boost}-devel
-BuildRequires: smartmet-library-spine-devel >= 22.6.16
-BuildRequires: smartmet-library-timeseries-devel >= 22.6.16
-BuildRequires: smartmet-library-macgyver-devel >= 22.6.16
-BuildRequires: smartmet-library-timeseries-devel >= 22.6.16
+BuildRequires: smartmet-library-spine-devel >= 22.8.25
+BuildRequires: smartmet-library-timeseries-devel >= 22.7.27
+BuildRequires: smartmet-library-macgyver-devel >= 22.8.23
+BuildRequires: smartmet-library-timeseries-devel >= 22.7.27
 BuildRequires: smartmet-engine-avi-devel >= 22.6.17
 BuildRequires: smartmet-engine-authentication-devel >= 22.6.17
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 Requires: libconfig17
-Requires: smartmet-library-macgyver >= 22.6.16
-Requires: smartmet-library-timeseries >= 22.6.16
-Requires: smartmet-library-spine >= 22.6.16
+Requires: smartmet-library-macgyver >= 22.8.23
+Requires: smartmet-library-timeseries >= 22.7.27
+Requires: smartmet-library-spine >= 22.8.25
 Requires: smartmet-engine-avi >= 22.6.17
 Requires: smartmet-engine-authentication >= 22.6.17
 Requires: %{smartmet_boost}-date-time
@@ -62,6 +62,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Thu Aug 25 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.8.25-1.fmi
+- Use a generic exception handler for configuration file errors
+
 * Tue Jun 21 2022 Andris Pavēnis <andris.pavenis@fmi.fi> 22.6.21-1.fmi
 - Add support for RHEL9, upgrade libpqxx to 7.7.0 (rhel8+) and fmt to 8.1.1
 

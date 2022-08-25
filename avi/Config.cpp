@@ -4,8 +4,9 @@
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include <engines/authentication/Engine.h>
-#include <macgyver/StringConversion.h>
 #include <macgyver/Exception.h>
+#include <macgyver/StringConversion.h>
+#include <spine/Exceptions.h>
 #include <stdexcept>
 
 using namespace std;
@@ -97,20 +98,18 @@ Config::Config(const string &theConfigFileName)
       libconfig::Setting &groups = theConfig.lookup(optGroups);
 
       if (!groups.isList())
-        throw Fmi::Exception(
-            BCP,
-            "Groups must be stored in list of groups delimited by {}: line " +
-                Fmi::to_string(groups.getSourceLine()));
+        throw Fmi::Exception(BCP,
+                             "Groups must be stored in list of groups delimited by {}: line " +
+                                 Fmi::to_string(groups.getSourceLine()));
 
       for (int i = 0; i < groups.getLength(); i++)
       {
         libconfig::Setting &group = groups[i];
 
         if (!group.isGroup())
-          throw Fmi::Exception(
-              BCP,
-              "Groups must be stored in list of groups delimited by {}: line " +
-                  Fmi::to_string(group.getSourceLine()));
+          throw Fmi::Exception(BCP,
+                               "Groups must be stored in list of groups delimited by {}: line " +
+                                   Fmi::to_string(group.getSourceLine()));
 
         QueryLimits groupLimits(defaultLimits);
         string groupName, paramName;
@@ -154,33 +153,16 @@ Config::Config(const string &theConfigFileName)
             else
               throw Fmi::Exception(BCP, string("Unknown variable '") + paramName);
           }
-          catch (const libconfig::ParseException &e)
+          catch (...)
           {
-            throw Fmi::Exception(BCP,
-                                             string("Configuration error ' ") + e.getError() +
-                                                 "' with variable '" + paramName + "' on line " +
-                                                 Fmi::to_string(e.getLine()));
-          }
-          catch (const libconfig::ConfigException &)
-          {
-            throw Fmi::Exception(BCP,
-                                             string("Configuration error with variable '") +
-                                                 paramName + "' on line " +
-                                                 Fmi::to_string(group[j].getSourceLine()));
-          }
-          catch (const std::exception &e)
-          {
-            throw Fmi::Exception(BCP,
-                                             e.what() + string(" (line number ") +
-                                                 Fmi::to_string(group[j].getSourceLine()) + ")");
+            Spine::Exceptions::handle("AVI plugin");
           }
         }
 
         if (groupName.empty())
-          throw Fmi::Exception(
-              BCP,
-              string("Group name missing for group definition starting at line ") +
-                  Fmi::to_string(group[i].getSourceLine()));
+          throw Fmi::Exception(BCP,
+                               string("Group name missing for group definition starting at line ") +
+                                   Fmi::to_string(group[i].getSourceLine()));
 
         itsQueryLimits[groupName] = groupLimits;
       }
