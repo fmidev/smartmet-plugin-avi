@@ -3,10 +3,10 @@
 #include "Query.h"
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
-#include <macgyver/StringConversion.h>
 #include <macgyver/DistanceParser.h>
-#include <spine/Convenience.h>
 #include <macgyver/Exception.h>
+#include <macgyver/StringConversion.h>
+#include <spine/Convenience.h>
 #include <spine/FmiApiKey.h>
 
 using namespace std;
@@ -26,7 +26,7 @@ namespace Avi
 // ----------------------------------------------------------------------
 
 template <typename T>
-T toType(const string &s)
+T toType(const string & /* s */)
 {
   throw Fmi::Exception(BCP, "internal: unsupported conversion");
 }
@@ -70,13 +70,13 @@ boost::optional<list<pair<T, T>>> listOfPairs(const string &commaSeparatedStr,
 
     if ((nValues > 0) && (flds.size() != nValues))
       throw Fmi::Exception(BCP,
-                                       Fmi::to_string(nValues) +
-                                           string(" values required for option '") + optionName +
-                                           "'; '" + commaSeparatedStr + "'");
-    else if ((nValues == 0) && ((flds.size() % 2) != 0))
+                           Fmi::to_string(nValues) + string(" values required for option '") +
+                               optionName + "'; '" + commaSeparatedStr + "'");
+
+    if ((nValues == 0) && ((flds.size() % 2) != 0))
       throw Fmi::Exception(BCP,
-                                       string("Even number of values required for option '") +
-                                           optionName + "'; '" + commaSeparatedStr + "'");
+                           string("Even number of values required for option '") + optionName +
+                               "'; '" + commaSeparatedStr + "'");
 
     size_t n;
 
@@ -86,9 +86,8 @@ boost::optional<list<pair<T, T>>> listOfPairs(const string &commaSeparatedStr,
 
       if (flds[n].empty())
         throw Fmi::Exception(BCP,
-                                         string("Empty value for option '") + optionName +
-                                             "' at position " + Fmi::to_string(n + 1) + "; '" +
-                                             commaSeparatedStr + "'");
+                             string("Empty value for option '") + optionName + "' at position " +
+                                 Fmi::to_string(n + 1) + "; '" + commaSeparatedStr + "'");
     }
 
     list<pair<T, T>> valueList;
@@ -107,15 +106,15 @@ boost::optional<list<pair<T, T>>> listOfPairs(const string &commaSeparatedStr,
           // Order lon,lat expected
           //
           if ((value1 < -180) || (value1 > 180))
-            throw Fmi::Exception(
-                BCP,
-                string("Value in range [-180,180] expected for option '") + optionName +
-                    "' at position " + Fmi::to_string(n - 1) + "; '" + commaSeparatedStr + "'");
+            throw Fmi::Exception(BCP,
+                                 string("Value in range [-180,180] expected for option '") +
+                                     optionName + "' at position " + Fmi::to_string(n - 1) + "; '" +
+                                     commaSeparatedStr + "'");
           if ((value2 < -90) || (value2 > 90))
-            throw Fmi::Exception(
-                BCP,
-                string("Value in range [-90,90] expected for option '") + optionName +
-                    "' at position " + Fmi::to_string(n) + "; '" + commaSeparatedStr + "'");
+            throw Fmi::Exception(BCP,
+                                 string("Value in range [-90,90] expected for option '") +
+                                     optionName + "' at position " + Fmi::to_string(n) + "; '" +
+                                     commaSeparatedStr + "'");
         }
 
         valueList.push_back(make_pair<T, T>((T)value1, (T)value2));
@@ -123,9 +122,8 @@ boost::optional<list<pair<T, T>>> listOfPairs(const string &commaSeparatedStr,
       catch (...)
       {
         throw Fmi::Exception(BCP,
-                                         string("Invalid value for option '") + optionName +
-                                             "' at position " + Fmi::to_string(n + 1) + "; '" +
-                                             commaSeparatedStr + "'");
+                             string("Invalid value for option '") + optionName + "' at position " +
+                                 Fmi::to_string(n + 1) + "; '" + commaSeparatedStr + "'");
       }
     }
     return boost::optional<list<pair<T, T>>>(valueList);
@@ -149,7 +147,7 @@ bool validValue(const T &value, double minValue, double maxValue)
 }
 
 template <>
-bool validValue<string>(const string &value, double minValue, double maxValue)
+bool validValue<string>(const string & /*value */, double /*minValue*/, double /*maxValue*/)
 {
   return true;
 }
@@ -178,9 +176,8 @@ boost::optional<list<T>> listOfValues(const string &commaSeparatedStr,
     {
       if (nValues != flds.size())
         throw Fmi::Exception(BCP,
-                                         Fmi::to_string(nValues) +
-                                             string(" values required for option '") + optionName +
-                                             "'; '" + commaSeparatedStr + "'");
+                             Fmi::to_string(nValues) + string(" values required for option '") +
+                                 optionName + "'; '" + commaSeparatedStr + "'");
     }
     else
     {
@@ -188,11 +185,12 @@ boost::optional<list<T>> listOfValues(const string &commaSeparatedStr,
 
       if (even && ((nValues % 2) != 0))
         throw Fmi::Exception(BCP,
-                                         string("Even number of values required for option '") +
-                                             optionName + "'; '" + commaSeparatedStr + "'");
+                             string("Even number of values required for option '") + optionName +
+                                 "'; '" + commaSeparatedStr + "'");
     }
 
-    size_t n, np;
+    size_t n;
+    size_t np;
 
     for (n = 0; (n < nValues); n++)
     {
@@ -200,9 +198,8 @@ boost::optional<list<T>> listOfValues(const string &commaSeparatedStr,
 
       if (flds[n].empty())
         throw Fmi::Exception(BCP,
-                                         string("Empty value for option '") + optionName +
-                                             "' at position " + Fmi::to_string(n + 1) + "; '" +
-                                             commaSeparatedStr + "'");
+                             string("Empty value for option '") + optionName + "' at position " +
+                                 Fmi::to_string(n + 1) + "; '" + commaSeparatedStr + "'");
     }
 
     list<T> valueList;
@@ -227,18 +224,18 @@ boost::optional<list<T>> listOfValues(const string &commaSeparatedStr,
           if ((n % 2) == 0)
           {
             if (!validValue<T>(value, -180, 180))
-              throw Fmi::Exception(
-                  BCP,
-                  string("Value in range [-180,180] expected for option '") + optionName +
-                      "' at position " + Fmi::to_string(nn + 1) + "; '" + commaSeparatedStr + "'");
+              throw Fmi::Exception(BCP,
+                                   string("Value in range [-180,180] expected for option '") +
+                                       optionName + "' at position " + Fmi::to_string(nn + 1) +
+                                       "; '" + commaSeparatedStr + "'");
           }
           else
           {
             if (!validValue<T>(value, -90, 90))
-              throw Fmi::Exception(
-                  BCP,
-                  string("Value in range [-90,90] expected for option '") + optionName +
-                      "' at position " + Fmi::to_string(nn + 1) + "; '" + commaSeparatedStr + "'");
+              throw Fmi::Exception(BCP,
+                                   string("Value in range [-90,90] expected for option '") +
+                                       optionName + "' at position " + Fmi::to_string(nn + 1) +
+                                       "; '" + commaSeparatedStr + "'");
           }
         }
 
@@ -247,10 +244,10 @@ boost::optional<list<T>> listOfValues(const string &commaSeparatedStr,
       catch (...)
       {
         if (castOk)
-          throw Fmi::Exception::Trace(
-              BCP,
-              string("Invalid value for option '") + optionName + "' at position " +
-                  Fmi::to_string(nn + 1) + "; '" + commaSeparatedStr + "'");
+          throw Fmi::Exception::Trace(BCP,
+                                      string("Invalid value for option '") + optionName +
+                                          "' at position " + Fmi::to_string(nn + 1) + "; '" +
+                                          commaSeparatedStr + "'");
       }
 
       np = n;
@@ -365,7 +362,7 @@ void Query::parseParamOption(const SmartMet::Spine::HTTP::Request &theRequest)
  */
 // ----------------------------------------------------------------------
 
-void Query::checkIfMultipleLocationOptionsAllowed(bool allowMultipleLocationOptions)
+void Query::checkIfMultipleLocationOptionsAllowed(bool allowMultipleLocationOptions) const
 {
   try
   {
@@ -675,12 +672,14 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request &theReques
     {
       const char *errMsg =
           "Option maxdistance is required with latlon/lonlat, bbox and wkt options";
-	  std::string maxdistance = SmartMet::Spine::required_string(theRequest.getParameter("maxdistance"), errMsg);
-	  // If plain number is given it is kilometers
-	  if(std::isdigit(maxdistance.back()))
-		maxdistance.append("km");
+      std::string maxdistance =
+          SmartMet::Spine::required_string(theRequest.getParameter("maxdistance"), errMsg);
+      // If plain number is given it is kilometers
+      if (std::isdigit(maxdistance.back()))
+        maxdistance.append("km");
 
-      itsQueryOptions.itsLocationOptions.itsMaxDistance = Fmi::DistanceParser::parse_meter(maxdistance);
+      itsQueryOptions.itsLocationOptions.itsMaxDistance =
+          Fmi::DistanceParser::parse_meter(maxdistance);
 
       if (itsQueryOptions.itsLocationOptions.itsMaxDistance < 0)
         throw Fmi::Exception(BCP, "maxdistance can't be negative");
@@ -706,7 +705,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request &theReques
 // ----------------------------------------------------------------------
 
 void Query::parseTimeOptions(const SmartMet::Spine::HTTP::Request &theRequest,
-                             int maxMessageTimeRangeDays)
+                             int maxTimeRangeInDays)
 {
   try
   {
@@ -727,8 +726,7 @@ void Query::parseTimeOptions(const SmartMet::Spine::HTTP::Request &theRequest,
          0);
 
     if (startTime.empty() != endTime.empty())
-      throw Fmi::Exception(
-          BCP, "'starttime' and 'endtime' options must be given simultaneously");
+      throw Fmi::Exception(BCP, "'starttime' and 'endtime' options must be given simultaneously");
 
     if (!startTime.empty())
     {
@@ -744,10 +742,9 @@ void Query::parseTimeOptions(const SmartMet::Spine::HTTP::Request &theRequest,
       if (st > et)
         throw Fmi::Exception(BCP, "'starttime' must be earlier than 'endtime'");
 
-      if ((maxMessageTimeRangeDays > 0) && ((et - st).hours() > (maxMessageTimeRangeDays * 24)))
+      if ((maxTimeRangeInDays > 0) && ((et - st).hours() > (maxTimeRangeInDays * 24)))
         throw Fmi::Exception(
-            BCP,
-            "Time range too long, maximum is " + Fmi::to_string(maxMessageTimeRangeDays) + " days");
+            BCP, "Time range too long, maximum is " + Fmi::to_string(maxTimeRangeInDays) + " days");
 
       itsQueryOptions.itsTimeOptions.itsStartTime =
           string("timestamptz '") + Fmi::to_iso_string(st) + "Z'";
@@ -772,8 +769,8 @@ void Query::parseTimeOptions(const SmartMet::Spine::HTTP::Request &theRequest,
         (itsQueryOptions.itsTimeOptions.itsTimeFormat != "sql") &&
         (itsQueryOptions.itsTimeOptions.itsTimeFormat != "xml") &&
         (itsQueryOptions.itsTimeOptions.itsTimeFormat != "epoch"))
-      throw Fmi::Exception(
-          BCP, "Unknown 'timeformat', use 'iso', 'timestamp', 'sql', 'xml' or 'epoch'");
+      throw Fmi::Exception(BCP,
+                           "Unknown 'timeformat', use 'iso', 'timestamp', 'sql', 'xml' or 'epoch'");
 
     // Times always in utc
     //

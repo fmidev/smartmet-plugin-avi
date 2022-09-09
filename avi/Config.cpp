@@ -23,8 +23,7 @@ namespace Avi
  */
 // ----------------------------------------------------------------------
 
-Config::Config(const string &theConfigFileName)
-    : ConfigBase(theConfigFileName), itsTableFormatterOptions()
+Config::Config(const string &theConfigFileName) : ConfigBase(theConfigFileName)
 {
   try
   {
@@ -112,7 +111,8 @@ Config::Config(const string &theConfigFileName)
                                    Fmi::to_string(group.getSourceLine()));
 
         QueryLimits groupLimits(defaultLimits);
-        string groupName, paramName;
+        string groupName;
+        string paramName;
 
         for (int j = 0; j < group.getLength(); j++)
         {
@@ -170,12 +170,12 @@ Config::Config(const string &theConfigFileName)
 
     // Authentication engine needs not to be loaded if there's no apikey groups
 
-    itsUseAuthEngine &= (itsQueryLimits.size() > 0);
+    itsUseAuthEngine &= (!itsQueryLimits.empty());
 
     // Store the default limits as the last map entry
 
-    string defaultGroup(itsQueryLimits.size() > 0 ? itsQueryLimits.crbegin()->first + "Z"
-                                                  : "default");
+    string defaultGroup(!itsQueryLimits.empty() ? itsQueryLimits.crbegin()->first + "Z"
+                                                : "default");
     itsQueryLimits[defaultGroup] = defaultLimits;
   }
   catch (...)
@@ -189,7 +189,7 @@ const QueryLimits &Config::getQueryLimits(
 {
   // The default limits are stored as the last map entry
 
-  map<string, QueryLimits>::const_iterator it = itsQueryLimits.end();
+  auto it = itsQueryLimits.end();
 
   if (authEngine && (!apiKey.empty()) && (itsQueryLimits.size() > 1))
   {

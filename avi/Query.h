@@ -37,7 +37,7 @@ class Query
   unsigned int itsPrecision;
 
  private:
-  void checkIfMultipleLocationOptionsAllowed(bool allowMultipleLocationOptions);
+  void checkIfMultipleLocationOptionsAllowed(bool allowMultipleLocationOptions) const;
 
   void parseMessageTypeOption(const SmartMet::Spine::HTTP::Request &theRequest);
   void parseParamOption(const SmartMet::Spine::HTTP::Request &theRequest);

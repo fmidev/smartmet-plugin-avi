@@ -8,6 +8,8 @@
 #include "Query.h"
 
 #include <macgyver/Exception.h>
+#include <macgyver/StringConversion.h>
+#include <macgyver/TimeZoneFactory.h>
 #include <macgyver/ValueFormatter.h>
 #include <spine/Convenience.h>
 #include <spine/Reactor.h>
@@ -15,8 +17,6 @@
 #include <spine/Table.h>
 #include <spine/TableFormatterFactory.h>
 #include <timeseries/TableFeeder.h>
-#include <macgyver/StringConversion.h>
-#include <macgyver/TimeZoneFactory.h>
 
 #include <boost/date_time/local_time/local_time.hpp>
 
@@ -186,7 +186,7 @@ void Plugin::query(const SmartMet::Spine::HTTP::Request &theRequest,
     theResponse.setContent(out);
 
     string mime = formatter->mimetype() + "; charset=UTF-8";
-    theResponse.setHeader("Content-type", mime.c_str());
+    theResponse.setHeader("Content-type", mime);
     theResponse.setHeader("Access-Control-Allow-Origin", "*");
   }
   catch (...)
@@ -230,9 +230,9 @@ void Plugin::requestHandler(Reactor & /* theReactor */,
       std::string expiration = tformat->format(t_expires);
       std::string modification = tformat->format(t_now);
 
-      theResponse.setHeader("Cache-Control", cachecontrol.c_str());
-      theResponse.setHeader("Expires", expiration.c_str());
-      theResponse.setHeader("Last-Modified", modification.c_str());
+      theResponse.setHeader("Cache-Control", cachecontrol);
+      theResponse.setHeader("Expires", expiration);
+      theResponse.setHeader("Last-Modified", modification);
     }
     catch (...)
     {
@@ -261,7 +261,7 @@ void Plugin::requestHandler(Reactor & /* theReactor */,
       std::string firstMessage = exception.what();
       boost::algorithm::replace_all(firstMessage, "\n", " ");
       firstMessage = firstMessage.substr(0, 300);
-      theResponse.setHeader("X-Avi-Error", firstMessage.c_str());
+      theResponse.setHeader("X-Avi-Error", firstMessage);
     }
   }
   catch (...)
@@ -277,11 +277,7 @@ void Plugin::requestHandler(Reactor & /* theReactor */,
 // ----------------------------------------------------------------------
 
 Plugin::Plugin(Reactor *theReactor, const char *theConfigFileName)
-    : SmartMetPlugin(),
-      itsModuleName("Avi"),
-      itsConfigFileName(theConfigFileName),
-      itsConfig(),
-      itsReactor(theReactor)
+    : itsModuleName("Avi"), itsConfigFileName(theConfigFileName), itsReactor(theReactor)
 {
   try
   {
@@ -311,7 +307,7 @@ void Plugin::init()
   {
     /* AviEngine */
 
-    auto engine = itsReactor->getSingleton("Avi", nullptr);
+    auto *engine = itsReactor->getSingleton("Avi", nullptr);
     if (!engine)
       throw Fmi::Exception(BCP, "Avi engine unavailable");
 
@@ -357,7 +353,8 @@ void Plugin::shutdown()
  */
 // ----------------------------------------------------------------------
 
-Plugin::~Plugin() {}
+Plugin::~Plugin() = default;
+
 // ----------------------------------------------------------------------
 /*!
  * \brief Return the plugin name
@@ -384,7 +381,7 @@ int Plugin::getRequiredAPIVersion() const
  */
 // ----------------------------------------------------------------------
 
-bool Plugin::queryIsFast(const SmartMet::Spine::HTTP::Request &) const
+bool Plugin::queryIsFast(const SmartMet::Spine::HTTP::Request & /* theRequest */) const
 {
   return false;
 }

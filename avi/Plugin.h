@@ -29,18 +29,18 @@ class Plugin : public SmartMetPlugin, private boost::noncopyable
 {
  public:
   Plugin(Reactor *theReactor, const char *theConfigFileName);
-  virtual ~Plugin();
+  ~Plugin() override;
 
-  const std::string &getPluginName() const;
-  int getRequiredAPIVersion() const;
-  bool queryIsFast(const SmartMet::Spine::HTTP::Request &theRequest) const;
+  const std::string &getPluginName() const override;
+  int getRequiredAPIVersion() const override;
+  bool queryIsFast(const SmartMet::Spine::HTTP::Request &theRequest) const override;
 
  protected:
-  void init();
-  void shutdown();
+  void init() override;
+  void shutdown() override;
   void requestHandler(SmartMet::Spine::Reactor &theReactor,
                       const SmartMet::Spine::HTTP::Request &theRequest,
-                      SmartMet::Spine::HTTP::Response &theResponse);
+                      SmartMet::Spine::HTTP::Response &theResponse) override;
 
  private:
   void query(const SmartMet::Spine::HTTP::Request &theRequest,
@@ -50,9 +50,9 @@ class Plugin : public SmartMetPlugin, private boost::noncopyable
   const std::string itsConfigFileName;
   std::unique_ptr<Config> itsConfig;
 
-  SmartMet::Spine::Reactor *itsReactor;
-  SmartMet::Engine::Avi::Engine *itsAviEngine;
-  SmartMet::Engine::Authentication::Engine *itsAuthEngine;
+  SmartMet::Spine::Reactor *itsReactor = nullptr;
+  SmartMet::Engine::Avi::Engine *itsAviEngine = nullptr;
+  SmartMet::Engine::Authentication::Engine *itsAuthEngine = nullptr;
 };
 
 }  // namespace Avi
