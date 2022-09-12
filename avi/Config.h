@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include <boost/noncopyable.hpp>
 #include <engines/authentication/Engine.h>
 #include <spine/ConfigBase.h>
 #include <spine/TableFormatterOptions.h>
@@ -17,13 +16,11 @@ namespace Avi
 using namespace SmartMet::Spine;
 const int maxMessageTimeRangeDaysDefault = 31;
 
-class Config : public ConfigBase, private boost::noncopyable
+class Config : public ConfigBase
 {
  public:
-  Config(const std::string &theConfigFileName);
   Config() = delete;
-  Config(const Config &) = delete;
-  Config &operator=(const Config &) = delete;
+  Config(const std::string &theConfigFileName);
 
   const TableFormatterOptions &tableFormatterOptions() const { return itsTableFormatterOptions; }
   const QueryLimits &getQueryLimits(const SmartMet::Engine::Authentication::Engine *authEngine,

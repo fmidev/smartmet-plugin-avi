@@ -43,7 +43,7 @@ class Query
   void parseParamOption(const SmartMet::Spine::HTTP::Request &theRequest);
   void parseLocationOptions(const SmartMet::Spine::HTTP::Request &theRequest,
                             bool allowMultipleLocationOptions);
-  void parseTimeOptions(const SmartMet::Spine::HTTP::Request &theRequest, int maxTimeRangeDays);
+  void parseTimeOptions(const SmartMet::Spine::HTTP::Request &theRequest, int maxTimeRangeInDays);
 };
 
 }  // namespace Avi

@@ -45,9 +45,8 @@ void setColumnHeaders(TableFormatter::Names &headers, const SmartMet::Engine::Av
 {
   try
   {
-    for (SmartMet::Engine::Avi::Columns::const_iterator it = columns.begin(); (it != columns.end());
-         it++)
-      headers.push_back(it->itsName);
+    for (const auto &column : columns)
+      headers.push_back(column.itsName);
   }
   catch (...)
   {
@@ -347,13 +346,6 @@ void Plugin::shutdown()
 {
   std::cout << "  -- Shutdown requested (aviplugin)\n";
 }
-// ----------------------------------------------------------------------
-/*!
- * \brief Destructor
- */
-// ----------------------------------------------------------------------
-
-Plugin::~Plugin() = default;
 
 // ----------------------------------------------------------------------
 /*!

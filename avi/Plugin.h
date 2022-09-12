@@ -28,8 +28,8 @@ namespace Avi
 class Plugin : public SmartMetPlugin, private boost::noncopyable
 {
  public:
+  Plugin() = delete;
   Plugin(Reactor *theReactor, const char *theConfigFileName);
-  ~Plugin() override;
 
   const std::string &getPluginName() const override;
   int getRequiredAPIVersion() const override;
