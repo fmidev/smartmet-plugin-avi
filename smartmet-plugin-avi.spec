@@ -2,7 +2,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet aviation message plugin
 Name: %{SPECNAME}
-Version: 22.9.12
+Version: 22.10.5
 Release: 1%{?dist}.fmi
 License: FMI
 Group: SmartMet/Plugins
@@ -21,16 +21,16 @@ BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: %{smartmet_boost}-devel
 BuildRequires: smartmet-library-spine-devel >= 22.9.5
-BuildRequires: smartmet-library-timeseries-devel >= 22.9.9
+BuildRequires: smartmet-library-timeseries-devel >= 22.10.4
 BuildRequires: smartmet-library-macgyver-devel >= 22.8.23
-BuildRequires: smartmet-library-timeseries-devel >= 22.9.9
+BuildRequires: smartmet-library-timeseries-devel >= 22.10.4
 BuildRequires: smartmet-engine-avi-devel >= 22.6.17
 BuildRequires: smartmet-engine-authentication-devel >= 22.6.17
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 Requires: libconfig17
 Requires: smartmet-library-macgyver >= 22.8.23
-Requires: smartmet-library-timeseries >= 22.9.9
+Requires: smartmet-library-timeseries >= 22.10.4
 Requires: smartmet-library-spine >= 22.9.5
 Requires: smartmet-engine-avi >= 22.6.17
 Requires: smartmet-engine-authentication >= 22.6.17
@@ -62,6 +62,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Wed Oct  5 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.10.5-1.fmi
+- Do not use boost::noncopyable
+
 * Mon Sep 12 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.9.12-1.fmi
 - Silenced several compiler warnings
 

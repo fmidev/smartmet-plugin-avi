@@ -7,16 +7,12 @@
 #pragma once
 
 #include "Config.h"
-
+#include <boost/shared_ptr.hpp>
 #include <engines/authentication/Engine.h>
 #include <engines/avi/Engine.h>
 #include <spine/HTTP.h>
 #include <spine/Reactor.h>
 #include <spine/SmartMetPlugin.h>
-
-#include <boost/shared_ptr.hpp>
-#include <boost/utility.hpp>
-
 #include <string>
 
 namespace SmartMet
@@ -25,10 +21,12 @@ namespace Plugin
 {
 namespace Avi
 {
-class Plugin : public SmartMetPlugin, private boost::noncopyable
+class Plugin : public SmartMetPlugin
 {
  public:
   Plugin() = delete;
+  Plugin(const Plugin &other) = delete;
+  Plugin &operator=(const Plugin &other) = delete;
   Plugin(Reactor *theReactor, const char *theConfigFileName);
 
   const std::string &getPluginName() const override;
