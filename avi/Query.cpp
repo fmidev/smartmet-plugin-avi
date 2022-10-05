@@ -827,6 +827,17 @@ Query::Query(const SmartMet::Spine::HTTP::Request &theRequest,
 
     parseTimeOptions(theRequest, queryLimits.getMaxMessageTimeRangeDays());
 
+    // Message format
+
+    itsQueryOptions.itsMessageFormat = Fmi::ascii_toupper_copy(
+        SmartMet::Spine::optional_string(theRequest.getParameter("messageformat"), "TAC"));
+
+    if (
+        (itsQueryOptions.itsMessageFormat != "TAC") &&
+        (itsQueryOptions.itsMessageFormat != "IWXXM")
+       )
+      throw Fmi::Exception(BCP, "Unknown 'messageformat', use 'TAC' or 'IWXXM'");
+
     // Format, output precision, debug on/off (whether engine writes generated sql to stderr)
 
     itsFormat = SmartMet::Spine::optional_string(theRequest.getParameter("format"), "ascii");
@@ -846,10 +857,12 @@ Query::Query(const SmartMet::Spine::HTTP::Request &theRequest,
         (SmartMet::Spine::optional_unsigned_long(theRequest.getParameter("distinct"), 1) > 0);
 
     // Whether to filter (finnish) METARs (LIKE 'METAR%', if enabled by engine's configuration) or
-    // not
+    // not. Option is applicable to TAC output only
 
     itsQueryOptions.itsFilterMETARs =
-        (SmartMet::Spine::optional_unsigned_long(theRequest.getParameter("filtermetars"), 1) > 0);
+        itsQueryOptions.itsMessageFormat == "TAC"
+        ? (SmartMet::Spine::optional_unsigned_long(theRequest.getParameter("filtermetars"), 1) > 0)
+        : false;
 
     // https://jira.fmi.fi/browse/BRAINSTORM-1779
     //
