@@ -2,7 +2,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet aviation message plugin
 Name: %{SPECNAME}
-Version: 22.10.6
+Version: 22.12.2
 Release: 1%{?dist}.fmi
 License: FMI
 Group: SmartMet/Plugins
@@ -62,6 +62,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Fri Dec  2 2022 Andris Pavēnis <andris.pavenis@fmi.fi> 22.12.2-1.fmi
+- Update HTTP request method checking and support OPTIONS method
+
 * Thu Oct  6 2022 Pertti Kinnia <pertti.kinnia@fmi.fi> 22.10.6-1.fmi
 - Added support for IWXXM messages; BRAINSTORM-905
 
