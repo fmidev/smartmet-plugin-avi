@@ -211,6 +211,11 @@ void Plugin::requestHandler(Reactor & /* theReactor */,
 
     try
     {
+      // Check request method (support GET, POST, OPTIONS)
+      if (checkRequest(theRequest, theResponse, true)) {
+        return;
+      }
+
       const int expires_seconds = 60;
       ptime t_now = second_clock::universal_time();
 
