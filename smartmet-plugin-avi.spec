@@ -2,7 +2,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet aviation message plugin
 Name: %{SPECNAME}
-Version: 22.12.2
+Version: 23.2.9
 Release: 1%{?dist}.fmi
 License: FMI
 Group: SmartMet/Plugins
@@ -20,20 +20,20 @@ BuildRequires: rpm-build
 BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: %{smartmet_boost}-devel
-BuildRequires: smartmet-library-spine-devel >= 22.12.2
-BuildRequires: smartmet-library-timeseries-devel >= 22.10.5
-BuildRequires: smartmet-library-macgyver-devel >= 22.8.23
-BuildRequires: smartmet-library-timeseries-devel >= 22.10.5
-BuildRequires: smartmet-engine-avi-devel >= 22.10.6
-BuildRequires: smartmet-engine-authentication-devel >= 22.6.17
+BuildRequires: smartmet-library-spine-devel >= 23.2.8
+BuildRequires: smartmet-library-timeseries-devel >= 23.1.31
+BuildRequires: smartmet-library-macgyver-devel >= 22.12.16
+BuildRequires: smartmet-library-timeseries-devel >= 23.1.31
+BuildRequires: smartmet-engine-avi-devel >= 22.12.16
+BuildRequires: smartmet-engine-authentication-devel >= 23.1.25
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 Requires: libconfig17
-Requires: smartmet-library-macgyver >= 22.8.23
-Requires: smartmet-library-timeseries >= 22.10.5
-Requires: smartmet-library-spine >= 22.12.2
-Requires: smartmet-engine-avi >= 22.10.6
-Requires: smartmet-engine-authentication >= 22.6.17
+Requires: smartmet-library-macgyver >= 22.12.16
+Requires: smartmet-library-timeseries >= 23.1.31
+Requires: smartmet-library-spine >= 23.2.8
+Requires: smartmet-engine-avi >= 22.12.16
+Requires: smartmet-engine-authentication >= 23.1.25
 Requires: %{smartmet_boost}-date-time
 Provides: %{SPECNAME}
 Obsoletes: smartmet-brainstorm-aviplugin < 16.11.1
@@ -62,6 +62,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Thu Feb  9 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.2.9-1.fmi
+- Add host name to stack traces
+
 * Fri Dec  2 2022 Andris Pavēnis <andris.pavenis@fmi.fi> 22.12.2-1.fmi
 - Update HTTP request method checking and support OPTIONS method
 

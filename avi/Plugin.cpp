@@ -7,19 +7,18 @@
 #include "Plugin.h"
 #include "Query.h"
 
+#include <boost/date_time/local_time/local_time.hpp>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TimeZoneFactory.h>
 #include <macgyver/ValueFormatter.h>
 #include <spine/Convenience.h>
+#include <spine/HostInfo.h>
 #include <spine/Reactor.h>
 #include <spine/SmartMet.h>
 #include <spine/Table.h>
 #include <spine/TableFormatterFactory.h>
 #include <timeseries/TableFeeder.h>
-
-#include <boost/date_time/local_time/local_time.hpp>
-
 #include <iostream>
 #include <stdexcept>
 
@@ -212,7 +211,8 @@ void Plugin::requestHandler(Reactor & /* theReactor */,
     try
     {
       // Check request method (support GET, POST, OPTIONS)
-      if (checkRequest(theRequest, theResponse, true)) {
+      if (checkRequest(theRequest, theResponse, true))
+      {
         return;
       }
 
@@ -245,6 +245,7 @@ void Plugin::requestHandler(Reactor & /* theReactor */,
       Fmi::Exception exception(BCP, "Request processing exception!", nullptr);
       exception.addParameter("URI", theRequest.getURI());
       exception.addParameter("ClientIP", theRequest.getClientIP());
+      exception.addParameter("HostName", Spine::HostInfo::getHostName(theRequest.getClientIP()));
       exception.printError();
 
       if (isdebug)
