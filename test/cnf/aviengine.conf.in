@@ -6,6 +6,7 @@ postgis:
 {
 	host		= "smartmet-test";
 	port		= 5444;
+	path_to_db_dir  = "/usr/share/smartmet/test/db/db_dir";
 	database	= "avi";
 	username	= "avi_user";
 	password	= "avi_pw";
@@ -49,8 +50,8 @@ message:
 		# 	timerangetype = "validtime"; 		using valid_from and valid_to columns
 		# 	timerangetype = "messagevalidtime";	using message_time and valid_to column, or if valid_from and valid_to are NULLs,
 		#										message_time column and range length (hours forwards) if given with 'validityhours' setting
-		# 	timerangetype = "messagetime";	using message_time column and range length (hours forwards) given with 'validityhours' setting
-		# 	timerangetype = "creationtime";	using creation_time and valid_to columns
+		# 	timerangetype = "messagetime";		using message_time column and range length (hours forwards) given with 'validityhours' setting
+		# 	timerangetype = "creationtime";		using creation_time and valid_to columns
 		#
 		# Query latest or all valid messages:
 		#
@@ -83,10 +84,22 @@ message:
 			timerangetype = "messagevalidtime";
 			validityhours = 4;					# 'NIL' messages have no valid from/to; use message_time - message_time+'validityhours' time range
 			latestmessage = true;
+                        queryrestrictionhours = [ 2,5,8,11,14,17,20,23 ];       # BRAINSTORM-2239
+                        queryrestrictioncountrycodes = [ "FI" ];
+                        queryrestrictionstartminute = 20;
+                        queryrestrictionendminute = 40;
+		},
+		{
+            # Space Weather warning messages
+			names = [ "SWX" ];
+			timerangetype = "validtime";
+			latestmessage = true;
+			scope         = "global";
 		},
 		{
 			names = [ "METREP","SPECIAL" ];
-			timerangetype = "validtime";
+			timerangetype = "messagetime";
+			validityhours = 2;
 			latestmessage = true;
 		},
 		{
@@ -94,12 +107,14 @@ message:
 			timerangetype = "messagetime";
 			validityhours = 2;
 			latestmessage = false;
+			scope         = "fir";
 		},
 		{
 			name = "WXREP";
 			timerangetype = "messagetime";
 			validityhours = 2;
 			latestmessage = false;
+			scope         = "fir";
 		},
 		{
 			name = "WRNG";
@@ -111,6 +126,7 @@ message:
 			name = "SIGMET";
 			timerangetype = "creationtime";
 			latestmessage = false;
+			scope         = "fir";
 		},
 		{
 			name = "VA-SIGMET";
@@ -122,11 +138,37 @@ message:
 			timerangetype = "creationtime";
 			latestmessage = true;
 			messirpatterns = [ "FBFI41%","FBFI42%","FBFI43%" ];
+		},
+		{
+			name = "LOWWIND";
+			timerangetype = "messagetime";
+			validityhours = 4;
+			latestmessage = true;
+		},
+		{
+			name = "VAA";
+			timerangetype = "messagetime";
+			validityhours = 6;
+			latestmessage = false;
+			scope         = "global";
+		},
+		{
+			name = "TCA";
+			timerangetype = "messagetime";
+			validityhours = 6;
+			latestmessage = false;
+			scope         = "global";
+		},
+		{
+			name = "AIRMET";
+			timerangetype = "validtime";
+			latestmessage = false;
+			scope         = "fir";
 		}
 	);
 
 	# When querying rejected messages for given time range, selecting messages where
 	#
-	#	(message.created BETWEEN start time AND end time)
+	#	(message.created >= start time AND message.created < end time)
 	#
 }
