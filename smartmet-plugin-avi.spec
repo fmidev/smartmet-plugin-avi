@@ -35,6 +35,25 @@ Requires: smartmet-library-spine >= 23.7.28
 Requires: smartmet-engine-avi >= 22.12.16
 Requires: smartmet-engine-authentication >= 23.1.25
 Requires: %{smartmet_boost}-date-time
+
+#TestRequires: smartmet-utils-devel
+#TestRequires: smartmet-test-db
+#TestRequires: smartmet-library-spine-plugin-test >= 23.7.28
+
+%if %{defined el7}
+Requires: libpqxx < 1:7.0
+BuildRequires: libpqxx-devel < 1:7.0
+%else
+%if 0%{?rhel} && 0%{rhel} >= 8
+Requires: libpqxx >= 1:7.7.0, libpqxx < 1:7.8.0
+BuildRequires: libpqxx-devel >= 1:7.7.0, libpqxx-devel < 1:7.8.0
+#TestRequires: libpqxx-devel >= 1:7.7.0, libpqxx-devel < 1:7.8.0
+%else
+Requires: libpqxx
+BuildRequires: libpqxx-devel
+%endif
+%endif
+
 Provides: %{SPECNAME}
 Obsoletes: smartmet-brainstorm-aviplugin < 16.11.1
 Obsoletes: smartmet-brainstorm-aviplugin-debuginfo < 16.11.1
@@ -46,7 +65,7 @@ SmartMet Aviation plugin
 rm -rf $RPM_BUILD_ROOT
 
 %setup -q -n %{SPECNAME}
- 
+
 %build -q -n %{SPECNAME}
 make %{_smp_mflags}
 
