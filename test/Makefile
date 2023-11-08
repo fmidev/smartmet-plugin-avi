@@ -54,7 +54,7 @@ test-noauth test-auth:
 geonames-database:
 	@-$(MAKE) stop-test-db
 	rm -rf tmp-geonames-db
-	if ! /usr/share/smartmet/test/db/create-local-db.sh $(TEST_DB_DIR) >tmp-geonames-db.log 2>&1 ; then \
+	if ! /usr/share/smartmet/test/db/create-local-db.sh $(TEST_DB_DIR) collation_C >tmp-geonames-db.log 2>&1 ; then \
 	    cat tmp-geonames-db.log; \
 	    false; \
 	fi
@@ -63,7 +63,7 @@ start-geonames-db: geonames-database
 	/usr/share/smartmet/test/db/test-db-ctl.sh $(TEST_DB_DIR) start -w
 
 stop-test-db:
-	-/usr/share/smartmet/test/db/test-db-ctl.sh $(TEST_DB_DIR) stop
+	/usr/share/smartmet/test/db/test-db-ctl.sh $(TEST_DB_DIR) stop
 
 cnf/authengine.conf cnf/aviengine.conf:	dummy
 	$(GEONAMES_HOST_EDIT) $@.in >$@
