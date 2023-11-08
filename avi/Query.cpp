@@ -2,7 +2,7 @@
 
 #include "Query.h"
 #include <boost/algorithm/string/trim.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
+#include <macgyver/DateTime.h>
 #include <macgyver/DistanceParser.h>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
@@ -736,8 +736,8 @@ void Query::parseTimeOptions(const SmartMet::Spine::HTTP::Request &theRequest,
             "Can't specify both time range ('starttime' and 'endtime') and observation time "
             "('time')");
 
-      ptime st = Fmi::TimeParser::parse(startTime);
-      ptime et = Fmi::TimeParser::parse(endTime);
+      Fmi::DateTime st = Fmi::TimeParser::parse(startTime);
+      Fmi::DateTime et = Fmi::TimeParser::parse(endTime);
 
       if (st > et)
         throw Fmi::Exception(BCP, "'starttime' must be earlier than 'endtime'");

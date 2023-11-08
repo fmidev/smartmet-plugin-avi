@@ -7,7 +7,7 @@
 #include "Plugin.h"
 #include "Query.h"
 
-#include <boost/date_time/local_time/local_time.hpp>
+#include <macgyver/LocalDateTime.h>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TimeZoneFactory.h>
@@ -121,7 +121,7 @@ void Plugin::query(const SmartMet::Spine::HTTP::Request &theRequest,
 
     // Get formatter and timezone for time columns
 
-    boost::optional<boost::local_time::time_zone_ptr> timeZonePtr;
+    boost::optional<Fmi::TimeZonePtr> timeZonePtr;
 
     if ((!query.itsQueryOptions.itsTimeOptions.itsTimeZone.empty()) &&
         (query.itsQueryOptions.itsTimeOptions.itsTimeZone != "utc"))
@@ -217,14 +217,14 @@ void Plugin::requestHandler(Reactor & /* theReactor */,
       }
 
       const int expires_seconds = 60;
-      ptime t_now = second_clock::universal_time();
+      Fmi::DateTime t_now = Fmi::SecondClock::universal_time();
 
       query(theRequest, theResponse);
       theResponse.setStatus(HTTP::Status::ok);
 
       // Build cache expiration time info
 
-      ptime t_expires = t_now + seconds(expires_seconds);
+      Fmi::DateTime t_expires = t_now + seconds(expires_seconds);
 
       // The headers themselves
 

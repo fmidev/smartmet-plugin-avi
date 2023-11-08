@@ -22,14 +22,14 @@ BuildRequires: make
 BuildRequires: %{smartmet_boost}-devel
 BuildRequires: smartmet-library-spine-devel >= 23.7.28
 BuildRequires: smartmet-library-timeseries-devel >= 23.1.31
-BuildRequires: smartmet-library-macgyver-devel >= 23.7.28
+BuildRequires: smartmet-library-macgyver-devel >= 23.11.8
 BuildRequires: smartmet-library-timeseries-devel >= 23.1.31
 BuildRequires: smartmet-engine-avi-devel >= 22.12.16
 BuildRequires: smartmet-engine-authentication-devel >= 23.1.25
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 Requires: libconfig17
-Requires: smartmet-library-macgyver >= 23.7.28
+Requires: smartmet-library-macgyver >= 23.11.8
 Requires: smartmet-library-timeseries >= 23.1.31
 Requires: smartmet-library-spine >= 23.7.28
 Requires: smartmet-engine-avi >= 22.12.16
