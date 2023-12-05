@@ -2,7 +2,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet aviation message plugin
 Name: %{SPECNAME}
-Version: 23.7.28
+Version: 23.12.5
 Release: 1%{?dist}.fmi
 License: FMI
 Group: SmartMet/Plugins
@@ -20,25 +20,25 @@ BuildRequires: rpm-build
 BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: %{smartmet_boost}-devel
-BuildRequires: smartmet-library-spine-devel >= 23.7.28
-BuildRequires: smartmet-library-timeseries-devel >= 23.1.31
-BuildRequires: smartmet-library-macgyver-devel >= 23.11.8
-BuildRequires: smartmet-library-timeseries-devel >= 23.1.31
-BuildRequires: smartmet-engine-avi-devel >= 22.12.16
-BuildRequires: smartmet-engine-authentication-devel >= 23.1.25
+BuildRequires: smartmet-library-spine-devel >= 23.12.5
+BuildRequires: smartmet-library-timeseries-devel >= 23.11.21
+BuildRequires: smartmet-library-macgyver-devel >= 23.11.21
+BuildRequires: smartmet-library-timeseries-devel >= 23.11.21
+BuildRequires: smartmet-engine-avi-devel >= 23.7.28
+BuildRequires: smartmet-engine-authentication-devel >= 23.7.28
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 Requires: libconfig17
-Requires: smartmet-library-macgyver >= 23.11.8
-Requires: smartmet-library-timeseries >= 23.1.31
-Requires: smartmet-library-spine >= 23.7.28
-Requires: smartmet-engine-avi >= 22.12.16
-Requires: smartmet-engine-authentication >= 23.1.25
+Requires: smartmet-library-macgyver >= 23.11.21
+Requires: smartmet-library-timeseries >= 23.11.21
+Requires: smartmet-library-spine >= 23.12.5
+Requires: smartmet-engine-avi >= 23.7.28
+Requires: smartmet-engine-authentication >= 23.7.28
 Requires: %{smartmet_boost}-date-time
 
 #TestRequires: smartmet-utils-devel
 #TestRequires: smartmet-test-db
-#TestRequires: smartmet-library-spine-plugin-test >= 23.7.28
+#TestRequires: smartmet-library-spine-plugin-test >= 23.12.5
 
 %if %{defined el7}
 Requires: libpqxx < 1:7.0
@@ -81,6 +81,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Tue Dec  5 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.12.5-1.fmi
+- Repackaged due to an ABI change in SmartMetPlugin
+
 * Fri Jul 28 2023 Andris Pavēnis <andris.pavenis@fmi.fi> 23.7.28-1.fmi
 - Repackage due to bulk ABI changes in macgyver/newbase/spine
 
