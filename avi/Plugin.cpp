@@ -23,8 +23,6 @@
 #include <stdexcept>
 
 using namespace std;
-using namespace boost::posix_time;
-using namespace boost::local_time;
 
 namespace SmartMet
 {
@@ -224,7 +222,7 @@ void Plugin::requestHandler(Reactor & /* theReactor */,
 
       // Build cache expiration time info
 
-      Fmi::DateTime t_expires = t_now + seconds(expires_seconds);
+      Fmi::DateTime t_expires = t_now + Fmi::Seconds(expires_seconds);
 
       // The headers themselves
 
