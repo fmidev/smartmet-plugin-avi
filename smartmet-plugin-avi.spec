@@ -29,10 +29,10 @@ BuildRequires: smartmet-engine-authentication-devel >= 24.2.23
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 Requires: libconfig17
-Requires: smartmet-library-macgyver >= 24.1.17
-Requires: smartmet-library-timeseries >= 24.2.23
-Requires: smartmet-library-spine >= 24.2.8
-Requires: smartmet-engine-avi >= 24.2.23
+Requires: smartmet-library-macgyver >= 24.5.6
+Requires: smartmet-library-timeseries >= 24.5.6
+Requires: smartmet-library-spine >= 24.5.6
+Requires: smartmet-engine-avi >= 24.5.7
 Requires: smartmet-engine-authentication >= 24.2.23
 Requires: %{smartmet_boost}-date-time
 
