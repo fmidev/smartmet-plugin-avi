@@ -34,7 +34,6 @@ Requires: smartmet-library-timeseries >= 24.5.6
 Requires: smartmet-library-spine >= 24.5.6
 Requires: smartmet-engine-avi >= 24.5.7
 Requires: smartmet-engine-authentication >= 24.2.23
-Requires: %{smartmet_boost}-date-time
 
 #TestRequires: smartmet-utils-devel
 #TestRequires: smartmet-test-db
