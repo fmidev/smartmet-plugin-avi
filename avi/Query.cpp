@@ -10,7 +10,6 @@
 #include <spine/FmiApiKey.h>
 
 using namespace std;
-using namespace boost::posix_time;
 using namespace boost::algorithm;
 
 namespace SmartMet
@@ -832,10 +831,8 @@ Query::Query(const SmartMet::Spine::HTTP::Request &theRequest,
     itsQueryOptions.itsMessageFormat = Fmi::ascii_toupper_copy(
         SmartMet::Spine::optional_string(theRequest.getParameter("messageformat"), "TAC"));
 
-    if (
-        (itsQueryOptions.itsMessageFormat != "TAC") &&
-        (itsQueryOptions.itsMessageFormat != "IWXXM")
-       )
+    if ((itsQueryOptions.itsMessageFormat != "TAC") &&
+        (itsQueryOptions.itsMessageFormat != "IWXXM"))
       throw Fmi::Exception(BCP, "Unknown 'messageformat', use 'TAC' or 'IWXXM'");
 
     // Format, output precision, debug on/off (whether engine writes generated sql to stderr)
@@ -859,10 +856,10 @@ Query::Query(const SmartMet::Spine::HTTP::Request &theRequest,
     // Whether to filter (finnish) METARs (LIKE 'METAR%', if enabled by engine's configuration) or
     // not. Option is applicable to TAC output only
 
-    itsQueryOptions.itsFilterMETARs =
-        itsQueryOptions.itsMessageFormat == "TAC"
-        ? (SmartMet::Spine::optional_unsigned_long(theRequest.getParameter("filtermetars"), 1) > 0)
-        : false;
+    itsQueryOptions.itsFilterMETARs = itsQueryOptions.itsMessageFormat == "TAC"
+                                          ? (SmartMet::Spine::optional_unsigned_long(
+                                                 theRequest.getParameter("filtermetars"), 1) > 0)
+                                          : false;
 
     // https://jira.fmi.fi/browse/BRAINSTORM-1779
     //
