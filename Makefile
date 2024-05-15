@@ -13,7 +13,6 @@ DEFINES = -DUNIX -D_REENTRANT
 LIBS += -L$(libdir) \
 	$(REQUIRED_LIBS) \
 	-lsmartmet-spine \
-	-lboost_date_time \
 	-lboost_thread \
 	-lboost_iostreams \
 	-lboost_system \
