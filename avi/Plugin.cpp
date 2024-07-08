@@ -119,14 +119,14 @@ void Plugin::query(const SmartMet::Spine::HTTP::Request &theRequest,
 
     // Get formatter and timezone for time columns
 
-    boost::optional<Fmi::TimeZonePtr> timeZonePtr;
+    std::optional<Fmi::TimeZonePtr> timeZonePtr;
 
     if ((!query.itsQueryOptions.itsTimeOptions.itsTimeZone.empty()) &&
         (query.itsQueryOptions.itsTimeOptions.itsTimeZone != "utc"))
       timeZonePtr = Fmi::TimeZoneFactory::instance().time_zone_from_string(
           query.itsQueryOptions.itsTimeOptions.itsTimeZone);
 
-    boost::shared_ptr<Fmi::TimeFormatter> timeFormatter(
+    std::shared_ptr<Fmi::TimeFormatter> timeFormatter(
         Fmi::TimeFormatter::create(query.itsQueryOptions.itsTimeOptions.itsTimeFormat));
 
     // Fill table
@@ -176,7 +176,7 @@ void Plugin::query(const SmartMet::Spine::HTTP::Request &theRequest,
 
     // Formatted output
 
-    boost::shared_ptr<TableFormatter> formatter(TableFormatterFactory::create(query.itsFormat));
+    std::shared_ptr<TableFormatter> formatter(TableFormatterFactory::create(query.itsFormat));
     auto out = formatter->format(table, headers, theRequest, itsConfig->tableFormatterOptions());
 
     theResponse.setContent(out);
@@ -226,7 +226,7 @@ void Plugin::requestHandler(Reactor & /* theReactor */,
 
       // The headers themselves
 
-      boost::shared_ptr<Fmi::TimeFormatter> tformat(Fmi::TimeFormatter::create("http"));
+      std::shared_ptr<Fmi::TimeFormatter> tformat(Fmi::TimeFormatter::create("http"));
 
       std::string cachecontrol = "public, max-age=" + Fmi::to_string(expires_seconds);
       std::string expiration = tformat->format(t_expires);

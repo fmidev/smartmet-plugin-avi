@@ -49,7 +49,7 @@ string toType<string>(const string &s)
 }
 
 template <typename T>
-boost::optional<list<pair<T, T>>> listOfPairs(const string &commaSeparatedStr,
+std::optional<list<pair<T, T>>> listOfPairs(const string &commaSeparatedStr,
                                               const char *optionName,
                                               size_t nPairs,
                                               bool latlonPairs = true)
@@ -59,7 +59,7 @@ boost::optional<list<pair<T, T>>> listOfPairs(const string &commaSeparatedStr,
     string valueStr(trim_copy(commaSeparatedStr));
 
     if (valueStr.empty())
-      return boost::optional<list<pair<T, T>>>();
+      return std::optional<list<pair<T, T>>>();
 
     std::vector<std::string> flds;
     boost::split(flds, valueStr, boost::is_any_of(","));
@@ -125,7 +125,7 @@ boost::optional<list<pair<T, T>>> listOfPairs(const string &commaSeparatedStr,
                                  Fmi::to_string(n + 1) + "; '" + commaSeparatedStr + "'");
       }
     }
-    return boost::optional<list<pair<T, T>>>(valueList);
+    return std::optional<list<pair<T, T>>>(valueList);
   }
   catch (...)
   {
@@ -152,7 +152,7 @@ bool validValue<string>(const string & /*value */, double /*minValue*/, double /
 }
 
 template <typename T>
-boost::optional<list<T>> listOfValues(const string &commaSeparatedStr,
+std::optional<list<T>> listOfValues(const string &commaSeparatedStr,
                                       const char *optionName,
                                       size_t nValues = 0,
                                       bool even = true,
@@ -164,7 +164,7 @@ boost::optional<list<T>> listOfValues(const string &commaSeparatedStr,
     string valueStr(trim_copy(commaSeparatedStr));
 
     if (valueStr.empty())
-      return boost::optional<list<T>>();
+      return std::optional<list<T>>();
 
     std::vector<std::string> flds;
     boost::split(flds, valueStr, boost::is_any_of(","));
@@ -252,7 +252,7 @@ boost::optional<list<T>> listOfValues(const string &commaSeparatedStr,
       np = n;
     }
 
-    return boost::optional<list<T>>(valueList);
+    return std::optional<list<T>>(valueList);
   }
   catch (...)
   {
