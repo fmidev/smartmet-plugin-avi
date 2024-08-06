@@ -2,7 +2,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet aviation message plugin
 Name: %{SPECNAME}
-Version: 24.5.16
+Version: 24.7.12
 Release: 1%{?dist}.fmi
 License: FMI
 Group: SmartMet/Plugins
@@ -20,24 +20,24 @@ BuildRequires: rpm-build
 BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: %{smartmet_boost}-devel
-BuildRequires: smartmet-library-spine-devel >= 24.2.8
-BuildRequires: smartmet-library-timeseries-devel >= 24.2.23
-BuildRequires: smartmet-library-macgyver-devel >= 24.1.17
-BuildRequires: smartmet-library-timeseries-devel >= 24.2.23
-BuildRequires: smartmet-engine-avi-devel >= 24.2.23
-BuildRequires: smartmet-engine-authentication-devel >= 24.2.23
+BuildRequires: smartmet-library-spine-devel >= 24.7.12
+BuildRequires: smartmet-library-timeseries-devel >= 24.7.12
+BuildRequires: smartmet-library-macgyver-devel >= 24.7.12
+BuildRequires: smartmet-library-timeseries-devel >= 24.7.12
+BuildRequires: smartmet-engine-avi-devel >= 24.7.12
+BuildRequires: smartmet-engine-authentication-devel >= 24.7.12
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 Requires: libconfig17
-Requires: smartmet-library-macgyver >= 24.5.6
-Requires: smartmet-library-timeseries >= 24.5.6
-Requires: smartmet-library-spine >= 24.5.6
-Requires: smartmet-engine-avi >= 24.5.7
-Requires: smartmet-engine-authentication >= 24.2.23
+Requires: smartmet-library-macgyver >= 24.7.12
+Requires: smartmet-library-timeseries >= 24.7.12
+Requires: smartmet-library-spine >= 24.7.12
+Requires: smartmet-engine-avi >= 24.7.12
+Requires: smartmet-engine-authentication >= 24.7.12
 
 #TestRequires: smartmet-utils-devel
 #TestRequires: smartmet-test-db
-#TestRequires: smartmet-library-spine-plugin-test >= 24.2.8
+#TestRequires: smartmet-library-spine-plugin-test >= 24.7.12
 
 %if %{defined el7}
 Requires: libpqxx < 1:7.0
@@ -80,6 +80,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Fri Jul 12 2024 Andris Pavēnis <andris.pavenis@fmi.fi> 24.7.12-1.fmi
+- Replace many boost library types with C++ standard library ones
+
 * Thu May 16 2024 Andris Pavēnis <andris.pavenis@fmi.fi> 24.5.16-1.fmi
 - Clean up boost date-time uses
 

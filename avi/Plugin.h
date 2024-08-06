@@ -7,7 +7,7 @@
 #pragma once
 
 #include "Config.h"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <engines/authentication/Engine.h>
 #include <engines/avi/Engine.h>
 #include <spine/HTTP.h>
