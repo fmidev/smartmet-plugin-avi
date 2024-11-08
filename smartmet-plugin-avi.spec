@@ -20,24 +20,24 @@ BuildRequires: rpm-build
 BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: %{smartmet_boost}-devel
-BuildRequires: smartmet-library-spine-devel >= 24.8.7
-BuildRequires: smartmet-library-timeseries-devel >= 24.8.7
-BuildRequires: smartmet-library-macgyver-devel >= 24.8.7
-BuildRequires: smartmet-library-timeseries-devel >= 24.8.7
-BuildRequires: smartmet-engine-avi-devel >= 24.8.7
+BuildRequires: smartmet-library-spine-devel >= 24.11.8
+BuildRequires: smartmet-library-timeseries-devel >= 24.11.8
+BuildRequires: smartmet-library-macgyver-devel >= 24.10.28
+BuildRequires: smartmet-library-timeseries-devel >= 24.11.8
+BuildRequires: smartmet-engine-avi-devel >= 24.11.8
 BuildRequires: smartmet-engine-authentication-devel >= 24.8.7
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 Requires: libconfig17
-Requires: smartmet-library-macgyver >= 24.8.7
-Requires: smartmet-library-timeseries >= 24.8.7
-Requires: smartmet-library-spine >= 24.8.7
-Requires: smartmet-engine-avi >= 24.8.7
-Requires: smartmet-engine-authentication >= 24.8.7
+Requires: smartmet-library-macgyver >= 24.10.28
+Requires: smartmet-library-timeseries >= 24.11.8
+Requires: smartmet-library-spine >= 24.11.8
+Requires: smartmet-engine-avi >= 24.11.8
+Requires: smartmet-engine-authentication >= 24.11.8
 
 #TestRequires: smartmet-utils-devel
 #TestRequires: smartmet-test-db
-#TestRequires: smartmet-library-spine-plugin-test >= 24.8.7
+#TestRequires: smartmet-library-spine-plugin-test >= 24.11.8
 
 %if 0%{?rhel} && 0%{rhel} == 8
 Requires: libpqxx >= 1:7.7.0, libpqxx < 1:7.8.0
