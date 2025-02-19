@@ -2,7 +2,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet aviation message plugin
 Name: %{SPECNAME}
-Version: 24.11.8
+Version: 25.2.19
 Release: 1%{?dist}.fmi
 License: FMI
 Group: SmartMet/Plugins
@@ -20,24 +20,24 @@ BuildRequires: rpm-build
 BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: %{smartmet_boost}-devel
-BuildRequires: smartmet-library-spine-devel >= 24.11.8
-BuildRequires: smartmet-library-timeseries-devel >= 24.11.8
-BuildRequires: smartmet-library-macgyver-devel >= 24.10.28
-BuildRequires: smartmet-library-timeseries-devel >= 24.11.8
-BuildRequires: smartmet-engine-avi-devel >= 24.11.8
-BuildRequires: smartmet-engine-authentication-devel >= 24.8.7
+BuildRequires: smartmet-library-spine-devel >= 25.1.17
+BuildRequires: smartmet-library-timeseries-devel >= 25.1.17
+BuildRequires: smartmet-library-macgyver-devel >= 25.2.5
+BuildRequires: smartmet-library-timeseries-devel >= 25.1.17
+BuildRequires: smartmet-engine-avi-devel >= 25.2.19
+BuildRequires: smartmet-engine-authentication-devel >= 24.11.8
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 Requires: libconfig17
-Requires: smartmet-library-macgyver >= 24.10.28
-Requires: smartmet-library-timeseries >= 24.11.8
-Requires: smartmet-library-spine >= 24.11.8
-Requires: smartmet-engine-avi >= 24.11.8
+Requires: smartmet-library-macgyver >= 25.2.5
+Requires: smartmet-library-timeseries >= 25.1.17
+Requires: smartmet-library-spine >= 25.1.17
+Requires: smartmet-engine-avi >= 25.2.19
 Requires: smartmet-engine-authentication >= 24.11.8
 
 #TestRequires: smartmet-utils-devel
 #TestRequires: smartmet-test-db
-#TestRequires: smartmet-library-spine-plugin-test >= 24.11.8
+#TestRequires: smartmet-library-spine-plugin-test >= 25.1.17
 
 %if 0%{?rhel} && 0%{rhel} == 8
 Requires: libpqxx >= 1:7.7.0, libpqxx < 1:7.8.0
@@ -81,6 +81,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Wed Feb 19 2025 Pertti Kinnia <pertti.kinnia@fmi.fi> - 25.2.19-1.fmi
+- Do not allow use of multiple location options (BRAINSTORM-3136)
+
 * Fri Nov  8 2024 Andris Pavēnis <andris.pavenis@fmi.fi> 24.11.8-1.fmi
 - Repackage due to smartmet-library-spine ABI changes
 
