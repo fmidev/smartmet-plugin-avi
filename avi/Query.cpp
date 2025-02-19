@@ -808,7 +808,13 @@ Query::Query(const SmartMet::Spine::HTTP::Request &theRequest,
         authEngine,
         SmartMet::Spine::optional_string(SmartMet::Spine::FmiApiKey::getFmiApiKey(theRequest), ""));
 
-    parseLocationOptions(theRequest, queryLimits.getAllowMultipleLocationOptions());
+    // BRAINSTORM-3136; do not allow use of multiple location options
+    //
+    // When using bbox(es), message query now filters stations with the bbox(es)/maxdistance,
+    // not with preselected station id list. If query would use bbox(es) and other location options,
+    // the stations matching only the other location options would simply be ignored
+
+    parseLocationOptions(theRequest, false /* queryLimits.getAllowMultipleLocationOptions() */);
 
     // 'validity' controls whether accepted or rejected messages are returned
 
