@@ -2,7 +2,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet aviation message plugin
 Name: %{SPECNAME}
-Version: 25.2.19
+Version: 25.2.20
 Release: 1%{?dist}.fmi
 License: FMI
 Group: SmartMet/Plugins
@@ -81,6 +81,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Thu Feb 20 2025 Andris Pavēnis <andris.pavenis@fmi.fi> 25.2.20-1.fmi
+- Update to gdal-3.10, geos-3.13 and proj-9.5
+
 * Wed Feb 19 2025 Pertti Kinnia <pertti.kinnia@fmi.fi> - 25.2.19-1.fmi
 - Do not allow use of multiple location options (BRAINSTORM-3136)
 
