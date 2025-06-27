@@ -12,6 +12,7 @@ DEFINES = -DUNIX -D_REENTRANT
 
 LIBS += $(PREFIX_LDFLAGS) \
 	$(REQUIRED_LIBS) \
+	-lsmartmet-timeseries \
 	-lsmartmet-spine \
 	-lboost_thread \
 	-lboost_iostreams \
