@@ -327,7 +327,14 @@ void Plugin::init()
       if (!engine)
         throw Fmi::Exception(BCP, "Authentication engine unavailable");
 
-      itsAuthEngine = reinterpret_cast<SmartMet::Engine::Authentication::Engine *>(engine);
+      auto* authEngine = dynamic_cast<SmartMet::Engine::Authentication::Engine *>(engine);
+      if (!authEngine)
+        throw Fmi::Exception(BCP, "Engine specified in configuration is not of type Authentication::Engine");
+
+      if (!authEngine->isEnabled())
+        throw Fmi::Exception(BCP, "Authentication engine is disabled");
+
+      itsAuthEngine = authEngine;
     }
 
     if (!(itsReactor->addContentHandler(
