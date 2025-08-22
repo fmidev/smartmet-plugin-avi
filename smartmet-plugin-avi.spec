@@ -27,7 +27,7 @@ BuildRequires: smartmet-library-spine-devel >= 25.2.18
 BuildRequires: smartmet-library-timeseries-devel >= 25.2.18
 BuildRequires: smartmet-library-macgyver-devel >= 25.2.18
 BuildRequires: smartmet-library-timeseries-devel >= 25.2.18
-BuildRequires: smartmet-engine-avi-devel >= 25.2.20
+BuildRequires: smartmet-engine-avi-devel >= 25.8.22
 BuildRequires: smartmet-engine-authentication-devel >= 25.7.2
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
@@ -35,7 +35,7 @@ Requires: libconfig17
 Requires: smartmet-library-macgyver >= 25.2.18
 Requires: smartmet-library-timeseries >= 25.2.18
 Requires: smartmet-library-spine >= 25.2.18
-Requires: smartmet-engine-avi >= 25.2.20
+Requires: smartmet-engine-avi >= 25.8.22
 Requires: smartmet-engine-authentication >= 25.7.2
 
 #TestRequires: smartmet-utils-devel
