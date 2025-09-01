@@ -208,12 +208,6 @@ void Plugin::requestHandler(Reactor & /* theReactor */,
 
     try
     {
-      // Check request method (support GET, POST, OPTIONS)
-      if (checkRequest(theRequest, theResponse, true))
-      {
-        return;
-      }
-
       const int expires_seconds = 60;
       Fmi::DateTime t_now = Fmi::SecondClock::universal_time();
 
