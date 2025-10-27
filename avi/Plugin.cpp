@@ -85,7 +85,7 @@ void Plugin::query(const SmartMet::Spine::HTTP::Request &theRequest,
   {
     // Parse query options
 
-    Query query(theRequest, itsAuthEngine, itsConfig);
+    Query query(theRequest, itsAuthEngine.get(), itsConfig);
 
     // Query
 
@@ -304,11 +304,7 @@ void Plugin::init()
   {
     /* AviEngine */
 
-    auto *engine = itsReactor->getSingleton("Avi", nullptr);
-    if (!engine)
-      throw Fmi::Exception(BCP, "Avi engine unavailable");
-
-    itsAviEngine = reinterpret_cast<SmartMet::Engine::Avi::Engine *>(engine);
+    itsAviEngine = itsReactor->getEngine<SmartMet::Engine::Avi::Engine>("Avi", nullptr);
 
     itsConfig.reset(new Config(itsConfigFileName));
 
@@ -316,19 +312,10 @@ void Plugin::init()
 
     if (itsConfig->useAuthentication())
     {
-      engine = itsReactor->getSingleton("Authentication", nullptr);
+      itsAuthEngine = itsReactor->getEngine<SmartMet::Engine::Authentication::Engine>("Authentication", nullptr);
 
-      if (!engine)
-        throw Fmi::Exception(BCP, "Authentication engine unavailable");
-
-      auto* authEngine = dynamic_cast<SmartMet::Engine::Authentication::Engine *>(engine);
-      if (!authEngine)
-        throw Fmi::Exception(BCP, "Engine specified in configuration is not of type Authentication::Engine");
-
-      if (!authEngine->isEnabled())
+      if (!itsAuthEngine->isEnabled())
         throw Fmi::Exception(BCP, "Authentication engine is disabled");
-
-      itsAuthEngine = authEngine;
     }
 
     if (!(itsReactor->addContentHandler(

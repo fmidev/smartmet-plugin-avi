@@ -49,8 +49,8 @@ class Plugin : public SmartMetPlugin
   std::unique_ptr<Config> itsConfig;
 
   SmartMet::Spine::Reactor *itsReactor = nullptr;
-  SmartMet::Engine::Avi::Engine *itsAviEngine = nullptr;
-  SmartMet::Engine::Authentication::Engine *itsAuthEngine = nullptr;
+  std::shared_ptr<SmartMet::Engine::Avi::Engine> itsAviEngine;
+  std::shared_ptr<SmartMet::Engine::Authentication::Engine> itsAuthEngine;
 };
 
 }  // namespace Avi
