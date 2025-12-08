@@ -2,7 +2,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet aviation message plugin
 Name: %{SPECNAME}
-Version: 25.10.27
+Version: 25.12.8
 Release: 1%{?dist}.fmi
 License: FMI
 Group: SmartMet/Plugins
@@ -23,24 +23,24 @@ BuildRequires: rpm-build
 BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: %{smartmet_boost}-devel
-BuildRequires: smartmet-library-spine-devel >= 25.10.27
+BuildRequires: smartmet-library-spine-devel >= 25.11.19
 BuildRequires: smartmet-library-timeseries-devel >= 25.8.1
-BuildRequires: smartmet-library-macgyver-devel >= 25.9.19
+BuildRequires: smartmet-library-macgyver-devel >= 25.12.2
 BuildRequires: smartmet-library-timeseries-devel >= 25.8.1
-BuildRequires: smartmet-engine-avi-devel >= 25.9.4
-BuildRequires: smartmet-engine-authentication-devel >= 25.9.29
+BuildRequires: smartmet-engine-avi-devel >= 25.12.8
+BuildRequires: smartmet-engine-authentication-devel >= 25.10.8
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 Requires: libconfig17
-Requires: smartmet-library-macgyver >= 25.9.19
+Requires: smartmet-library-macgyver >= 25.12.2
 Requires: smartmet-library-timeseries >= 25.8.1
-Requires: smartmet-library-spine >= 25.10.27
-Requires: smartmet-engine-avi >= 25.9.4
-Requires: smartmet-engine-authentication >= 25.9.29
+Requires: smartmet-library-spine >= 25.11.19
+Requires: smartmet-engine-avi >= 25.12.8
+Requires: smartmet-engine-authentication >= 25.10.8
 
 #TestRequires: smartmet-utils-devel
 #TestRequires: smartmet-test-db
-#TestRequires: smartmet-library-spine-plugin-test >= 25.10.27
+#TestRequires: smartmet-library-spine-plugin-test >= 25.11.19
 
 %if 0%{?rhel} && 0%{rhel} == 8
 Requires: libpqxx >= 1:7.7.0, libpqxx < 1:7.8.0
@@ -91,6 +91,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Mon Dec  8 2025 Pertti Kinnia <pertti.kinnia@fmi.fi> - 25.12.8-1.fmi
+- Repackaged due to avi -engine ABI changes (edr/SWIM)
+
 * Mon Oct 27 2025 Andris Pavēnis <andris.pavenis@fmi.fi> 25.10.27-1.fmi
 - Update due to smartmet-library-spine ABI changes
 
