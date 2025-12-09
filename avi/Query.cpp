@@ -208,9 +208,19 @@ std::optional<list<T>> listOfValues(const string &commaSeparatedStr,
 
     for (n = 0, np = 0; (n < nValues); n++)
     {
-      // Swap the elements (e.g. convert latlons to lonlats) if requested
+      // Swap the elements (e.g. convert latlons to lonlats) if requested.
       //
-      size_t nn = (swap ? (((n % 2) != 0) ? np : n + 1) : n);
+      // If swapping, we need an even number of elements:
+      // - if n is odd, use np
+      // - if n is even, use n + 1
+      size_t nn = n;
+
+      if (swap)
+      {
+        const bool n_is_odd = (n % 2) != 0;
+        nn = n_is_odd ? np : (n + 1);
+      }
+
       bool castOk = false;
 
       try
