@@ -191,8 +191,8 @@ std::optional<list<T>> listOfValues(const string &commaSeparatedStr,
                                  "'; '" + commaSeparatedStr + "'");
     }
 
-    size_t n;
-    size_t np;
+    size_t n = 0;
+    size_t np = 0;
 
     for (n = 0; (n < nValues); n++)
     {
@@ -290,7 +290,7 @@ void Query::parseMessageTypeOption(const SmartMet::Spine::HTTP::Request &theRequ
 {
   try
   {
-    const char *optionName;
+    const char *optionName = nullptr;
 
     auto messagetypes = theRequest.getParameterList(optionName = "messagetype");
     if (!messagetypes.empty())
@@ -326,7 +326,7 @@ void Query::parseParamOption(const SmartMet::Spine::HTTP::Request &theRequest)
 {
   try
   {
-    const char *optionName;
+    const char *optionName = nullptr;
 
     auto params = theRequest.getParameterList(optionName = "param");
     if (!params.empty())
@@ -400,7 +400,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request &theReques
     // place=place1&place=place2&place=...
     // places=place1,place2,...
 
-    const char *optionName;
+    const char *optionName = nullptr;
 
     auto places = theRequest.getParameterList(optionName = "place");
     if (!places.empty())

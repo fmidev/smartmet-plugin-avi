@@ -6,7 +6,6 @@
 
 #include "Plugin.h"
 #include "Query.h"
-
 #include <macgyver/Exception.h>
 #include <macgyver/LocalDateTime.h>
 #include <macgyver/StringConversion.h>
@@ -20,7 +19,6 @@
 #include <spine/TableFormatterFactory.h>
 #include <timeseries/TableFeeder.h>
 #include <iostream>
-#include <stdexcept>
 
 using namespace std;
 

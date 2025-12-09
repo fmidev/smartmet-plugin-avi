@@ -37,7 +37,7 @@ Config::Config(const string &theConfigFileName) : ConfigBase(theConfigFileName)
     //
     // Max # of stations allowed in message query; if missing or < 0, engine rules; if 0, unlimited
 
-    int maxMessageStations;
+    int maxMessageStations = 0;
 
     if (theConfig.exists("message.maxstations"))
       theConfig.lookupValue("message.maxstations", maxMessageStations);
@@ -46,7 +46,7 @@ Config::Config(const string &theConfigFileName) : ConfigBase(theConfigFileName)
 
     // Max # of rows fetched by message query; if missing or < 0, engine rules; if 0, unlimited
 
-    int maxMessages;
+    int maxMessages = 0;
 
     if (theConfig.exists("message.maxrows"))
       theConfig.lookupValue("message.maxrows", maxMessages);
@@ -67,7 +67,7 @@ Config::Config(const string &theConfigFileName) : ConfigBase(theConfigFileName)
 
     // Allow multiple location options ?
 
-    bool allowMultipleLocationOptions;
+    bool allowMultipleLocationOptions = false;
 
     if (theConfig.exists("multiplelocationoptions"))
       theConfig.lookupValue("multiplelocationoptions", allowMultipleLocationOptions);
@@ -148,7 +148,7 @@ Config::Config(const string &theConfigFileName) : ConfigBase(theConfigFileName)
             }
             else if (paramName == "multiplelocationoptions")
             {
-              bool allowMultipleLocationOptions;
+              bool allowMultipleLocationOptions = false;
               theConfig.lookupValue("multiplelocationoptions", allowMultipleLocationOptions);
 
               groupLimits.setAllowMultipleLocationOptions(allowMultipleLocationOptions);
