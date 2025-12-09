@@ -452,8 +452,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request &theReques
         auto east = listOfTwoLonLatPairs->back().first;
         auto north = listOfTwoLonLatPairs->back().second;
 
-        itsQueryOptions.itsLocationOptions.itsBBoxes.push_back(
-            SmartMet::Engine::Avi::BBox(west, east, south, north));
+        itsQueryOptions.itsLocationOptions.itsBBoxes.emplace_back(west, east, south, north);
       }
     }
 
@@ -476,8 +475,8 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request &theReques
         if ((!listOfTwoValues) || listOfTwoValues->empty())
           throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
 
-        itsQueryOptions.itsLocationOptions.itsLonLats.push_back(
-            SmartMet::Engine::Avi::LonLat(listOfTwoValues->front(), listOfTwoValues->back()));
+        itsQueryOptions.itsLocationOptions.itsLonLats.emplace_back(listOfTwoValues->front(),
+                                                                   listOfTwoValues->back());
       }
     }
 
@@ -493,8 +492,8 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request &theReques
         if ((!listOfTwoValues) || listOfTwoValues->empty())
           throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
 
-        itsQueryOptions.itsLocationOptions.itsLonLats.push_back(
-            SmartMet::Engine::Avi::LonLat(listOfTwoValues->front(), listOfTwoValues->back()));
+        itsQueryOptions.itsLocationOptions.itsLonLats.emplace_back(listOfTwoValues->front(),
+                                                                   listOfTwoValues->back());
       }
     }
 
@@ -517,8 +516,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request &theReques
           auto lat = *it;
           it++;
 
-          itsQueryOptions.itsLocationOptions.itsLonLats.push_back(
-              SmartMet::Engine::Avi::LonLat(lon, lat));
+          itsQueryOptions.itsLocationOptions.itsLonLats.emplace_back(lon, lat);
         }
       }
     }
@@ -542,8 +540,7 @@ void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request &theReques
           auto lat = *it;
           it++;
 
-          itsQueryOptions.itsLocationOptions.itsLonLats.push_back(
-              SmartMet::Engine::Avi::LonLat(lon, lat));
+          itsQueryOptions.itsLocationOptions.itsLonLats.emplace_back(lon, lat);
         }
       }
     }
