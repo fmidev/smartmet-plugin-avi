@@ -7,8 +7,8 @@
 #include "Plugin.h"
 #include "Query.h"
 
-#include <macgyver/LocalDateTime.h>
 #include <macgyver/Exception.h>
+#include <macgyver/LocalDateTime.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TimeZoneFactory.h>
 #include <macgyver/ValueFormatter.h>
@@ -280,7 +280,7 @@ Plugin::Plugin(Reactor *theReactor, const char *theConfigFileName)
   {
     if (theReactor->getRequiredAPIVersion() != SMARTMET_API_VERSION)
     {
-      std::cerr << "*** AviPlugin and Server SmartMet API version mismatch ***" << std::endl;
+      std::cerr << "*** AviPlugin and Server SmartMet API version mismatch ***\n";
       return;
     }
   }
@@ -312,7 +312,8 @@ void Plugin::init()
 
     if (itsConfig->useAuthentication())
     {
-      itsAuthEngine = itsReactor->getEngine<SmartMet::Engine::Authentication::Engine>("Authentication", nullptr);
+      itsAuthEngine = itsReactor->getEngine<SmartMet::Engine::Authentication::Engine>(
+          "Authentication", nullptr);
 
       if (!itsAuthEngine->isEnabled())
         throw Fmi::Exception(BCP, "Authentication engine is disabled");
