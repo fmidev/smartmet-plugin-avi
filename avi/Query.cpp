@@ -50,9 +50,9 @@ string toType<string>(const string &s)
 
 template <typename T>
 std::optional<list<pair<T, T>>> listOfPairs(const string &commaSeparatedStr,
-                                              const char *optionName,
-                                              size_t nPairs,
-                                              bool latlonPairs = true)
+                                            const char *optionName,
+                                            size_t nPairs,
+                                            bool latlonPairs = true)
 {
   try
   {
@@ -153,11 +153,11 @@ bool validValue<string>(const string & /*value */, double /*minValue*/, double /
 
 template <typename T>
 std::optional<list<T>> listOfValues(const string &commaSeparatedStr,
-                                      const char *optionName,
-                                      size_t nValues = 0,
-                                      bool even = true,
-                                      bool swap = false,
-                                      bool latlonValues = true)
+                                    const char *optionName,
+                                    size_t nValues = 0,
+                                    bool even = true,
+                                    bool swap = false,
+                                    bool latlonValues = true)
 {
   try
   {
@@ -846,12 +846,14 @@ Query::Query(const SmartMet::Spine::HTTP::Request &theRequest,
     itsFormat = SmartMet::Spine::optional_string(theRequest.getParameter("format"), "ascii");
     itsPrecision = SmartMet::Spine::optional_unsigned_long(theRequest.getParameter("precision"), 6);
 
-    if (!(itsQueryOptions.itsDebug = (itsFormat == "debug")))
+    itsQueryOptions.itsDebug = (itsFormat == "debug");
+    if (!itsQueryOptions.itsDebug)
     {
-      auto pos = itsFormat.find("debug");
+      const auto pos = itsFormat.find("debug");
+      itsQueryOptions.itsDebug = (pos != std::string::npos);
 
-      if ((itsQueryOptions.itsDebug = (pos != string::npos)))
-        itsFormat.erase(pos, strlen("debug"));
+      if (itsQueryOptions.itsDebug)
+        itsFormat.erase(pos, std::strlen("debug"));
     }
 
     // Whether to skip duplicate messages
