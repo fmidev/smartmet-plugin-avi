@@ -19,6 +19,7 @@ const int maxMessageTimeRangeDaysDefault = 31;
 class Config : public ConfigBase
 {
  public:
+  ~Config() override;
   Config() = delete;
   Config(const std::string &theConfigFileName);
 
