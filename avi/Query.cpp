@@ -24,6 +24,9 @@ namespace Avi
  */
 // ----------------------------------------------------------------------
 
+namespace
+{
+
 template <typename T>
 T toType(const string & /* s */)
 {
@@ -280,6 +283,8 @@ string errMsgOptionIsEmpty(const char *optionName)
     throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
+
+}  // namespace
 
 void Query::parseMessageTypeOption(const SmartMet::Spine::HTTP::Request &theRequest)
 {
