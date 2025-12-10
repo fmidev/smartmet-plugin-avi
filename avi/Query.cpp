@@ -762,7 +762,7 @@ void Query::parseTimeOptions(const SmartMet::Spine::HTTP::Request &theRequest,
       itsQueryOptions.itsTimeOptions.itsEndTime =
           string("timestamptz '") + Fmi::to_iso_string(et) + "Z'";
     }
-    else if (itsQueryOptions.itsValidity == SmartMet::Engine::Avi::Rejected)
+    else if (itsQueryOptions.itsValidity == Engine::Avi::Validity::Rejected)
       throw Fmi::Exception(BCP, "Time range must be used to query rejected messages");
     else if (!obsTime.empty())
       itsQueryOptions.itsTimeOptions.itsObservationTime =
@@ -834,9 +834,9 @@ Query::Query(const SmartMet::Spine::HTTP::Request &theRequest,
         SmartMet::Spine::optional_string(theRequest.getParameter("validity"), "accepted"));
 
     if (validity == "accepted")
-      itsQueryOptions.itsValidity = SmartMet::Engine::Avi::Accepted;
+      itsQueryOptions.itsValidity = Engine::Avi::Validity::Accepted;
     else if (validity == "rejected")
-      itsQueryOptions.itsValidity = SmartMet::Engine::Avi::Rejected;
+      itsQueryOptions.itsValidity = Engine::Avi::Validity::Rejected;
     else
       throw Fmi::Exception(BCP, "Unknown 'validity', use 'accepted' or 'rejected'");
 

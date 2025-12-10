@@ -90,7 +90,7 @@ void Plugin::query(const SmartMet::Spine::HTTP::Request &theRequest,
     SmartMet::Engine::Avi::StationQueryData stationData;
     SmartMet::Engine::Avi::QueryData rejectedMessageData;
 
-    if (query.itsQueryOptions.itsValidity == SmartMet::Engine::Avi::Accepted)
+    if (query.itsQueryOptions.itsValidity == Engine::Avi::Validity::Accepted)
       stationData = itsAviEngine->queryStationsAndMessages(query.itsQueryOptions);
     else
     {
@@ -105,7 +105,7 @@ void Plugin::query(const SmartMet::Spine::HTTP::Request &theRequest,
     TableFormatter::Names headers;
 
     setColumnHeaders(headers,
-                     (query.itsQueryOptions.itsValidity == SmartMet::Engine::Avi::Accepted)
+                     (query.itsQueryOptions.itsValidity == Engine::Avi::Validity::Accepted)
                          ? stationData.itsColumns
                          : rejectedMessageData.itsColumns);
 
@@ -136,7 +136,7 @@ void Plugin::query(const SmartMet::Spine::HTTP::Request &theRequest,
 
     int columnNumber = 0;
 
-    if (query.itsQueryOptions.itsValidity == SmartMet::Engine::Avi::Accepted)
+    if (query.itsQueryOptions.itsValidity == Engine::Avi::Validity::Accepted)
     {
       for (const auto &column : stationData.itsColumns)
       {
