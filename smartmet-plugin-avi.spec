@@ -2,7 +2,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet aviation message plugin
 Name: %{SPECNAME}
-Version: 25.12.8
+Version: 25.12.10
 Release: 1%{?dist}.fmi
 License: FMI
 Group: SmartMet/Plugins
@@ -24,18 +24,18 @@ BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: %{smartmet_boost}-devel
 BuildRequires: smartmet-library-spine-devel >= 25.11.19
-BuildRequires: smartmet-library-timeseries-devel >= 25.8.1
+BuildRequires: smartmet-library-timeseries-devel >= 25.12.9
 BuildRequires: smartmet-library-macgyver-devel >= 25.12.2
-BuildRequires: smartmet-library-timeseries-devel >= 25.8.1
-BuildRequires: smartmet-engine-avi-devel >= 25.12.8
+BuildRequires: smartmet-library-timeseries-devel >= 25.12.9
+BuildRequires: smartmet-engine-avi-devel >= 25.12.10
 BuildRequires: smartmet-engine-authentication-devel >= 25.10.8
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 Requires: libconfig17
 Requires: smartmet-library-macgyver >= 25.12.2
-Requires: smartmet-library-timeseries >= 25.8.1
+Requires: smartmet-library-timeseries >= 25.12.9
 Requires: smartmet-library-spine >= 25.11.19
-Requires: smartmet-engine-avi >= 25.12.8
+Requires: smartmet-engine-avi >= 25.12.10
 Requires: smartmet-engine-authentication >= 25.10.8
 
 #TestRequires: smartmet-utils-devel
@@ -91,6 +91,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Wed Dec 10 2025 Mika Heiskanen <mika.heiskanen@fmi.fi> - 25.12.10-1.fmi
+- Silenced several compiler warnings
+
 * Mon Dec  8 2025 Pertti Kinnia <pertti.kinnia@fmi.fi> - 25.12.8-1.fmi
 - Repackaged due to avi -engine ABI changes (edr/SWIM)
 
