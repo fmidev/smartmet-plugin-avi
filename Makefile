@@ -16,7 +16,6 @@ LIBS += $(PREFIX_LDFLAGS) \
 	-lsmartmet-spine \
 	-lboost_thread \
 	-lboost_iostreams \
-	-lboost_system \
 	-lbz2 -lz
 
 # What to install
