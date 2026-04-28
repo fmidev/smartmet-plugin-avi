@@ -2,7 +2,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet aviation message plugin
 Name: %{SPECNAME}
-Version: 26.4.13
+Version: 26.4.28
 Release: 1%{?dist}.fmi
 License: FMI
 Group: SmartMet/Plugins
@@ -91,6 +91,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Tue Apr 28 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.4.28-1.fmi
+- Link explicitly against smartmet-library-macgyver (was relying on transitive linking)
+
 * Mon Apr 13 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.4.13-1.fmi
 - Repackaged due to API changes
 

@@ -14,6 +14,7 @@ LIBS += $(PREFIX_LDFLAGS) \
 	$(REQUIRED_LIBS) \
 	-lsmartmet-timeseries \
 	-lsmartmet-spine \
+	-lsmartmet-macgyver \
 	-lboost_thread \
 	-lboost_iostreams \
 	-lbz2 -lz
