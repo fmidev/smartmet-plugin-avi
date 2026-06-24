@@ -2,7 +2,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet aviation message plugin
 Name: %{SPECNAME}
-Version: 26.4.28
+Version: 26.6.24
 Release: 1%{?dist}.fmi
 License: FMI
 Group: SmartMet/Plugins
@@ -23,24 +23,24 @@ BuildRequires: rpm-build
 BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: %{smartmet_boost}-devel
-BuildRequires: smartmet-library-spine-devel >= 26.4.13
-BuildRequires: smartmet-library-timeseries-devel >= 26.4.13
-BuildRequires: smartmet-library-macgyver-devel >= 26.4.13
-BuildRequires: smartmet-library-timeseries-devel >= 26.4.13
-BuildRequires: smartmet-engine-avi-devel >= 26.4.13
-BuildRequires: smartmet-engine-authentication-devel >= 26.4.13
+BuildRequires: smartmet-library-spine-devel >= 26.6.24
+BuildRequires: smartmet-library-timeseries-devel >= 26.5.5
+BuildRequires: smartmet-library-macgyver-devel >= 26.6.15
+BuildRequires: smartmet-library-timeseries-devel >= 26.5.5
+BuildRequires: smartmet-engine-avi-devel >= 26.6.24
+BuildRequires: smartmet-engine-authentication-devel >= 26.6.24
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 Requires: libconfig17
-Requires: smartmet-library-macgyver >= 26.4.13
-Requires: smartmet-library-timeseries >= 26.4.13
-Requires: smartmet-library-spine >= 26.4.13
-Requires: smartmet-engine-avi >= 26.4.13
-Requires: smartmet-engine-authentication >= 26.4.13
+Requires: smartmet-library-macgyver >= 26.6.15
+Requires: smartmet-library-timeseries >= 26.5.5
+Requires: smartmet-library-spine >= 26.6.24
+Requires: smartmet-engine-avi >= 26.6.24
+Requires: smartmet-engine-authentication >= 26.6.24
 
 #TestRequires: smartmet-utils-devel
 #TestRequires: smartmet-test-db
-#TestRequires: smartmet-library-spine-plugin-test >= 26.4.13
+#TestRequires: smartmet-library-spine-plugin-test >= 26.6.24
 
 %if 0%{?rhel} && 0%{rhel} == 8
 Requires: libpqxx >= 1:7.7.0, libpqxx < 1:7.8.0
@@ -91,6 +91,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Wed Jun 24 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.6.24-1.fmi
+- Mass rebuild
+
 * Tue Apr 28 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.4.28-1.fmi
 - Link explicitly against smartmet-library-macgyver (was relying on transitive linking)
 
