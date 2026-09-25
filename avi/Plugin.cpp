@@ -177,7 +177,7 @@ void Plugin::query(const SmartMet::Spine::HTTP::Request &theRequest,
     std::shared_ptr<TableFormatter> formatter(TableFormatterFactory::create(query.itsFormat));
     auto out = formatter->format(table, headers, theRequest, itsConfig->tableFormatterOptions());
 
-    theResponse.setContent(out);
+    theResponse.setContent(std::move(out));
 
     string mime = formatter->mimetype() + "; charset=UTF-8";
     theResponse.setHeader("Content-type", mime);
