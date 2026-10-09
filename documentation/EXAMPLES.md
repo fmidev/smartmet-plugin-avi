@@ -138,6 +138,4 @@ Huom! icao tai name = EFKL
 
 http://smartmet.fmi.fi/avi?&format=json&starttime=202005060000&endtime=202005300000&param=message,name,icao,messagetime&country=FI&messagetype=SIGMET
 
-### VA-SIGMET
-
 ### VAA

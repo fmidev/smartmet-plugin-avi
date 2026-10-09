@@ -178,7 +178,6 @@ Available types (to be revised):
 - WXREP
 - ARS
 - SIGMET
-- VA-SIGMET
 - VAA
 
 Coming
