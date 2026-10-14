@@ -2,7 +2,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet aviation message plugin
 Name: %{SPECNAME}
-Version: 26.10.3
+Version: 26.10.14
 Release: 1%{?dist}.fmi
 License: FMI
 Group: SmartMet/Plugins
@@ -23,7 +23,7 @@ BuildRequires: rpm-build
 BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: %{smartmet_boost}-devel
-BuildRequires: smartmet-library-spine-devel >= 26.10.3
+BuildRequires: smartmet-library-spine-devel >= 26.10.13
 BuildRequires: smartmet-library-timeseries-devel >= 26.10.3
 BuildRequires: smartmet-library-macgyver-devel >= 26.10.3
 BuildRequires: smartmet-library-timeseries-devel >= 26.10.3
@@ -34,7 +34,7 @@ BuildRequires: zlib-devel
 Requires: libconfig17
 Requires: smartmet-library-macgyver >= 26.10.3
 Requires: smartmet-library-timeseries >= 26.10.3
-Requires: smartmet-library-spine >= 26.10.3
+Requires: smartmet-library-spine >= 26.10.13
 Requires: smartmet-engine-avi >= 26.10.3
 Requires: smartmet-engine-authentication >= 26.6.26
 
@@ -91,6 +91,10 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Wed Oct 14 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.10.14-1.fmi
+- Fixed mechanical clang-tidy findings (internal linkage, unused parameters, initialization, redundant code), no functional changes
+- Requires 26.10.13 versions of spine due to their ABI changes
+
 * Sat Oct 03 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.10.3-1.fmi
 - Move the formatted response body into the HTTP response
 

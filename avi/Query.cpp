@@ -80,7 +80,7 @@ std::optional<list<pair<T, T>>> listOfPairs(const string &commaSeparatedStr,
                            string("Even number of values required for option '") + optionName +
                                "'; '" + commaSeparatedStr + "'");
 
-    size_t n;
+    size_t n = 0;
 
     for (n = 0, nValues = flds.size(); (n < nValues); n++)
     {

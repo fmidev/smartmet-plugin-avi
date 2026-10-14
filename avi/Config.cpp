@@ -55,7 +55,7 @@ Config::Config(const string &theConfigFileName) : ConfigBase(theConfigFileName)
 
     // Max message time range length in days; if < 0, use default; if 0, unlimited
 
-    int maxMessageTimeRangeDays;
+    int maxMessageTimeRangeDays = 0;
 
     if (theConfig.exists("message.maxrangedays"))
       theConfig.lookupValue("message.maxrangedays", maxMessageTimeRangeDays);
