@@ -20,6 +20,21 @@ namespace Avi
 
 Config::~Config() = default;
 
+namespace
+{
+// An optional integer limit, -1 if not set
+int optional_limit(const libconfig::Config &theConfig, const char *theName)
+{
+  int value = 0;
+
+  if (theConfig.exists(theName))
+    theConfig.lookupValue(theName, value);
+  else
+    value = -1;
+  return value;
+}
+}  // namespace
+
 // ----------------------------------------------------------------------
 /*!
  * \brief The only permitted constructor requires a configfile
@@ -37,30 +52,15 @@ Config::Config(const string &theConfigFileName) : ConfigBase(theConfigFileName)
     //
     // Max # of stations allowed in message query; if missing or < 0, engine rules; if 0, unlimited
 
-    int maxMessageStations = 0;
-
-    if (theConfig.exists("message.maxstations"))
-      theConfig.lookupValue("message.maxstations", maxMessageStations);
-    else
-      maxMessageStations = -1;
+    int maxMessageStations = optional_limit(theConfig, "message.maxstations");
 
     // Max # of rows fetched by message query; if missing or < 0, engine rules; if 0, unlimited
 
-    int maxMessages = 0;
-
-    if (theConfig.exists("message.maxrows"))
-      theConfig.lookupValue("message.maxrows", maxMessages);
-    else
-      maxMessages = -1;
+    int maxMessages = optional_limit(theConfig, "message.maxrows");
 
     // Max message time range length in days; if < 0, use default; if 0, unlimited
 
-    int maxMessageTimeRangeDays = 0;
-
-    if (theConfig.exists("message.maxrangedays"))
-      theConfig.lookupValue("message.maxrangedays", maxMessageTimeRangeDays);
-    else
-      maxMessageTimeRangeDays = -1;
+    int maxMessageTimeRangeDays = optional_limit(theConfig, "message.maxrangedays");
 
     if (maxMessageTimeRangeDays < 0)
       maxMessageTimeRangeDays = maxMessageTimeRangeDaysDefault;
@@ -105,70 +105,7 @@ Config::Config(const string &theConfigFileName) : ConfigBase(theConfigFileName)
                                  Fmi::to_string(groups.getSourceLine()));
 
       for (int i = 0; i < groups.getLength(); i++)
-      {
-        libconfig::Setting &group = groups[i];
-
-        if (!group.isGroup())
-          throw Fmi::Exception(BCP,
-                               "Groups must be stored in list of groups delimited by {}: line " +
-                                   Fmi::to_string(group.getSourceLine()));
-
-        QueryLimits groupLimits(defaultLimits);
-        string groupName;
-        string paramName;
-
-        for (int j = 0; j < group.getLength(); j++)
-        {
-          paramName = group[j].getName();
-
-          try
-          {
-            string paramName = group[j].getName();
-
-            if (paramName == "name")
-            {
-              string value = group[j];
-              groupName = value;
-
-              if (itsQueryLimits.find(groupName) != itsQueryLimits.end())
-                throw Fmi::Exception(BCP, string("Duplicate group name"));
-            }
-            else if ((paramName == "maxstations") || (paramName == "maxrows") ||
-                     (paramName == "maxrangedays"))
-            {
-              int value = group[j];
-
-              if (paramName == "maxstations")
-                groupLimits.setMaxMessageStations(value);
-              else if (paramName == "maxrows")
-                groupLimits.setMaxMessageRows(value);
-              else
-                groupLimits.setMaxMessageTimeRangeDays(
-                    (value >= 0) ? value : maxMessageTimeRangeDaysDefault);
-            }
-            else if (paramName == "multiplelocationoptions")
-            {
-              bool allowMultipleLocationOptions = false;
-              theConfig.lookupValue("multiplelocationoptions", allowMultipleLocationOptions);
-
-              groupLimits.setAllowMultipleLocationOptions(allowMultipleLocationOptions);
-            }
-            else
-              throw Fmi::Exception(BCP, string("Unknown variable '") + paramName);
-          }
-          catch (...)
-          {
-            Spine::Exceptions::handle("AVI plugin");
-          }
-        }
-
-        if (groupName.empty())
-          throw Fmi::Exception(BCP,
-                               string("Group name missing for group definition starting at line ") +
-                                   Fmi::to_string(group[i].getSourceLine()));
-
-        itsQueryLimits[groupName] = groupLimits;
-      }
+        parseGroup(groups[i], i, defaultLimits);
     }
 
     // Authentication engine needs not to be loaded if there's no apikey groups
@@ -185,6 +122,75 @@ Config::Config(const string &theConfigFileName) : ConfigBase(theConfigFileName)
   {
     throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
+}
+
+// ----------------------------------------------------------------------
+/*!
+ * \brief Parse the query limits of an apikey group
+ */
+// ----------------------------------------------------------------------
+
+void Config::parseGroup(libconfig::Setting &group, int i, const QueryLimits &defaultLimits)
+{
+  const auto &theConfig = get_config();
+
+  if (!group.isGroup())
+    throw Fmi::Exception(BCP,
+                         "Groups must be stored in list of groups delimited by {}: line " +
+                             Fmi::to_string(group.getSourceLine()));
+
+  QueryLimits groupLimits(defaultLimits);
+  string groupName;
+
+  for (int j = 0; j < group.getLength(); j++)
+  {
+    try
+    {
+      string paramName = group[j].getName();
+
+      if (paramName == "name")
+      {
+        string value = group[j];
+        groupName = value;
+
+        if (itsQueryLimits.find(groupName) != itsQueryLimits.end())
+          throw Fmi::Exception(BCP, string("Duplicate group name"));
+      }
+      else if ((paramName == "maxstations") || (paramName == "maxrows") ||
+               (paramName == "maxrangedays"))
+      {
+        int value = group[j];
+
+        if (paramName == "maxstations")
+          groupLimits.setMaxMessageStations(value);
+        else if (paramName == "maxrows")
+          groupLimits.setMaxMessageRows(value);
+        else
+          groupLimits.setMaxMessageTimeRangeDays(
+              (value >= 0) ? value : maxMessageTimeRangeDaysDefault);
+      }
+      else if (paramName == "multiplelocationoptions")
+      {
+        bool allowMultipleLocationOptions = false;
+        theConfig.lookupValue("multiplelocationoptions", allowMultipleLocationOptions);
+
+        groupLimits.setAllowMultipleLocationOptions(allowMultipleLocationOptions);
+      }
+      else
+        throw Fmi::Exception(BCP, string("Unknown variable '") + paramName);
+    }
+    catch (...)
+    {
+      Spine::Exceptions::handle("AVI plugin");
+    }
+  }
+
+  if (groupName.empty())
+    throw Fmi::Exception(BCP,
+                         string("Group name missing for group definition starting at line ") +
+                             Fmi::to_string(group[i].getSourceLine()));
+
+  itsQueryLimits[groupName] = groupLimits;
 }
 
 const QueryLimits &Config::getQueryLimits(

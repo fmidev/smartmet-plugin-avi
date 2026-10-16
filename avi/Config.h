@@ -29,6 +29,8 @@ class Config : public ConfigBase
   bool useAuthentication() const { return itsUseAuthEngine; }
 
  private:
+  void parseGroup(libconfig::Setting &group, int i, const QueryLimits &defaultLimits);
+
   TableFormatterOptions itsTableFormatterOptions;
   bool itsUseAuthEngine;
   std::map<std::string, QueryLimits> itsQueryLimits;
