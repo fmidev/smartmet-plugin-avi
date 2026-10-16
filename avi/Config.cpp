@@ -105,7 +105,7 @@ Config::Config(const string &theConfigFileName) : ConfigBase(theConfigFileName)
                                  Fmi::to_string(groups.getSourceLine()));
 
       for (int i = 0; i < groups.getLength(); i++)
-        parseGroup(groups[i], i, defaultLimits);
+        parseGroup(groups[i], defaultLimits);
     }
 
     // Authentication engine needs not to be loaded if there's no apikey groups
@@ -130,10 +130,8 @@ Config::Config(const string &theConfigFileName) : ConfigBase(theConfigFileName)
  */
 // ----------------------------------------------------------------------
 
-void Config::parseGroup(libconfig::Setting &group, int i, const QueryLimits &defaultLimits)
+void Config::parseGroup(libconfig::Setting &group, const QueryLimits &defaultLimits)
 {
-  const auto &theConfig = get_config();
-
   if (!group.isGroup())
     throw Fmi::Exception(BCP,
                          "Groups must be stored in list of groups delimited by {}: line " +
@@ -171,9 +169,7 @@ void Config::parseGroup(libconfig::Setting &group, int i, const QueryLimits &def
       }
       else if (paramName == "multiplelocationoptions")
       {
-        bool allowMultipleLocationOptions = false;
-        theConfig.lookupValue("multiplelocationoptions", allowMultipleLocationOptions);
-
+        bool allowMultipleLocationOptions = group[j];
         groupLimits.setAllowMultipleLocationOptions(allowMultipleLocationOptions);
       }
       else
@@ -188,7 +184,7 @@ void Config::parseGroup(libconfig::Setting &group, int i, const QueryLimits &def
   if (groupName.empty())
     throw Fmi::Exception(BCP,
                          string("Group name missing for group definition starting at line ") +
-                             Fmi::to_string(group[i].getSourceLine()));
+                             Fmi::to_string(group.getSourceLine()));
 
   itsQueryLimits[groupName] = groupLimits;
 }
