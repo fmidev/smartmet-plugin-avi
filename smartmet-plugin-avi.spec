@@ -2,7 +2,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet aviation message plugin
 Name: %{SPECNAME}
-Version: 26.10.15
+Version: 26.10.16
 Release: 1%{?dist}.fmi
 License: FMI
 Group: SmartMet/Plugins
@@ -23,24 +23,24 @@ BuildRequires: rpm-build
 BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: %{smartmet_boost}-devel
-BuildRequires: smartmet-library-spine-devel >= 26.10.15
-BuildRequires: smartmet-library-timeseries-devel >= 26.10.15
-BuildRequires: smartmet-library-macgyver-devel >= 26.10.15
-BuildRequires: smartmet-library-timeseries-devel >= 26.10.15
-BuildRequires: smartmet-engine-avi-devel >= 26.10.15
-BuildRequires: smartmet-engine-authentication-devel >= 26.6.26
+BuildRequires: smartmet-library-spine-devel >= 26.10.16
+BuildRequires: smartmet-library-timeseries-devel >= 26.10.16
+BuildRequires: smartmet-library-macgyver-devel >= 26.10.16
+BuildRequires: smartmet-library-timeseries-devel >= 26.10.16
+BuildRequires: smartmet-engine-avi-devel >= 26.10.16
+BuildRequires: smartmet-engine-authentication-devel >= 26.10.16
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 Requires: libconfig17
-Requires: smartmet-library-macgyver >= 26.10.15
-Requires: smartmet-library-timeseries >= 26.10.15
-Requires: smartmet-library-spine >= 26.10.15
-Requires: smartmet-engine-avi >= 26.10.15
-Requires: smartmet-engine-authentication >= 26.6.26
+Requires: smartmet-library-macgyver >= 26.10.16
+Requires: smartmet-library-timeseries >= 26.10.16
+Requires: smartmet-library-spine >= 26.10.16
+Requires: smartmet-engine-avi >= 26.10.16
+Requires: smartmet-engine-authentication >= 26.10.16
 
 #TestRequires: smartmet-utils-devel
 #TestRequires: smartmet-test-db
-#TestRequires: smartmet-library-spine-plugin-test >= 26.10.15
+#TestRequires: smartmet-library-spine-plugin-test >= 26.10.16
 
 %if 0%{?rhel} && 0%{rhel} == 8
 Requires: libpqxx >= 1:7.7.0, libpqxx < 1:7.8.0
@@ -91,6 +91,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0664,root,root,0775)
 
 %changelog
+* Fri Oct 16 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.10.16-1.fmi
+- Rebuilt due to ABI changes in macgyver, spine, newbase and other libraries
+
 * Thu Oct 15 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.10.15-1.fmi
 - Fixed mechanical clang-tidy findings (internal linkage, unused parameters, initialization, redundant code), no functional changes
 - Requires 26.10.15 versions of spine due to their ABI changes
