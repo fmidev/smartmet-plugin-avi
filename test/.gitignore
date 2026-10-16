@@ -1,5 +1,7 @@
 /cnf/authengine.conf
 /cnf/aviengine.conf
+/cnf/reactor.conf
+/cnf/reactor-with-authentication.conf
 /failures-test-noauth
 /failures-test-auth
 /tmp-geonames-db
