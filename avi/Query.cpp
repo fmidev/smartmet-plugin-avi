@@ -439,303 +439,416 @@ void Query::checkIfMultipleLocationOptionsAllowed(bool allowMultipleLocationOpti
   }
 }
 
+// ----------------------------------------------------------------------
+/*!
+ * \brief Parse the location options: Named locations (station names)
+ */
+// ----------------------------------------------------------------------
+
+void Query::parsePlaceOptions(const SmartMet::Spine::HTTP::Request &theRequest,
+                              bool allowMultipleLocationOptions)
+{
+  // Named locations (station names)
+  //
+  // place=place1&place=place2&place=...
+  // places=place1,place2,...
+
+  const char *optionName = nullptr;
+
+  auto places = theRequest.getParameterList(optionName = "place");
+  if (!places.empty())
+  {
+    for (const string &place : places)
+    {
+      if (place.empty())
+        throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
+
+      itsQueryOptions.itsLocationOptions.itsPlaces.push_back(place);
+    }
+  }
+
+  places = theRequest.getParameterList(optionName = "places");
+  if (!places.empty())
+  {
+    checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
+
+    for (const string &place : places)
+    {
+      auto listOfPlaces = listOfValues<string>(place, optionName, 0, false, false, false);
+
+      if ((!listOfPlaces) || listOfPlaces->empty())
+        throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
+
+      for (const string &p : *listOfPlaces)
+        itsQueryOptions.itsLocationOptions.itsPlaces.push_back(p);
+    }
+  }
+}
+
+// ----------------------------------------------------------------------
+/*!
+ * \brief Parse the location options: Bounding boxes
+ */
+// ----------------------------------------------------------------------
+
+void Query::parseBBoxOptions(const SmartMet::Spine::HTTP::Request &theRequest,
+                             bool allowMultipleLocationOptions)
+{
+  const char *optionName = nullptr;
+
+  // Bounding boxes
+  //
+  // bbox=bllon,bllat,trlon,trlat&bbox=...
+
+  auto bboxes = theRequest.getParameterList(optionName = "bbox");
+  if (!bboxes.empty())
+  {
+    checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
+
+    for (const string &bbox : bboxes)
+    {
+      auto listOfTwoLonLatPairs = listOfPairs<double>(bbox, optionName, 2);
+
+      if ((!listOfTwoLonLatPairs) || listOfTwoLonLatPairs->empty())
+        throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
+
+      auto west = listOfTwoLonLatPairs->front().first;
+      auto south = listOfTwoLonLatPairs->front().second;
+      auto east = listOfTwoLonLatPairs->back().first;
+      auto north = listOfTwoLonLatPairs->back().second;
+
+      itsQueryOptions.itsLocationOptions.itsBBoxes.emplace_back(west, east, south, north);
+    }
+  }
+}
+
+// ----------------------------------------------------------------------
+/*!
+ * \brief Parse the location options: Latlon points
+ */
+// ----------------------------------------------------------------------
+
+void Query::parseLonLatOptions(const SmartMet::Spine::HTTP::Request &theRequest,
+                               bool allowMultipleLocationOptions)
+{
+  const char *optionName = nullptr;
+
+  // Latlon points
+  //
+  // lonlat=lon1,lat1&lonlat=lon2,lat2&lonlat=...
+  // latlon=lat1,lon1&latlon=lat2,lon2&latlon=...
+  // lonlats=lon1,lat1,lon2,lat2,...&lonlats=...
+  // latlons=lat1,lon1,lat2,lon2,...&latlons=...
+
+  auto lonlats = theRequest.getParameterList(optionName = "lonlat");
+  if (!lonlats.empty())
+  {
+    checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
+
+    for (const string &lonlat : lonlats)
+    {
+      auto listOfTwoValues = listOfValues<double>(lonlat, optionName, 2);
+
+      if ((!listOfTwoValues) || listOfTwoValues->empty())
+        throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
+
+      itsQueryOptions.itsLocationOptions.itsLonLats.emplace_back(listOfTwoValues->front(),
+                                                                 listOfTwoValues->back());
+    }
+  }
+
+  auto latlons = theRequest.getParameterList(optionName = "latlon");
+  if (!latlons.empty())
+  {
+    checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
+
+    for (const string &latlon : latlons)
+    {
+      auto listOfTwoValues = listOfValues<double>(latlon, optionName, 2, true, true);
+
+      if ((!listOfTwoValues) || listOfTwoValues->empty())
+        throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
+
+      itsQueryOptions.itsLocationOptions.itsLonLats.emplace_back(listOfTwoValues->front(),
+                                                                 listOfTwoValues->back());
+    }
+  }
+}
+
+// ----------------------------------------------------------------------
+/*!
+ * \brief Parse the location options: Latlon point lists
+ */
+// ----------------------------------------------------------------------
+
+void Query::parseLonLatListOptions(const SmartMet::Spine::HTTP::Request &theRequest,
+                                   bool allowMultipleLocationOptions)
+{
+  const char *optionName = nullptr;
+
+  auto lonlats = theRequest.getParameterList(optionName = "lonlats");
+  if (!lonlats.empty())
+  {
+    checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
+
+    for (const string &lonlat : lonlats)
+    {
+      auto listOfEvenNValues = listOfValues<double>(lonlat, optionName);
+
+      if ((!listOfEvenNValues) || listOfEvenNValues->empty())
+        throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
+
+      for (auto it = listOfEvenNValues->begin(); (it != listOfEvenNValues->end());)
+      {
+        auto lon = *it;
+        it++;
+        auto lat = *it;
+        it++;
+
+        itsQueryOptions.itsLocationOptions.itsLonLats.emplace_back(lon, lat);
+      }
+    }
+  }
+
+  auto latlons = theRequest.getParameterList(optionName = "latlons");
+  if (!latlons.empty())
+  {
+    checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
+
+    for (const string &latlon : latlons)
+    {
+      auto listOfEvenNValues = listOfValues<double>(latlon, optionName, 0, true, true);
+
+      if ((!listOfEvenNValues) || listOfEvenNValues->empty())
+        throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
+
+      for (auto it = listOfEvenNValues->begin(); (it != listOfEvenNValues->end());)
+      {
+        auto lon = *it;
+        it++;
+        auto lat = *it;
+        it++;
+
+        itsQueryOptions.itsLocationOptions.itsLonLats.emplace_back(lon, lat);
+      }
+    }
+  }
+}
+
+// ----------------------------------------------------------------------
+/*!
+ * \brief Parse the location options: WKT's
+ */
+// ----------------------------------------------------------------------
+
+void Query::parseWKTOptions(const SmartMet::Spine::HTTP::Request &theRequest,
+                            bool allowMultipleLocationOptions)
+{
+  const char *optionName = nullptr;
+
+  // WKT's
+
+  auto wkts = theRequest.getParameterList(optionName = "wkt");
+  if (!wkts.empty())
+  {
+    checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
+
+    for (const string &wkt : wkts)
+    {
+      if (boost::trim_copy(wkt).empty())
+        throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
+
+      itsQueryOptions.itsLocationOptions.itsWKTs.itsWKTs.push_back(wkt);
+    }
+  }
+}
+
+// ----------------------------------------------------------------------
+/*!
+ * \brief Parse the location options: Icao codes
+ */
+// ----------------------------------------------------------------------
+
+void Query::parseIcaoOptions(const SmartMet::Spine::HTTP::Request &theRequest,
+                             bool allowMultipleLocationOptions)
+{
+  const char *optionName = nullptr;
+
+  // Icao codes
+
+  auto icaos = theRequest.getParameterList(optionName = "icao");
+  if (!icaos.empty())
+  {
+    checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
+
+    for (const string &icao : icaos)
+    {
+      if (icao.empty())
+        throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
+
+      itsQueryOptions.itsLocationOptions.itsIcaos.push_back(icao);
+    }
+  }
+
+  icaos = theRequest.getParameterList(optionName = "icaos");
+  if (!icaos.empty())
+  {
+    checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
+
+    for (const string &icao : icaos)
+    {
+      auto listOfIcaos = listOfValues<string>(icao, optionName, 0, false, false, false);
+
+      if ((!listOfIcaos) || listOfIcaos->empty())
+        throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
+
+      for (const string &p : *listOfIcaos)
+        itsQueryOptions.itsLocationOptions.itsIcaos.push_back(p);
+    }
+  }
+}
+
+// ----------------------------------------------------------------------
+/*!
+ * \brief Parse the location options: Country codes
+ */
+// ----------------------------------------------------------------------
+
+void Query::parseCountryOptions(const SmartMet::Spine::HTTP::Request &theRequest,
+                                bool allowMultipleLocationOptions)
+{
+  const char *optionName = nullptr;
+
+  // Country codes
+
+  auto countries = theRequest.getParameterList(optionName = "country");
+  if (!countries.empty())
+  {
+    checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
+
+    for (const string &country : countries)
+    {
+      if (country.empty())
+        throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
+
+      itsQueryOptions.itsLocationOptions.itsCountries.push_back(country);
+    }
+  }
+
+  countries = theRequest.getParameterList(optionName = "countries");
+  if (!countries.empty())
+  {
+    checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
+
+    for (const string &country : countries)
+    {
+      auto listOfCountries = listOfValues<string>(country, optionName, 0, false, false, false);
+
+      if ((!listOfCountries) || listOfCountries->empty())
+        throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
+
+      for (const string &c : *listOfCountries)
+        itsQueryOptions.itsLocationOptions.itsCountries.push_back(c);
+    }
+  }
+}
+
+// ----------------------------------------------------------------------
+/*!
+ * \brief Parse the location options: Station id's
+ */
+// ----------------------------------------------------------------------
+
+void Query::parseStationIdOptions(const SmartMet::Spine::HTTP::Request &theRequest,
+                                  bool allowMultipleLocationOptions)
+{
+  const char *optionName = nullptr;
+
+  // Station id's
+
+  auto stationids = theRequest.getParameterList(optionName = "stationid");
+  if (!stationids.empty())
+  {
+    checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
+
+    for (const string &stationid : stationids)
+    {
+      auto listOfNValues = listOfValues<SmartMet::Engine::Avi::StationIdType>(
+          stationid, optionName, 0, false, false, false);
+
+      if ((!listOfNValues) || listOfNValues->empty())
+        throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
+
+      for (auto id : *listOfNValues)
+        itsQueryOptions.itsLocationOptions.itsStationIds.push_back(id);
+    }
+  }
+
+  stationids = theRequest.getParameterList(optionName = "stationids");
+  if (!stationids.empty())
+  {
+    checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
+
+    for (const string &stationid : stationids)
+    {
+      auto listOfNValues = listOfValues<SmartMet::Engine::Avi::StationIdType>(
+          stationid, optionName, 0, false, false, false);
+
+      if ((!listOfNValues) || listOfNValues->empty())
+        throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
+
+      for (auto id : *listOfNValues)
+        itsQueryOptions.itsLocationOptions.itsStationIds.push_back(id);
+    }
+  }
+}
+
+// ----------------------------------------------------------------------
+/*!
+ * \brief Parse the location options: Max station distance
+ */
+// ----------------------------------------------------------------------
+
+void Query::parseMaxDistance(const SmartMet::Spine::HTTP::Request &theRequest)
+{
+  // Max station distance (km) is taken into account with coordinate, bbox and wkt queries
+
+  if (!(itsQueryOptions.itsLocationOptions.itsLonLats.empty() &&
+        itsQueryOptions.itsLocationOptions.itsBBoxes.empty() &&
+        itsQueryOptions.itsLocationOptions.itsWKTs.itsWKTs.empty()))
+  {
+    const char *errMsg =
+        "Option maxdistance is required with latlon/lonlat, bbox and wkt options";
+    std::string maxdistance =
+        SmartMet::Spine::required_string(theRequest.getParameter("maxdistance"), errMsg);
+    // If plain number is given it is kilometers
+    if (std::isdigit(maxdistance.back()))
+      maxdistance.append("km");
+
+    itsQueryOptions.itsLocationOptions.itsMaxDistance =
+        Fmi::DistanceParser::parse_meter(maxdistance);
+
+    if (itsQueryOptions.itsLocationOptions.itsMaxDistance < 0)
+      throw Fmi::Exception(BCP, "maxdistance can't be negative");
+  }
+  else
+    itsQueryOptions.itsLocationOptions.itsMaxDistance = 0;
+}
+
 void Query::parseLocationOptions(const SmartMet::Spine::HTTP::Request &theRequest,
                                  bool allowMultipleLocationOptions)
 {
   try
   {
-    // Named locations (station names)
-    //
-    // place=place1&place=place2&place=...
-    // places=place1,place2,...
-
-    const char *optionName = nullptr;
-
-    auto places = theRequest.getParameterList(optionName = "place");
-    if (!places.empty())
-    {
-      for (const string &place : places)
-      {
-        if (place.empty())
-          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
-
-        itsQueryOptions.itsLocationOptions.itsPlaces.push_back(place);
-      }
-    }
-
-    places = theRequest.getParameterList(optionName = "places");
-    if (!places.empty())
-    {
-      checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
-
-      for (const string &place : places)
-      {
-        auto listOfPlaces = listOfValues<string>(place, optionName, 0, false, false, false);
-
-        if ((!listOfPlaces) || listOfPlaces->empty())
-          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
-
-        for (const string &p : *listOfPlaces)
-          itsQueryOptions.itsLocationOptions.itsPlaces.push_back(p);
-      }
-    }
-
-    // Bounding boxes
-    //
-    // bbox=bllon,bllat,trlon,trlat&bbox=...
-
-    auto bboxes = theRequest.getParameterList(optionName = "bbox");
-    if (!bboxes.empty())
-    {
-      checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
-
-      for (const string &bbox : bboxes)
-      {
-        auto listOfTwoLonLatPairs = listOfPairs<double>(bbox, optionName, 2);
-
-        if ((!listOfTwoLonLatPairs) || listOfTwoLonLatPairs->empty())
-          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
-
-        auto west = listOfTwoLonLatPairs->front().first;
-        auto south = listOfTwoLonLatPairs->front().second;
-        auto east = listOfTwoLonLatPairs->back().first;
-        auto north = listOfTwoLonLatPairs->back().second;
-
-        itsQueryOptions.itsLocationOptions.itsBBoxes.emplace_back(west, east, south, north);
-      }
-    }
-
-    // Latlon points
-    //
-    // lonlat=lon1,lat1&lonlat=lon2,lat2&lonlat=...
-    // latlon=lat1,lon1&latlon=lat2,lon2&latlon=...
-    // lonlats=lon1,lat1,lon2,lat2,...&lonlats=...
-    // latlons=lat1,lon1,lat2,lon2,...&latlons=...
-
-    auto lonlats = theRequest.getParameterList(optionName = "lonlat");
-    if (!lonlats.empty())
-    {
-      checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
-
-      for (const string &lonlat : lonlats)
-      {
-        auto listOfTwoValues = listOfValues<double>(lonlat, optionName, 2);
-
-        if ((!listOfTwoValues) || listOfTwoValues->empty())
-          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
-
-        itsQueryOptions.itsLocationOptions.itsLonLats.emplace_back(listOfTwoValues->front(),
-                                                                   listOfTwoValues->back());
-      }
-    }
-
-    auto latlons = theRequest.getParameterList(optionName = "latlon");
-    if (!latlons.empty())
-    {
-      checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
-
-      for (const string &latlon : latlons)
-      {
-        auto listOfTwoValues = listOfValues<double>(latlon, optionName, 2, true, true);
-
-        if ((!listOfTwoValues) || listOfTwoValues->empty())
-          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
-
-        itsQueryOptions.itsLocationOptions.itsLonLats.emplace_back(listOfTwoValues->front(),
-                                                                   listOfTwoValues->back());
-      }
-    }
-
-    lonlats = theRequest.getParameterList(optionName = "lonlats");
-    if (!lonlats.empty())
-    {
-      checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
-
-      for (const string &lonlat : lonlats)
-      {
-        auto listOfEvenNValues = listOfValues<double>(lonlat, optionName);
-
-        if ((!listOfEvenNValues) || listOfEvenNValues->empty())
-          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
-
-        for (auto it = listOfEvenNValues->begin(); (it != listOfEvenNValues->end());)
-        {
-          auto lon = *it;
-          it++;
-          auto lat = *it;
-          it++;
-
-          itsQueryOptions.itsLocationOptions.itsLonLats.emplace_back(lon, lat);
-        }
-      }
-    }
-
-    latlons = theRequest.getParameterList(optionName = "latlons");
-    if (!latlons.empty())
-    {
-      checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
-
-      for (const string &latlon : latlons)
-      {
-        auto listOfEvenNValues = listOfValues<double>(latlon, optionName, 0, true, true);
-
-        if ((!listOfEvenNValues) || listOfEvenNValues->empty())
-          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
-
-        for (auto it = listOfEvenNValues->begin(); (it != listOfEvenNValues->end());)
-        {
-          auto lon = *it;
-          it++;
-          auto lat = *it;
-          it++;
-
-          itsQueryOptions.itsLocationOptions.itsLonLats.emplace_back(lon, lat);
-        }
-      }
-    }
-
-    // WKT's
-
-    auto wkts = theRequest.getParameterList(optionName = "wkt");
-    if (!wkts.empty())
-    {
-      checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
-
-      for (const string &wkt : wkts)
-      {
-        if (boost::trim_copy(wkt).empty())
-          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
-
-        itsQueryOptions.itsLocationOptions.itsWKTs.itsWKTs.push_back(wkt);
-      }
-    }
-
-    // Icao codes
-
-    auto icaos = theRequest.getParameterList(optionName = "icao");
-    if (!icaos.empty())
-    {
-      checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
-
-      for (const string &icao : icaos)
-      {
-        if (icao.empty())
-          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
-
-        itsQueryOptions.itsLocationOptions.itsIcaos.push_back(icao);
-      }
-    }
-
-    icaos = theRequest.getParameterList(optionName = "icaos");
-    if (!icaos.empty())
-    {
-      checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
-
-      for (const string &icao : icaos)
-      {
-        auto listOfIcaos = listOfValues<string>(icao, optionName, 0, false, false, false);
-
-        if ((!listOfIcaos) || listOfIcaos->empty())
-          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
-
-        for (const string &p : *listOfIcaos)
-          itsQueryOptions.itsLocationOptions.itsIcaos.push_back(p);
-      }
-    }
-
-    // Country codes
-
-    auto countries = theRequest.getParameterList(optionName = "country");
-    if (!countries.empty())
-    {
-      checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
-
-      for (const string &country : countries)
-      {
-        if (country.empty())
-          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
-
-        itsQueryOptions.itsLocationOptions.itsCountries.push_back(country);
-      }
-    }
-
-    countries = theRequest.getParameterList(optionName = "countries");
-    if (!countries.empty())
-    {
-      checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
-
-      for (const string &country : countries)
-      {
-        auto listOfCountries = listOfValues<string>(country, optionName, 0, false, false, false);
-
-        if ((!listOfCountries) || listOfCountries->empty())
-          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
-
-        for (const string &c : *listOfCountries)
-          itsQueryOptions.itsLocationOptions.itsCountries.push_back(c);
-      }
-    }
-
-    // Station id's
-
-    auto stationids = theRequest.getParameterList(optionName = "stationid");
-    if (!stationids.empty())
-    {
-      checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
-
-      for (const string &stationid : stationids)
-      {
-        auto listOfNValues = listOfValues<SmartMet::Engine::Avi::StationIdType>(
-            stationid, optionName, 0, false, false, false);
-
-        if ((!listOfNValues) || listOfNValues->empty())
-          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
-
-        for (auto id : *listOfNValues)
-          itsQueryOptions.itsLocationOptions.itsStationIds.push_back(id);
-      }
-    }
-
-    stationids = theRequest.getParameterList(optionName = "stationids");
-    if (!stationids.empty())
-    {
-      checkIfMultipleLocationOptionsAllowed(allowMultipleLocationOptions);
-
-      for (const string &stationid : stationids)
-      {
-        auto listOfNValues = listOfValues<SmartMet::Engine::Avi::StationIdType>(
-            stationid, optionName, 0, false, false, false);
-
-        if ((!listOfNValues) || listOfNValues->empty())
-          throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
-
-        for (auto id : *listOfNValues)
-          itsQueryOptions.itsLocationOptions.itsStationIds.push_back(id);
-      }
-    }
-
-    // Max station distance (km) is taken into account with coordinate, bbox and wkt queries
-
-    if (!(itsQueryOptions.itsLocationOptions.itsLonLats.empty() &&
-          itsQueryOptions.itsLocationOptions.itsBBoxes.empty() &&
-          itsQueryOptions.itsLocationOptions.itsWKTs.itsWKTs.empty()))
-    {
-      const char *errMsg =
-          "Option maxdistance is required with latlon/lonlat, bbox and wkt options";
-      std::string maxdistance =
-          SmartMet::Spine::required_string(theRequest.getParameter("maxdistance"), errMsg);
-      // If plain number is given it is kilometers
-      if (std::isdigit(maxdistance.back()))
-        maxdistance.append("km");
-
-      itsQueryOptions.itsLocationOptions.itsMaxDistance =
-          Fmi::DistanceParser::parse_meter(maxdistance);
-
-      if (itsQueryOptions.itsLocationOptions.itsMaxDistance < 0)
-        throw Fmi::Exception(BCP, "maxdistance can't be negative");
-    }
-    else
-      itsQueryOptions.itsLocationOptions.itsMaxDistance = 0;
+    parsePlaceOptions(theRequest, allowMultipleLocationOptions);
+    parseBBoxOptions(theRequest, allowMultipleLocationOptions);
+    parseLonLatOptions(theRequest, allowMultipleLocationOptions);
+    parseLonLatListOptions(theRequest, allowMultipleLocationOptions);
+    parseWKTOptions(theRequest, allowMultipleLocationOptions);
+    parseIcaoOptions(theRequest, allowMultipleLocationOptions);
+    parseCountryOptions(theRequest, allowMultipleLocationOptions);
+    parseStationIdOptions(theRequest, allowMultipleLocationOptions);
+    parseMaxDistance(theRequest);
 
     // Number of nearest stations returned for point queries
 

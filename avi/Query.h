@@ -41,6 +41,23 @@ class Query
 
   void parseMessageTypeOption(const SmartMet::Spine::HTTP::Request &theRequest);
   void parseParamOption(const SmartMet::Spine::HTTP::Request &theRequest);
+  void parsePlaceOptions(const SmartMet::Spine::HTTP::Request &theRequest,
+                         bool allowMultipleLocationOptions);
+  void parseBBoxOptions(const SmartMet::Spine::HTTP::Request &theRequest,
+                        bool allowMultipleLocationOptions);
+  void parseLonLatOptions(const SmartMet::Spine::HTTP::Request &theRequest,
+                          bool allowMultipleLocationOptions);
+  void parseLonLatListOptions(const SmartMet::Spine::HTTP::Request &theRequest,
+                              bool allowMultipleLocationOptions);
+  void parseWKTOptions(const SmartMet::Spine::HTTP::Request &theRequest,
+                       bool allowMultipleLocationOptions);
+  void parseIcaoOptions(const SmartMet::Spine::HTTP::Request &theRequest,
+                        bool allowMultipleLocationOptions);
+  void parseCountryOptions(const SmartMet::Spine::HTTP::Request &theRequest,
+                           bool allowMultipleLocationOptions);
+  void parseStationIdOptions(const SmartMet::Spine::HTTP::Request &theRequest,
+                             bool allowMultipleLocationOptions);
+  void parseMaxDistance(const SmartMet::Spine::HTTP::Request &theRequest);
   void parseLocationOptions(const SmartMet::Spine::HTTP::Request &theRequest,
                             bool allowMultipleLocationOptions);
   void parseTimeOptions(const SmartMet::Spine::HTTP::Request &theRequest, int maxTimeRangeInDays);
