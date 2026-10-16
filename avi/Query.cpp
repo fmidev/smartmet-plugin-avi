@@ -154,6 +154,85 @@ bool validValue<string>(const string & /*value */, double /*minValue*/, double /
   return true;
 }
 
+// ----------------------------------------------------------------------
+/*!
+ * \brief Check the number of values, returning the number of values to use
+ */
+// ----------------------------------------------------------------------
+
+size_t checkValueCount(size_t nFields,
+                       size_t nValues,
+                       bool even,
+                       const string &commaSeparatedStr,
+                       const char *optionName)
+{
+  if (nValues > 0)
+  {
+    if (nValues != nFields)
+      throw Fmi::Exception(BCP,
+                           Fmi::to_string(nValues) + string(" values required for option '") +
+                               optionName + "'; '" + commaSeparatedStr + "'");
+    return nValues;
+  }
+
+  nValues = nFields;
+
+  if (even && ((nValues % 2) != 0))
+    throw Fmi::Exception(BCP,
+                         string("Even number of values required for option '") + optionName +
+                             "'; '" + commaSeparatedStr + "'");
+  return nValues;
+}
+
+// ----------------------------------------------------------------------
+/*!
+ * \brief The index of the element to use when swapping pairs of elements
+ *
+ * If swapping, we need an even number of elements:
+ * - if n is odd, use np
+ * - if n is even, use n + 1
+ */
+// ----------------------------------------------------------------------
+
+size_t swappedIndex(size_t n, size_t np)
+{
+  const bool n_is_odd = (n % 2) != 0;
+  return n_is_odd ? np : (n + 1);
+}
+
+// ----------------------------------------------------------------------
+/*!
+ * \brief Check the range of a longitude (even n) or latitude (odd n) value
+ */
+// ----------------------------------------------------------------------
+
+template <typename T>
+void checkLonLatValue(const T &value,
+                      size_t n,
+                      size_t nn,
+                      const string &commaSeparatedStr,
+                      const char *optionName)
+{
+  // Order lon,lat expected
+  //
+  if ((n % 2) == 0)
+  {
+    if (!validValue<T>(value, -180, 180))
+      throw Fmi::Exception(BCP,
+                           string("Value in range [-180,180] expected for option '") + optionName +
+                               "' at position " + Fmi::to_string(nn + 1) + "; '" +
+                               commaSeparatedStr + "'");
+  }
+  else
+  {
+    if (!validValue<T>(value, -90, 90))
+      throw Fmi::Exception(BCP,
+                           string("Value in range [-90,90] expected for option '") + optionName +
+                               "' at position " + Fmi::to_string(nn + 1) + "; '" +
+                               commaSeparatedStr + "'");
+  }
+}
+
 template <typename T>
 std::optional<list<T>> listOfValues(const string &commaSeparatedStr,
                                     const char *optionName,
@@ -174,22 +253,7 @@ std::optional<list<T>> listOfValues(const string &commaSeparatedStr,
 
     // Given or even number of values required ?
 
-    if (nValues > 0)
-    {
-      if (nValues != flds.size())
-        throw Fmi::Exception(BCP,
-                             Fmi::to_string(nValues) + string(" values required for option '") +
-                                 optionName + "'; '" + commaSeparatedStr + "'");
-    }
-    else
-    {
-      nValues = flds.size();
-
-      if (even && ((nValues % 2) != 0))
-        throw Fmi::Exception(BCP,
-                             string("Even number of values required for option '") + optionName +
-                                 "'; '" + commaSeparatedStr + "'");
-    }
+    nValues = checkValueCount(flds.size(), nValues, even, commaSeparatedStr, optionName);
 
     size_t n = 0;
     size_t np = 0;
@@ -213,13 +277,7 @@ std::optional<list<T>> listOfValues(const string &commaSeparatedStr,
       // If swapping, we need an even number of elements:
       // - if n is odd, use np
       // - if n is even, use n + 1
-      size_t nn = n;
-
-      if (swap)
-      {
-        const bool n_is_odd = (n % 2) != 0;
-        nn = n_is_odd ? np : (n + 1);
-      }
+      size_t nn = (swap ? swappedIndex(n, np) : n);
 
       bool castOk = false;
 
@@ -230,26 +288,7 @@ std::optional<list<T>> listOfValues(const string &commaSeparatedStr,
         castOk = true;
 
         if (latlonValues)
-        {
-          // Order lon,lat expected
-          //
-          if ((n % 2) == 0)
-          {
-            if (!validValue<T>(value, -180, 180))
-              throw Fmi::Exception(BCP,
-                                   string("Value in range [-180,180] expected for option '") +
-                                       optionName + "' at position " + Fmi::to_string(nn + 1) +
-                                       "; '" + commaSeparatedStr + "'");
-          }
-          else
-          {
-            if (!validValue<T>(value, -90, 90))
-              throw Fmi::Exception(BCP,
-                                   string("Value in range [-90,90] expected for option '") +
-                                       optionName + "' at position " + Fmi::to_string(nn + 1) +
-                                       "; '" + commaSeparatedStr + "'");
-          }
-        }
+          checkLonLatValue<T>(value, n, nn, commaSeparatedStr, optionName);
 
         valueList.push_back(value);
       }
