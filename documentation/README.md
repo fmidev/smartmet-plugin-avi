@@ -211,7 +211,7 @@ There are four basic methods of selecting data with timestamps:
 - using a specific time range for valid messages
 - using a specific time range for created messages
 
-Longest possible time range is 31 days (configured in plugin's configuration). Messages whose valid time range intersects with requested time range are returned.
+Longest possible time range is 31 days by default (`message.maxrangedays` in the plugin configuration). Messages whose valid time range intersects with requested time range are returned.
 
 Note: given time range is taken as a half open range where starttime <= time < endtime; thus query with time range t1-t2 does not return messages which are valid
 startting from t2 (or created at t2).
@@ -288,10 +288,10 @@ timeformat=iso|timestamp|sql|epoch&
 
 ## Decimal Precision
 
-Number of decimal digits for floating point values is set with option 'decimals'. The default precision is 6.
+Number of decimal digits for floating point values is set with option 'precision'. The default precision is 6.
 
 ```
-decimals=3&
+precision=3&
 ```
 
 ## Data output format
@@ -324,17 +324,57 @@ JSON format output .
 
 ## Error Handling
 
-The plugin will return a `204 No Content` response in all formats except the debug format. Please note that the body of 204 responses is always empty.
+The plugin will return a `400 Bad Request` response with an empty body in all formats except the debug format.
 
 In debug format the response is `200 OK`, and the message body consists of the error message.
 
-A HTTP header `X-AVIPlugin-Error` will be returned in all formats. The value of the header is the error message truncated to 100 characters.
+A HTTP header `X-Avi-Error` will be returned in all formats. The value of the header is the error message truncated to 300 characters.
 
 # Configuration Files
 
 TODO: The configuration files probably shouldn't be here.
 
 ## Plugin configuration
+
+The plugin configuration file sets the default limits of the queries:
+
+```
+message:
+{
+	maxstations  = 0;    # max stations of a message query; missing or < 0: the engine decides, 0: unlimited
+	maxrows      = 0;    # max rows of a message query; missing or < 0: the engine decides, 0: unlimited
+	maxrangedays = 31;   # max time range in days; missing or < 0: 31, 0: unlimited
+};
+
+multiplelocationoptions = false;   # allow several location options in one request
+```
+
+Without `multiplelocationoptions` only one location option (`place(s)`, `bbox`, `lonlat(s)`,
+`latlon(s)`, `wkt`, `icao(s)`, `stationid`) may be given in a request.
+
+When the authentication engine is available, apikey groups (the token values of the service
+`avi` in the authentication database) can have limits of their own. The membership of the
+apikey of a request is checked in alphabetical order of the group names, and the limits of the
+first matching group are used; settings missing from a group, and requests without an apikey
+or with an apikey belonging to no group, use the defaults above. `apikey.disabled = true`
+disables the groups.
+
+```
+apikey:
+{
+	disabled = false;
+	groups:
+	(
+		{
+			name                    = "partners";
+			maxstations             = 100;
+			maxrows                 = 10000;
+			maxrangedays            = 62;
+			multiplelocationoptions = true;
+		}
+	);
+};
+```
 
 ## Engine configuration
 

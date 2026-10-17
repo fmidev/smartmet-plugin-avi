@@ -37,7 +37,7 @@ The plugin has four source files in `avi/`:
 
 - **Plugin.cpp** — SmartMet plugin lifecycle (`init`, `shutdown`, `requestHandler`). Registers the `/avi` handler, wires up engine dependencies, and orchestrates query → format → response. Exported via `create`/`destroy` C functions for dynamic loading.
 - **Query.cpp** (~900 lines, the largest file) — Parses and validates all HTTP request parameters: location options (ICAO, coordinates, WKT, bbox, country), time parameters, message types, output format, and API-key-based query limits. This is where most of the business logic lives.
-- **Config.cpp** — Loads libconfig configuration: default query limits (`maxstations`, `maxrows`, `maxrangedays`), API key group limits, and table formatter options.
+- **Config.cpp** — Loads libconfig configuration: default query limits (`message.maxstations`, `message.maxrows`, `message.maxrangedays`, `multiplelocationoptions`) and the API key group limits (`apikey.groups`, each of which may override any of the four).
 - **QueryLimits.h** — POD struct holding per-request limits (max stations/rows/range, whether multiple location options are allowed).
 
 ### Request flow
