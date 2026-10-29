@@ -4,7 +4,7 @@ TOP = $(shell pwd)/..
 
 REQUIRES = configpp
 
-include $(shell echo $${PREFIX-/usr})/share/smartmet/devel/makefile.inc
+include $(or $(PREFIX),$(shell smartbuildcfg --prefix))/share/smartmet/devel/makefile.inc
 
 DEFINES = -DUNIX -D_REENTRANT
 
