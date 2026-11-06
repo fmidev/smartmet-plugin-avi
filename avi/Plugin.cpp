@@ -6,6 +6,7 @@
 
 #include "Plugin.h"
 #include "Query.h"
+#include <boost/algorithm/string.hpp>
 #include <macgyver/Exception.h>
 #include <macgyver/LocalDateTime.h>
 #include <macgyver/StringConversion.h>

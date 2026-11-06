@@ -1,6 +1,7 @@
 // ======================================================================
 
 #include "Query.h"
+#include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include <macgyver/DateTime.h>
 #include <macgyver/DistanceParser.h>
