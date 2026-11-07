@@ -280,13 +280,9 @@ std::optional<list<T>> listOfValues(const string &commaSeparatedStr,
       // - if n is even, use n + 1
       size_t nn = (swap ? swappedIndex(n, np) : n);
 
-      bool castOk = false;
-
       try
       {
-        castOk = false;
         T value = toType<T>(flds[nn]);
-        castOk = true;
 
         if (latlonValues)
           checkLonLatValue<T>(value, n, nn, commaSeparatedStr, optionName);
@@ -295,11 +291,11 @@ std::optional<list<T>> listOfValues(const string &commaSeparatedStr,
       }
       catch (...)
       {
-        if (castOk)
-          throw Fmi::Exception::Trace(BCP,
-                                      string("Invalid value for option '") + optionName +
-                                          "' at position " + Fmi::to_string(nn + 1) + "; '" +
-                                          commaSeparatedStr + "'");
+        // Dropping an unparseable value would for example leave an odd number of coordinates
+        throw Fmi::Exception::Trace(BCP,
+                                    string("Invalid value for option '") + optionName +
+                                        "' at position " + Fmi::to_string(nn + 1) + "; '" +
+                                        commaSeparatedStr + "'");
       }
 
       np = n;
@@ -599,6 +595,11 @@ void Query::parseLonLatListOptions(const SmartMet::Spine::HTTP::Request &theRequ
       if ((!listOfEvenNValues) || listOfEvenNValues->empty())
         throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
 
+      // The coordinates are consumed in pairs below
+      if (listOfEvenNValues->size() % 2 != 0)
+        throw Fmi::Exception(BCP, string("Odd number of coordinates for option '") + optionName +
+                                      "'; '" + lonlat + "'");
+
       for (auto it = listOfEvenNValues->begin(); (it != listOfEvenNValues->end());)
       {
         auto lon = *it;
@@ -622,6 +623,11 @@ void Query::parseLonLatListOptions(const SmartMet::Spine::HTTP::Request &theRequ
 
       if ((!listOfEvenNValues) || listOfEvenNValues->empty())
         throw Fmi::Exception(BCP, errMsgOptionIsEmpty(optionName));
+
+      // The coordinates are consumed in pairs below
+      if (listOfEvenNValues->size() % 2 != 0)
+        throw Fmi::Exception(BCP, string("Odd number of coordinates for option '") + optionName +
+                                      "'; '" + latlon + "'");
 
       for (auto it = listOfEvenNValues->begin(); (it != listOfEvenNValues->end());)
       {
