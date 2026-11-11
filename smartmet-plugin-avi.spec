@@ -23,7 +23,7 @@ BuildRequires: rpm-build
 BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: %{smartmet_boost}-devel
-BuildRequires: smartmet-library-spine-devel >= 26.11.4
+BuildRequires: smartmet-library-spine-devel >= 26.11.11
 BuildRequires: smartmet-library-timeseries-devel >= 26.11.4
 BuildRequires: smartmet-library-macgyver-devel >= 26.11.3
 BuildRequires: smartmet-library-timeseries-devel >= 26.11.4
@@ -34,13 +34,13 @@ BuildRequires: zlib-devel
 Requires: libconfig17
 Requires: smartmet-library-macgyver >= 26.11.3
 Requires: smartmet-library-timeseries >= 26.11.4
-Requires: smartmet-library-spine >= 26.11.4
+Requires: smartmet-library-spine >= 26.11.11
 Requires: smartmet-engine-avi >= 26.10.17
 Requires: smartmet-engine-authentication >= 26.10.16
 
 #TestRequires: smartmet-utils-devel
 #TestRequires: smartmet-test-db
-#TestRequires: smartmet-library-spine-plugin-test >= 26.11.4
+#TestRequires: smartmet-library-spine-plugin-test >= 26.11.11
 
 %if 0%{?rhel} && 0%{rhel} == 8
 Requires: libpqxx >= 1:7.7.0, libpqxx < 1:7.8.0

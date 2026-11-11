@@ -319,7 +319,9 @@ void Plugin::init()
     }
 
     if (!(itsReactor->addContentHandler(
-            this, "/avi", boost::bind(&Plugin::callRequestHandler, this, _1, _2, _3))))
+            this,
+            Spine::Reactor::HandlerOptions("/avi"),
+            boost::bind(&Plugin::callRequestHandler, this, _1, _2, _3))))
       throw Fmi::Exception(BCP, "Failed to register avidb content handler");
   }
   catch (...)
