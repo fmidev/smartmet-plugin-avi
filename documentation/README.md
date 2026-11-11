@@ -188,7 +188,7 @@ Coming
 
 ### Duplicate Message Filtering
 
-Duplicate messages are filtered by default, thus only one copy of the same message originating from different routes is returned unless route table colums are also selected. Filtering can be omitted with zero valued 'distinct' option
+Duplicate messages are filtered by default, thus only one copy of the same message originating from different routes is returned unless route table columns are also selected. Filtering can be omitted with zero valued 'distinct' option
 
 ```
 distinct=0&
@@ -214,7 +214,7 @@ There are four basic methods of selecting data with timestamps:
 Longest possible time range is 31 days by default (`message.maxrangedays` in the plugin configuration). Messages whose valid time range intersects with requested time range are returned.
 
 Note: given time range is taken as a half open range where starttime <= time < endtime; thus query with time range t1-t2 does not return messages which are valid
-startting from t2 (or created at t2).
+starting from t2 (or created at t2).
 
 ### Input Time Formats
 

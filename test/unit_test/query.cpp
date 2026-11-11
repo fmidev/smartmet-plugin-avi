@@ -145,7 +145,7 @@ BOOST_AUTO_TEST_CASE(
   BOOST_CHECK_EQUAL(query2.itsQueryOptions.itsLocationOptions.itsBBoxes.size(), 1);
   request.removeParameter("bbox");
 
-  // One bbox by using floating point mumbers
+  // One bbox by using floating point numbers
   request.addParameter("bbox", "25.11 ,60.1, 26.0,61.1");
   Query query3(request, authEngine, config);
   BOOST_CHECK_EQUAL(query3.itsQueryOptions.itsLocationOptions.itsBBoxes.size(), 1);
@@ -315,7 +315,7 @@ BOOST_AUTO_TEST_CASE(query_constructor_parseLocationOptions_lonlats,
   BOOST_CHECK_THROW({ Query query3(request, authEngine, config); }, Spine::Exception);
   request.removeParameter("lonlats");
 
-  // Two LonLat pairs in a lonlats query paramer.
+  // Two LonLat pairs in a lonlats query parameter.
   request.addParameter("lonlats", "25,60,21,61");
   Query query4(request, authEngine, config);
   BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsLocationOptions.itsLonLats.size(), 2);
@@ -325,7 +325,7 @@ BOOST_AUTO_TEST_CASE(query_constructor_parseLocationOptions_lonlats,
   BOOST_CHECK_EQUAL(query4.itsQueryOptions.itsLocationOptions.itsLonLats.back().itsLat, 61);
   request.removeParameter("lonlats");
 
-  // Two LonLat pairs in separate lonlats query paramers.
+  // Two LonLat pairs in separate lonlats query parameters.
   request.addParameter("lonlats", "25,60");
   request.addParameter("lonlats", "21,61");
   Query query5(request, authEngine, config);
