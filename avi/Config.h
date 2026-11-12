@@ -2,10 +2,16 @@
 
 #pragma once
 
-#include <engines/authentication/Engine.h>
 #include <spine/ConfigBase.h>
 #include <spine/TableFormatterOptions.h>
 #include <QueryLimits.h>
+#include <map>
+#include <string>
+
+namespace SmartMet::Engine::Authentication
+{
+class Engine;
+}  // namespace SmartMet::Engine::Authentication
 
 namespace SmartMet
 {

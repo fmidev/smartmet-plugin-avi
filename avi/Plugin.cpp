@@ -7,19 +7,34 @@
 #include "Plugin.h"
 #include "Query.h"
 #include <boost/algorithm/string.hpp>
+#include <boost/bind/bind.hpp>
+#include <engines/authentication/Engine.h>
+#include <engines/avi/Engine.h>
+#include <macgyver/DateTime.h>
 #include <macgyver/Exception.h>
 #include <macgyver/LocalDateTime.h>
 #include <macgyver/StringConversion.h>
+#include <macgyver/TimeFormatter.h>
 #include <macgyver/TimeZoneFactory.h>
 #include <macgyver/ValueFormatter.h>
 #include <spine/Convenience.h>
+#include <spine/HTTP.h>
 #include <spine/HostInfo.h>
+#include <spine/LonLat.h>
 #include <spine/Reactor.h>
 #include <spine/SmartMet.h>
 #include <spine/Table.h>
+#include <spine/TableFormatter.h>
 #include <spine/TableFormatterFactory.h>
 #include <timeseries/TableFeeder.h>
+#include <timeseries/TimeSeriesTypes.h>
+#include <cstddef>
 #include <iostream>
+#include <list>
+#include <map>
+#include <optional>
+#include <utility>
+#include <vector>
 
 using namespace std;
 

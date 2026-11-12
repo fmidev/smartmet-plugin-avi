@@ -1,14 +1,30 @@
 // ======================================================================
 
 #include "Query.h"
+#include "Config.h"
+#include "QueryLimits.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include <macgyver/DateTime.h>
 #include <macgyver/DistanceParser.h>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
+#include <macgyver/TimeParser.h>
 #include <spine/Convenience.h>
 #include <spine/FmiApiKey.h>
+#include <spine/HTTP.h>
+#include <cctype>
+#include <cstring>
+#include <iterator>
+#include <list>
+#include <optional>
+#include <utility>
+#include <vector>
+
+namespace SmartMet::Engine::Authentication
+{
+class Engine;
+}  // namespace SmartMet::Engine::Authentication
 
 using namespace std;
 using namespace boost::algorithm;

@@ -2,15 +2,22 @@
 
 #pragma once
 
-#include "Config.h"
-
-#include <engines/authentication/Engine.h>
 #include <engines/avi/Engine.h>
-#include <spine/HTTP.h>
-#include <spine/Parameter.h>
-
-#include <list>
+#include <memory>
 #include <string>
+
+namespace SmartMet::Engine::Authentication
+{
+class Engine;
+}  // namespace SmartMet::Engine::Authentication
+namespace SmartMet::Plugin::Avi
+{
+class Config;
+}  // namespace SmartMet::Plugin::Avi
+namespace SmartMet::Spine::HTTP
+{
+class Request;
+}  // namespace SmartMet::Spine::HTTP
 
 namespace SmartMet
 {

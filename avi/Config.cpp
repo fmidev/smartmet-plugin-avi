@@ -1,13 +1,13 @@
 // ======================================================================
 
 #include "Config.h"
-#include <boost/algorithm/string/split.hpp>
-#include <boost/algorithm/string/trim.hpp>
+#include "QueryLimits.h"
 #include <engines/authentication/Engine.h>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
 #include <spine/Exceptions.h>
-#include <stdexcept>
+#include <libconfig.h++>
+#include <utility>
 
 using namespace std;
 

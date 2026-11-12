@@ -7,13 +7,27 @@
 #pragma once
 
 #include "Config.h"
-#include <memory>
-#include <engines/authentication/Engine.h>
-#include <engines/avi/Engine.h>
-#include <spine/HTTP.h>
-#include <spine/Reactor.h>
 #include <spine/SmartMetPlugin.h>
+#include <memory>
 #include <string>
+
+namespace SmartMet::Engine::Authentication
+{
+class Engine;
+}  // namespace SmartMet::Engine::Authentication
+namespace SmartMet::Engine::Avi
+{
+class Engine;
+}  // namespace SmartMet::Engine::Avi
+namespace SmartMet::Spine::HTTP
+{
+class Request;
+class Response;
+}  // namespace SmartMet::Spine::HTTP
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {
